@@ -1,0 +1,162 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using CarService.Models.Entities;
+
+namespace CarService.Controllers
+{
+    public class EstimateItemsController : Controller
+    {
+        private readonly CarServiceContext _context;
+
+        public EstimateItemsController(CarServiceContext context)
+        {
+            _context = context;
+        }
+
+        // GET: EstimateItems
+        public async Task<IActionResult> Index()
+        {
+              return _context.TblEstimateItems != null ? 
+                          View(await _context.TblEstimateItems.ToListAsync()) :
+                          Problem("Entity set 'CarServiceContext.TblEstimateItems'  is null.");
+        }
+
+        // GET: EstimateItems/Details/5
+        public async Task<IActionResult> Details(long? id)
+        {
+            if (id == null || _context.TblEstimateItems == null)
+            {
+                return NotFound();
+            }
+
+            var tblEstimateItem = await _context.TblEstimateItems
+                .FirstOrDefaultAsync(m => m.FldEstimateItemId == id);
+            if (tblEstimateItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(tblEstimateItem);
+        }
+
+        // GET: EstimateItems/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: EstimateItems/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(tblEstimateItem);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tblEstimateItem);
+        }
+
+        // GET: EstimateItems/Edit/5
+        public async Task<IActionResult> Edit(long? id)
+        {
+            if (id == null || _context.TblEstimateItems == null)
+            {
+                return NotFound();
+            }
+
+            var tblEstimateItem = await _context.TblEstimateItems.FindAsync(id);
+            if (tblEstimateItem == null)
+            {
+                return NotFound();
+            }
+            return View(tblEstimateItem);
+        }
+
+        // POST: EstimateItems/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
+        {
+            if (id != tblEstimateItem.FldEstimateItemId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tblEstimateItem);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TblEstimateItemExists(tblEstimateItem.FldEstimateItemId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tblEstimateItem);
+        }
+
+        // GET: EstimateItems/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            if (id == null || _context.TblEstimateItems == null)
+            {
+                return NotFound();
+            }
+
+            var tblEstimateItem = await _context.TblEstimateItems
+                .FirstOrDefaultAsync(m => m.FldEstimateItemId == id);
+            if (tblEstimateItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(tblEstimateItem);
+        }
+
+        // POST: EstimateItems/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            if (_context.TblEstimateItems == null)
+            {
+                return Problem("Entity set 'CarServiceContext.TblEstimateItems'  is null.");
+            }
+            var tblEstimateItem = await _context.TblEstimateItems.FindAsync(id);
+            if (tblEstimateItem != null)
+            {
+                _context.TblEstimateItems.Remove(tblEstimateItem);
+            }
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TblEstimateItemExists(long id)
+        {
+          return (_context.TblEstimateItems?.Any(e => e.FldEstimateItemId == id)).GetValueOrDefault();
+        }
+    }
+}

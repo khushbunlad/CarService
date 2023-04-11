@@ -1,0 +1,48 @@
+﻿@model CarService.Models.Entities.TblServiceItemMaster
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TblServiceItemMaster</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FldItemName" class="control-label"></label>
+                <input asp-for="FldItemName" class="form-control" />
+                <span asp-validation-for="FldItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldItemType" class="control-label"></label>
+                <input asp-for="FldItemType" class="form-control" />
+                <span asp-validation-for="FldItemType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldQuanitityUnit" class="control-label"></label>
+                <input asp-for="FldQuanitityUnit" class="form-control" />
+                <span asp-validation-for="FldQuanitityUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldIdealAmount" class="control-label"></label>
+                <input asp-for="FldIdealAmount" class="form-control" />
+                <span asp-validation-for="FldIdealAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

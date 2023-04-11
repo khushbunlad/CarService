@@ -1,0 +1,89 @@
+﻿@model IEnumerable<CarService.Models.Entities.TblEstimateItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FldEstimateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldItemTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldItemType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldQuantityUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldUnitAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldDiscountAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldItemTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldIsCancelled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldCancelReason)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldEstimateId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldItemTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldItemType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldQuantityUnit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldUnitAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldDiscountAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldItemTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldIsCancelled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldCancelReason)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FldEstimateItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FldEstimateItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FldEstimateItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

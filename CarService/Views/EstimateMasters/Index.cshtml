@@ -1,0 +1,77 @@
+﻿@model IEnumerable<CarService.Models.Entities.TblEstimateMaster>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FldCreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldJobId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldEstimateNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldIsInvoiceGenerated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldInvoiceNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldInvoiceCreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldInvoiceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldTotalAmount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldCreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldJobId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldEstimateNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldIsInvoiceGenerated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldInvoiceNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldInvoiceCreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldInvoiceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldTotalAmount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FldEstimateId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FldEstimateId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FldEstimateId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

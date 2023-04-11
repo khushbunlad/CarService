@@ -1,0 +1,79 @@
+﻿@model CarService.Models.Entities.TblEstimateItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TblEstimateItem</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FldEstimateItemId" />
+            <div class="form-group">
+                <label asp-for="FldEstimateId" class="control-label"></label>
+                <input asp-for="FldEstimateId" class="form-control" />
+                <span asp-validation-for="FldEstimateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldItemTitle" class="control-label"></label>
+                <input asp-for="FldItemTitle" class="form-control" />
+                <span asp-validation-for="FldItemTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldItemType" class="control-label"></label>
+                <input asp-for="FldItemType" class="form-control" />
+                <span asp-validation-for="FldItemType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldQuantity" class="control-label"></label>
+                <input asp-for="FldQuantity" class="form-control" />
+                <span asp-validation-for="FldQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldQuantityUnit" class="control-label"></label>
+                <input asp-for="FldQuantityUnit" class="form-control" />
+                <span asp-validation-for="FldQuantityUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldUnitAmount" class="control-label"></label>
+                <input asp-for="FldUnitAmount" class="form-control" />
+                <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldDiscountAmount" class="control-label"></label>
+                <input asp-for="FldDiscountAmount" class="form-control" />
+                <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldItemTotal" class="control-label"></label>
+                <input asp-for="FldItemTotal" class="form-control" />
+                <span asp-validation-for="FldItemTotal" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="FldIsCancelled" /> @Html.DisplayNameFor(model => model.FldIsCancelled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldCancelReason" class="control-label"></label>
+                <input asp-for="FldCancelReason" class="form-control" />
+                <span asp-validation-for="FldCancelReason" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

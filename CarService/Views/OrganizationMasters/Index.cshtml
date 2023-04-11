@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CarService.Models.Entities.TblOrganizationMaster>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FldOrgName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldOrgEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldContactPerson1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldContactNumber1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldContactPerson2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldContactNumber2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldLogo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldIsFullSubscription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldActiveUntil)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FldLicenseNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldOrgName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldOrgEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldContactPerson1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldContactNumber1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldContactPerson2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldContactNumber2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldLogo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldIsFullSubscription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldActiveUntil)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FldLicenseNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FldOrgId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FldOrgId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FldOrgId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

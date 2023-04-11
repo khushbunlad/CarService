@@ -1,0 +1,48 @@
+﻿@model CarService.Models.Entities.TblPayment
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TblPayment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FldJobId" class="control-label"></label>
+                <input asp-for="FldJobId" class="form-control" />
+                <span asp-validation-for="FldJobId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldPaidAmount" class="control-label"></label>
+                <input asp-for="FldPaidAmount" class="form-control" />
+                <span asp-validation-for="FldPaidAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldPaymentMode" class="control-label"></label>
+                <input asp-for="FldPaymentMode" class="form-control" />
+                <span asp-validation-for="FldPaymentMode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldPaymentDatetime" class="control-label"></label>
+                <input asp-for="FldPaymentDatetime" class="form-control" />
+                <span asp-validation-for="FldPaymentDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

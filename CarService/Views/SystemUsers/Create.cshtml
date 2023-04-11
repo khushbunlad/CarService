@@ -1,0 +1,63 @@
+﻿@model CarService.Models.Entities.TblSystemUser
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TblSystemUser</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FldOrgId" class="control-label"></label>
+                <input asp-for="FldOrgId" class="form-control" />
+                <span asp-validation-for="FldOrgId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldFullName" class="control-label"></label>
+                <input asp-for="FldFullName" class="form-control" />
+                <span asp-validation-for="FldFullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldEmailId" class="control-label"></label>
+                <input asp-for="FldEmailId" class="form-control" />
+                <span asp-validation-for="FldEmailId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldMobileNumber" class="control-label"></label>
+                <input asp-for="FldMobileNumber" class="form-control" />
+                <span asp-validation-for="FldMobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldPassword" class="control-label"></label>
+                <input asp-for="FldPassword" class="form-control" />
+                <span asp-validation-for="FldPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="FldIsActive" /> @Html.DisplayNameFor(model => model.FldIsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldRole" class="control-label"></label>
+                <input asp-for="FldRole" class="form-control" />
+                <span asp-validation-for="FldRole" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

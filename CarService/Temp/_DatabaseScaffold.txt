@@ -1,0 +1,20 @@
+﻿//----------------------------------------------------
+Create folder Temp into project 
+
+Create model files from database table into temp folder 
+//----------------------------------------------------
+
+Scaffold-DbContext "Name=ConnectionStrings:CarService" Microsoft.EntityFrameworkCore.SqlServer -ContextDir ".\Temp" -OutputDir ".\Temp" -Namespace "CarService.Models.Entities" -ContextNamespace "CarService.Models.Entities"
+
+//----------------------------------------------------
+
+Replace appContext.cs file in Models\Entities
+
+First time scaffold 
+	>> Copy files into Models\Entities 
+
+If manual modifications are made in already saved entities file
+	>>Add only modified lines
+
+
+

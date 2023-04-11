@@ -1,0 +1,87 @@
+﻿@model CarService.Models.Entities.TblOrganizationMaster
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TblOrganizationMaster</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldOrgName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldOrgName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldOrgEmail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldOrgEmail)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldAddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldContactPerson1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldContactPerson1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldContactNumber1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldContactNumber1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldContactPerson2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldContactPerson2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldContactNumber2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldContactNumber2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldLogo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldLogo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldIsFullSubscription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldIsFullSubscription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldActiveUntil)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldActiveUntil)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FldLicenseNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FldLicenseNumber)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="FldOrgId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

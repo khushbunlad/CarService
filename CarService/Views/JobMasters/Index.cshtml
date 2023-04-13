@@ -4,11 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="d-flex flex-row pb-5">
+    <div class="d-flex flex-fill display-6">My Jobs</div>
+    <div class="d-flex align-items-center">
+        <a asp-action="Create" class="btn btn-success">Create New Job</a>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (Model == null || Model.Count() == 0)
+{
+    <div class="d-flex p-4 justify-content-center align-items-center text-secondary">No Jobs</div>
+}
+else
+{
+    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Jobs</div>
 <table class="table">
     <thead>
         <tr>
@@ -105,3 +114,4 @@
 }
     </tbody>
 </table>
+}

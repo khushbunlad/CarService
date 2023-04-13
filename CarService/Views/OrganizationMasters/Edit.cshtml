@@ -4,15 +4,16 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Organization</h1>
 
-<h4>TblOrganizationMaster</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="FldOrgId" />
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="FldOrgId" />
+    <div class="row">
+        @*Organization basic detail*@
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldOrgName" class="control-label"></label>
                 <input asp-for="FldOrgName" class="form-control" />
@@ -25,9 +26,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="FldAddress" class="control-label"></label>
-                <input asp-for="FldAddress" class="form-control" />
+                <textarea asp-for="FldAddress" class="form-control" style="min-height:120px;"  ></textarea>
                 <span asp-validation-for="FldAddress" class="text-danger"></span>
             </div>
+        </div>
+        @*Contact person and number*@
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldContactPerson1" class="control-label"></label>
                 <input asp-for="FldContactPerson1" class="form-control" />
@@ -48,12 +52,16 @@
                 <input asp-for="FldContactNumber2" class="form-control" />
                 <span asp-validation-for="FldContactNumber2" class="text-danger"></span>
             </div>
+        </div>
+        @*Subscription detail*@
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldLogo" class="control-label"></label>
-                <input asp-for="FldLogo" class="form-control" />
+                <input type="file" asp-for="FldLogoFile" class="form-control" />
+                <input asp-for="FldLogo" class="form-control" hidden />
                 <span asp-validation-for="FldLogo" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check pt-5 pb-1">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="FldIsFullSubscription" /> @Html.DisplayNameFor(model => model.FldIsFullSubscription)
                 </label>
@@ -69,16 +77,24 @@
                 <span asp-validation-for="FldLicenseNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script type="text/javascript">
+    setTimeout(function () {
+        $("#FldLogo").rules("remove", "required")
+        $("#FldContactPerson2").rules("remove", "required")
+        $("#FldContactNumber2").rules("remove", "required")
+        $("#FldLogoFile").rules("remove", "required")
+    }, 500);
+</script>

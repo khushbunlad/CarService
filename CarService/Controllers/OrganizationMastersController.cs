@@ -12,10 +12,12 @@ namespace CarService.Controllers
     public class OrganizationMastersController : Controller
     {
         private readonly CarServiceContext _context;
+        private readonly IConfiguration _config;
 
-        public OrganizationMastersController(CarServiceContext context)
+        public OrganizationMastersController(CarServiceContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         // GET: OrganizationMasters
@@ -55,15 +57,56 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
+        public async Task<IActionResult> Create([Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldLogoFile,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
         {
+            if (tblOrganizationMaster.FldLogo == null)
+            {
+                tblOrganizationMaster.FldLogo = "";
+            }
+            tblOrganizationMaster.FldLogo = "-";
+            if (tblOrganizationMaster.FldContactNumber2 == null)
+            {
+                tblOrganizationMaster.FldContactNumber2 = "";
+            }
+            if (tblOrganizationMaster.FldContactPerson2 == null)
+            {
+                tblOrganizationMaster.FldContactPerson2 = "";
+            }
+            ModelState.Clear();
+            TryValidateModel(tblOrganizationMaster);
             if (ModelState.IsValid)
             {
                 _context.Add(tblOrganizationMaster);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
+                SaveLogoFileAndUpdatePathInDb(tblOrganizationMaster);
                 return RedirectToAction(nameof(Index));
             }
             return View(tblOrganizationMaster);
+        }
+
+        public void SaveLogoFileAndUpdatePathInDb( TblOrganizationMaster tblOrganizationMaster)
+        {
+            if (tblOrganizationMaster.FldLogoFile != null)
+            {
+                String BasePath = _config.GetValue<string>(CarService.Models.Constants.ConfigKeys.StorageBasePath) ?? "";
+                string SavePath = BasePath + "\\Organization_" + tblOrganizationMaster.FldOrgId;
+                if(!Directory.Exists(SavePath))
+                {
+                    Directory.CreateDirectory(SavePath);
+                }
+                SavePath += "\\Logo" + Path.GetExtension(tblOrganizationMaster.FldLogoFile.FileName);
+                if (System.IO.File.Exists(SavePath))
+                {
+                    System.IO.File.Delete(SavePath);
+                }
+                using (Stream fileStream = new FileStream(SavePath, FileMode.Create))
+                {
+                     tblOrganizationMaster.FldLogoFile.CopyToAsync(fileStream);
+                }
+                tblOrganizationMaster.FldLogo = SavePath.Replace(BasePath, "");
+                _context.Update(tblOrganizationMaster);
+                _context.SaveChanges();
+            }
         }
 
         // GET: OrganizationMasters/Edit/5
@@ -89,15 +132,27 @@ namespace CarService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
         {
-            if (id != tblOrganizationMaster.FldOrgId)
-            {
-                return NotFound();
-            }
 
+            if (tblOrganizationMaster.FldLogo == null)
+            {
+                tblOrganizationMaster.FldLogo = "";
+            }
+            tblOrganizationMaster.FldLogo = "-";
+            if (tblOrganizationMaster.FldContactNumber2 == null)
+            {
+                tblOrganizationMaster.FldContactNumber2 = "";
+            }
+            if (tblOrganizationMaster.FldContactPerson2 == null)
+            {
+                tblOrganizationMaster.FldContactPerson2 = "";
+            }
+            ModelState.Clear();
+            TryValidateModel(tblOrganizationMaster);
             if (ModelState.IsValid)
             {
                 try
                 {
+                    SaveLogoFileAndUpdatePathInDb(tblOrganizationMaster);
                     _context.Update(tblOrganizationMaster);
                     await _context.SaveChangesAsync();
                 }

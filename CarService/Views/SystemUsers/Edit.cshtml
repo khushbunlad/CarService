@@ -1,23 +1,19 @@
 ﻿@model CarService.Models.Entities.TblSystemUser
-
+@using CarService.Models.Constants;
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit User</h1>
 
-<h4>TblSystemUser</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="FldUserId" />
-            <div class="form-group">
-                <label asp-for="FldOrgId" class="control-label"></label>
-                <input asp-for="FldOrgId" class="form-control" />
-                <span asp-validation-for="FldOrgId" class="text-danger"></span>
-            </div>
+    <div class="row">
+        <div class="col-md-4">
+
             <div class="form-group">
                 <label asp-for="FldFullName" class="control-label"></label>
                 <input asp-for="FldFullName" class="form-control" />
@@ -38,26 +34,35 @@
                 <input asp-for="FldPassword" class="form-control" />
                 <span asp-validation-for="FldPassword" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="FldOrgId" class="control-label"></label>
+                <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
+                <span asp-validation-for="FldOrgId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check pt-5">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="FldIsActive" /> @Html.DisplayNameFor(model => model.FldIsActive)
                 </label>
             </div>
             <div class="form-group">
                 <label asp-for="FldRole" class="control-label"></label>
-                <input asp-for="FldRole" class="form-control" />
+                <select asp-for="FldRole" class="form-control form-select">
+                    <option value="@UserRoles.Admin">@UserRoles.Admin</option>
+                    <option value="@UserRoles.OrganizationAdmin">@UserRoles.OrganizationAdmin</option>
+                    <option value="@UserRoles.User">@UserRoles.User</option>
+                </select>
                 <span asp-validation-for="FldRole" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group ">
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        </form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -26,24 +26,7 @@ namespace CarService.Controllers
                           Problem("Entity set 'CarServiceContext.TblJobRemarkMasters'  is null.");
         }
 
-        // GET: JobRemarkMasters/Details/5
-        public async Task<IActionResult> Details(long? id)
-        {
-            if (id == null || _context.TblJobRemarkMasters == null)
-            {
-                return NotFound();
-            }
-
-            var tblJobRemarkMaster = await _context.TblJobRemarkMasters
-                .FirstOrDefaultAsync(m => m.FldRemarkId == id);
-            if (tblJobRemarkMaster == null)
-            {
-                return NotFound();
-            }
-
-            return View(tblJobRemarkMaster);
-        }
-
+       
         // GET: JobRemarkMasters/Create
         public IActionResult Create()
         {
@@ -66,57 +49,7 @@ namespace CarService.Controllers
             return View(tblJobRemarkMaster);
         }
 
-        // GET: JobRemarkMasters/Edit/5
-        public async Task<IActionResult> Edit(long? id)
-        {
-            if (id == null || _context.TblJobRemarkMasters == null)
-            {
-                return NotFound();
-            }
-
-            var tblJobRemarkMaster = await _context.TblJobRemarkMasters.FindAsync(id);
-            if (tblJobRemarkMaster == null)
-            {
-                return NotFound();
-            }
-            return View(tblJobRemarkMaster);
-        }
-
-        // POST: JobRemarkMasters/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FldRemarkId,FldRemarkTitle")] TblJobRemarkMaster tblJobRemarkMaster)
-        {
-            if (id != tblJobRemarkMaster.FldRemarkId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tblJobRemarkMaster);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblJobRemarkMasterExists(tblJobRemarkMaster.FldRemarkId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tblJobRemarkMaster);
-        }
-
+       
         // GET: JobRemarkMasters/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {

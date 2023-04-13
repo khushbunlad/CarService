@@ -16,3 +16,20 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*--------------- form controls modified--------------*/
+.form-group{
+    padding-top:1rem;
+}
+.control-label {
+    color: var(--bs-secondary);
+    font-size:small;
+}
+.field-validation-error {
+    font-size: small;
+}
+/*--------------- table modified--------------*/
+.table thead tr th, .table tr th, .table th {
+    background-color: var(--bs-light);
+    border: none !important;
+}

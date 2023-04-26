@@ -26,6 +26,13 @@ namespace CarService.Controllers
                           Problem("Entity set 'CarServiceContext.TblEstimateItems'  is null.");
         }
 
+        public async Task<IActionResult> IndexEstimate(long id)
+        {
+            return _context.TblEstimateItems != null ?
+                        View(await _context.TblEstimateItems.Where(ei=>ei.FldEstimateId == id).ToListAsync()) :
+                        Problem("Entity set 'CarServiceContext.TblEstimateItems'  is null.");
+        }
+
         // GET: EstimateItems/Details/5
         public async Task<IActionResult> Details(long? id)
         {
@@ -45,9 +52,9 @@ namespace CarService.Controllers
         }
 
         // GET: EstimateItems/Create
-        public IActionResult Create()
+        public IActionResult Create(long id)
         {
-            return View();
+            return View(new TblEstimateItem {FldEstimateId=id });
         }
 
         // POST: EstimateItems/Create

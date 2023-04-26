@@ -1,69 +1,96 @@
 ﻿@model CarService.Models.Entities.TblEstimateMaster
+@using CarService.Models.Constants;
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>TblEstimateMaster</h4>
+<h4>Edit estimate / Invoice</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="FldEstimateId" />
-            <div class="form-group">
-                <label asp-for="FldCreatedOn" class="control-label"></label>
-                <input asp-for="FldCreatedOn" class="form-control" />
-                <span asp-validation-for="FldCreatedOn" class="text-danger"></span>
-            </div>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="FldEstimateId" />
+    <input type="hidden" asp-for="FldCreatedOn" class="form-control" />
+    <input type="hidden" asp-for="FldJobId" class="form-control" />
+    <input type="hidden" class="form-check-input" asp-for="FldIsInvoiceGenerated" />
+    <input type="hidden" asp-for="FldInvoiceCreatedOn" class="form-control" />
+    <input type="hidden" asp-for="FldTotalAmount" class="form-control" />
+
+    <div class="row">
+        @*Estimate details*@
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldJobId" class="control-label"></label>
-                <input asp-for="FldJobId" class="form-control" />
-                <span asp-validation-for="FldJobId" class="text-danger"></span>
+                <label class="form-control-plaintext">@ViewBag.JobNumber</label>
             </div>
             <div class="form-group">
                 <label asp-for="FldEstimateNumber" class="control-label"></label>
                 <input asp-for="FldEstimateNumber" class="form-control" />
                 <span asp-validation-for="FldEstimateNumber" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="FldIsInvoiceGenerated" /> @Html.DisplayNameFor(model => model.FldIsInvoiceGenerated)
-                </label>
+            <div class="form-group">
+                <label asp-for="FldCreatedOn" class="control-label"></label>
+                <label class="form-control-plaintext">@Model.FldCreatedOn</label>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldInvoiceNumber" class="control-label"></label>
                 <input asp-for="FldInvoiceNumber" class="form-control" />
                 <span asp-validation-for="FldInvoiceNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FldInvoiceCreatedOn" class="control-label"></label>
-                <input asp-for="FldInvoiceCreatedOn" class="form-control" />
-                <span asp-validation-for="FldInvoiceCreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="FldInvoiceType" class="control-label"></label>
-                <input asp-for="FldInvoiceType" class="form-control" />
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Estimate" value="@InvoiceTypes.Estimate" checked="checked" />
+                    <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Estimate">@InvoiceTypes.Estimate</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Performa" value="@InvoiceTypes.Performa" />
+                    <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Performa">@InvoiceTypes.Performa</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Retail" value="@InvoiceTypes.Retail" />
+                    <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Retail">@InvoiceTypes.Retail</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Tax" value="@InvoiceTypes.Tax" />
+                    <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Tax">@InvoiceTypes.Tax</label>
+                </div>
                 <span asp-validation-for="FldInvoiceType" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FldTotalAmount" class="control-label"></label>
-                <input asp-for="FldTotalAmount" class="form-control" />
-                <span asp-validation-for="FldTotalAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+        </div>
     </div>
+</form>
+<div id="AddEstimateItemBlock">
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+<div id="ListEstimateItemsBlock">
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<script type="text/javascript">
+    setTimeout(function () {
+        $("#AddEstimateItemBlock").load("../../EstimateItems/Create/@Model.FldEstimateId");
+        $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
+
+    }, 500);
+    function CreateJobItem() {
+        var SendData = new Object();
+        SendData.FldJobId = $("#FldJobId").val();
+        SendData.FldRemarkTitle = $("#FldRemarkTitle").val();
+        $.post("../../JobRemarks/Create", SendData, function (res) {
+            $("#AddEstimateItemBlock").html(res);
+            $("#AddEstimateItemBlock").load("../../EstimateItems/Create/@Model.FldEstimateId");
+            $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
+
+        });
+    }
+</script>

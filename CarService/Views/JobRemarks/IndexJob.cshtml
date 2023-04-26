@@ -1,0 +1,42 @@
+﻿@model IEnumerable<CarService.Models.Entities.TblJobRemark>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.FldRemarkTitle</td>
+            <td>
+                <a onclick="DeleteJobItem(@item.FldJobId,'@item.FldRemarkTitle')" >Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    function DeleteJobItem(jobid,title){
+        var SendData = new Object();
+        SendData.FldJobId = jobid;
+        SendData.FldRemarkTitle = title;
+        $.post("../../JobRemarks/DeleteConfirmed", SendData, function (res) {
+            if(res=="success")
+            {
+                $("#ListJobRemarkBlock").load("../../JobRemarks/IndexJob/"+jobid);
+            }
+        });
+    }
+
+</script>

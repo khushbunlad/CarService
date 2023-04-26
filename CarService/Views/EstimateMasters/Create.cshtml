@@ -4,22 +4,23 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create Estimate</h1>
 
-<h4>TblEstimateMaster</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FldCreatedOn" class="control-label"></label>
-                <input asp-for="FldCreatedOn" class="form-control" />
-                <span asp-validation-for="FldCreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <input asp-for="FldInvoiceNumber" class="form-control" hidden />
+            <input asp-for="FldInvoiceType" class="form-control" hidden />
+            <input asp-for="FldCreatedOn" class="form-control" hidden />
+            <input class="form-check-input" asp-for="FldIsInvoiceGenerated" hidden /> @Html.DisplayNameFor(model => model.FldIsInvoiceGenerated)
+            <input asp-for="FldInvoiceCreatedOn" class="form-control" hidden />
+            <input asp-for="FldTotalAmount" class="form-control" hidden />
+
+            <div class="form-group" >
                 <label asp-for="FldJobId" class="control-label"></label>
-                <input asp-for="FldJobId" class="form-control" />
+                <select asp-for="FldJobId" class="form-control form-select" asp-items="@ViewBag.Jobs"></select>
                 <span asp-validation-for="FldJobId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,42 +28,20 @@
                 <input asp-for="FldEstimateNumber" class="form-control" />
                 <span asp-validation-for="FldEstimateNumber" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="FldIsInvoiceGenerated" /> @Html.DisplayNameFor(model => model.FldIsInvoiceGenerated)
-                </label>
-            </div>
             <div class="form-group">
-                <label asp-for="FldInvoiceNumber" class="control-label"></label>
-                <input asp-for="FldInvoiceNumber" class="form-control" />
-                <span asp-validation-for="FldInvoiceNumber" class="text-danger"></span>
+                <input type="submit" value="Create And Continue" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
             </div>
-            <div class="form-group">
-                <label asp-for="FldInvoiceCreatedOn" class="control-label"></label>
-                <input asp-for="FldInvoiceCreatedOn" class="form-control" />
-                <span asp-validation-for="FldInvoiceCreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldInvoiceType" class="control-label"></label>
-                <input asp-for="FldInvoiceType" class="form-control" />
-                <span asp-validation-for="FldInvoiceType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldTotalAmount" class="control-label"></label>
-                <input asp-for="FldTotalAmount" class="form-control" />
-                <span asp-validation-for="FldTotalAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
+
 
 <div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

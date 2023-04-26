@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarService.Models.Entities;
+using CarService.Models.Constants;
 
 namespace CarService.Controllers
 {
@@ -45,9 +46,21 @@ namespace CarService.Controllers
         }
 
         // GET: EstimateMasters/Create
-        public IActionResult Create()
+        public IActionResult Create(long id)
         {
-            return View();
+            SetJobListInViewBag();
+            return View(new TblEstimateMaster
+            {
+                FldCreatedOn = DateTime.Now,
+                FldInvoiceType = InvoiceTypes.Estimate,
+                FldJobId = id
+            });
+        }
+
+        public void SetJobListInViewBag()
+        {
+            long[] GeneratedEstimates =  _context.TblEstimateMasters.Select(e => e.FldJobId).ToArray();
+            ViewBag.Jobs = _context.TblJobMasters.Where(j=>!GeneratedEstimates.Contains(j.FldJobId)).ToList().Select(x => new SelectListItem { Text = x.FldJobNo, Value = x.FldJobId + "" }).ToList();
         }
 
         // POST: EstimateMasters/Create
@@ -57,12 +70,14 @@ namespace CarService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FldEstimateId,FldCreatedOn,FldJobId,FldEstimateNumber,FldIsInvoiceGenerated,FldInvoiceNumber,FldInvoiceCreatedOn,FldInvoiceType,FldTotalAmount")] TblEstimateMaster tblEstimateMaster)
         {
+            SetJobListInViewBag();
             if (ModelState.IsValid)
             {
                 _context.Add(tblEstimateMaster);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit),new { id=tblEstimateMaster.FldEstimateId });
             }
+
             return View(tblEstimateMaster);
         }
 
@@ -79,6 +94,7 @@ namespace CarService.Controllers
             {
                 return NotFound();
             }
+            ViewBag.JobNumber = _context.TblJobMasters.Where(j=>j.FldJobId == tblEstimateMaster.FldJobId).FirstOrDefault().FldJobNo;
             return View(tblEstimateMaster);
         }
 
@@ -114,6 +130,8 @@ namespace CarService.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.JobNumber = _context.TblJobMasters.Where(j => j.FldJobId == tblEstimateMaster.FldJobId).FirstOrDefault().FldJobNo;
+
             return View(tblEstimateMaster);
         }
 

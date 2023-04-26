@@ -1,22 +1,20 @@
 ﻿@model CarService.Models.Entities.TblEstimateItem
-
+@using CarService.Models.Constants;
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
 
-<h1>Create</h1>
 
-<h4>TblEstimateItem</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
         <form asp-action="Create">
+            <input hidden asp-for="FldEstimateId" class="form-control" />
+    <input hidden asp-for="FldCancelReason" class="form-control" />
+    <input hidden class="form-check-input" asp-for="FldIsCancelled" /> 
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FldEstimateId" class="control-label"></label>
-                <input asp-for="FldEstimateId" class="form-control" />
-                <span asp-validation-for="FldEstimateId" class="text-danger"></span>
-            </div>
+
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldItemTitle" class="control-label"></label>
                 <input asp-for="FldItemTitle" class="form-control" />
@@ -24,9 +22,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="FldItemType" class="control-label"></label>
-                <input asp-for="FldItemType" class="form-control" />
-                <span asp-validation-for="FldItemType" class="text-danger"></span>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Part" class="form-control" />
+                    <label class="form-check-label" for="FldItemType_@ServiceItemTypes.Part">@ServiceItemTypes.Part</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Labor" class="form-control" />
+                    <label class="form-check-label" for="FldItemType_@ServiceItemTypes.Labor">@ServiceItemTypes.Labor</label>
+                </div>
             </div>
+        </div>
+        <div class="col-md-3">
+
             <div class="form-group">
                 <label asp-for="FldQuantity" class="control-label"></label>
                 <input asp-for="FldQuantity" class="form-control" />
@@ -37,6 +44,9 @@
                 <input asp-for="FldQuantityUnit" class="form-control" />
                 <span asp-validation-for="FldQuantityUnit" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-3">
+
             <div class="form-group">
                 <label asp-for="FldUnitAmount" class="control-label"></label>
                 <input asp-for="FldUnitAmount" class="form-control" />
@@ -47,31 +57,21 @@
                 <input asp-for="FldDiscountAmount" class="form-control" />
                 <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
             </div>
+           
+        </div>
+        <div class="col-md-2">
             <div class="form-group">
                 <label asp-for="FldItemTotal" class="control-label"></label>
                 <input asp-for="FldItemTotal" class="form-control" />
                 <span asp-validation-for="FldItemTotal" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="FldIsCancelled" /> @Html.DisplayNameFor(model => model.FldIsCancelled)
-                </label>
-            </div>
             <div class="form-group">
-                <label asp-for="FldCancelReason" class="control-label"></label>
-                <input asp-for="FldCancelReason" class="form-control" />
-                <span asp-validation-for="FldCancelReason" class="text-danger"></span>
+                <input type="submit" value="Add Item" class="btn btn-primary" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        </form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

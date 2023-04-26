@@ -47,6 +47,7 @@ namespace CarService.Controllers
         // GET: JobMasters/Create
         public IActionResult Create()
         {
+            SetOrganizationsInViewbag();
             return View();
         }
 
@@ -63,6 +64,7 @@ namespace CarService.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            SetOrganizationsInViewbag();
             return View(tblJobMaster);
         }
 
@@ -79,6 +81,7 @@ namespace CarService.Controllers
             {
                 return NotFound();
             }
+            SetOrganizationsInViewbag();
             return View(tblJobMaster);
         }
 
@@ -114,6 +117,7 @@ namespace CarService.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            SetOrganizationsInViewbag();
             return View(tblJobMaster);
         }
 
@@ -158,5 +162,11 @@ namespace CarService.Controllers
         {
           return (_context.TblJobMasters?.Any(e => e.FldJobId == id)).GetValueOrDefault();
         }
+
+        private void SetOrganizationsInViewbag()
+        {
+            ViewBag.Organizations = _context.TblOrganizationMasters.Select(x => new SelectListItem { Text = x.FldOrgName, Value = x.FldOrgId + "" }).ToList();
+        }
+
     }
 }

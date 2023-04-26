@@ -11,14 +11,13 @@
 
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
     <div class="row">
         @*Job Details*@
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h4>Job Details</h4>
             <div class="form-group">
                 <label asp-for="FldOrgId" class="control-label"></label>
-                <input asp-for="FldOrgId" class="form-control" />
+                <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
                 <span asp-validation-for="FldOrgId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,71 +28,30 @@
             <div class="form-group">
                 <label asp-for="FldServiceType" class="control-label"></label>
                 <br />
-                <div class="form-check form-check-inline">
+                <div class="form-check">
                     <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Free" value="@ServiceTypes.Free" checked="checked" />
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Free">@ServiceTypes.Free</label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check">
                     <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Paid" value="@ServiceTypes.Paid" />
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Paid">@ServiceTypes.Paid</label>
                 </div>
-                <div class="form-check  form-check-inline">
+                <div class="form-check">
                     <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Repair" value="@ServiceTypes.Repair" />
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Repair">@ServiceTypes.Repair</label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check">
                     <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Accident" value="@ServiceTypes.Accident" />
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Accident">@ServiceTypes.Accident</label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check">
                     <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other"  />
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Other">@ServiceTypes.Other</label>
                 </div>
-               
-            </div>
-            <div class="form-group">
-                <label asp-for="FldRegisteredOn" class="control-label"></label>
-                <input asp-for="FldRegisteredOn" class="form-control" />
-                <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldHandedOverOn" class="control-label"></label>
-                <input asp-for="FldHandedOverOn" class="form-control" />
-                <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
-            </div>
-        </div>
-        @*Vehicle Details*@
-        <div class="col-md-4">
-            <h4>Vehicle Details</h4>
-
-            <div class="form-group">
-                <label asp-for="FldVehicleRegisteredNumber" class="control-label"></label>
-                <input asp-for="FldVehicleRegisteredNumber" class="form-control" />
-                <span asp-validation-for="FldVehicleRegisteredNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldChessisNumber" class="control-label"></label>
-                <input asp-for="FldChessisNumber" class="form-control" />
-                <span asp-validation-for="FldChessisNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldEngineNumber" class="control-label"></label>
-                <input asp-for="FldEngineNumber" class="form-control" />
-                <span asp-validation-for="FldEngineNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldModelNameNumber" class="control-label"></label>
-                <input asp-for="FldModelNameNumber" class="form-control" />
-                <span asp-validation-for="FldModelNameNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
-                <input asp-for="FldKmReadingOnRegistration" class="form-control" />
-                <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
             </div>
         </div>
         @*Customer Details*@
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h4>Customer Details</h4>
             <div class="form-group">
                 <label asp-for="FldCustomerName" class="control-label"></label>
@@ -111,6 +69,50 @@
                 <span asp-validation-for="FldCustomerContact2" class="text-danger"></span>
             </div>
 
+        </div>
+        @*Vehicle Details*@
+        <div class="col-md-3">
+            <h4>Vehicle Details</h4>
+            <div class="form-group">
+                <label asp-for="FldVehicleRegisteredNumber" class="control-label"></label>
+                <input asp-for="FldVehicleRegisteredNumber" class="form-control" />
+                <span asp-validation-for="FldVehicleRegisteredNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FldChessisNumber" class="control-label"></label>
+                <input asp-for="FldChessisNumber" class="form-control" />
+                <span asp-validation-for="FldChessisNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldEngineNumber" class="control-label"></label>
+                <input asp-for="FldEngineNumber" class="form-control" />
+                <span asp-validation-for="FldEngineNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldModelNameNumber" class="control-label"></label>
+                <input asp-for="FldModelNameNumber" class="form-control" />
+                <span asp-validation-for="FldModelNameNumber" class="text-danger"></span>
+            </div>
+        </div>
+        @*Job timing*@
+        <div class="col-md-3">
+            <h4>Job Records</h4>
+            <div class="form-group">
+                <label asp-for="FldRegisteredOn" class="control-label"></label>
+                <input asp-for="FldRegisteredOn" class="form-control" />
+                <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
+                <input asp-for="FldKmReadingOnRegistration" class="form-control" />
+                <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldHandedOverOn" class="control-label"></label>
+                <input asp-for="FldHandedOverOn" class="form-control" />
+                <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create Job" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>

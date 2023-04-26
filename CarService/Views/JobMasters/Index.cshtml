@@ -18,100 +18,67 @@
 else
 {
     <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Jobs</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FldOrgId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldJobNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldChessisNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldEngineNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldModelNameNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldServiceType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldRegisteredOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldKmReadingOnRegistration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldCustomerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldCustomerContact1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldCustomerContact2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldHandedOverOn)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldOrgId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldJobNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldVehicleRegisteredNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldChessisNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldEngineNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldModelNameNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldServiceType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldRegisteredOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldKmReadingOnRegistration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldCustomerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldCustomerContact1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldCustomerContact2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldHandedOverOn)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FldJobId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FldJobId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FldJobId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                @*<th>
+            @Html.DisplayNameFor(model => model.FldOrgId)
+            </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.FldJobNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldCustomerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldServiceType)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.FldRegisteredOn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldHandedOverOn)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldJobNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldCustomerName)<br />
+                        @Html.DisplayFor(modelItem => item.FldCustomerContact1)<br />
+                        @Html.DisplayFor(modelItem => item.FldCustomerContact2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldVehicleRegisteredNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldServiceType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldRegisteredOn)
+                    </td>
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldHandedOverOn)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.FldJobId">Edit</a>
+                        <a asp-action="Create" asp-controller="EstimateMasters" asp-route-id="@item.FldJobId">Generate estimate</a>
+                        <a asp-action="Details" asp-route-id="@item.FldJobId">Details</a> 
+                        <a asp-action="Delete" asp-route-id="@item.FldJobId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

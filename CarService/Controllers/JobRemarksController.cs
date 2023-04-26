@@ -21,6 +21,7 @@ namespace CarService.Controllers
         // GET: JobRemarks
         public async Task<IActionResult> IndexJob(long id)
         {
+
             return _context.TblJobRemarks != null ?
                         View(await _context.TblJobRemarks.Where(r=>r.FldJobId == id).ToListAsync()) :
                         Problem("Entity set 'CarServiceContext.TblJobRemarks'  is null.");
@@ -30,6 +31,7 @@ namespace CarService.Controllers
         // GET: JobRemarks/Create
         public IActionResult Create(long id)
         {
+            SetJobRemarkSuggestionInViewbag();
             return View(new TblJobRemark { FldJobId=id,FldRemarkTitle=""});
         }
 
@@ -39,6 +41,7 @@ namespace CarService.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("FldJobId,FldRemarkTitle")] TblJobRemark tblJobRemark)
         {
+            SetJobRemarkSuggestionInViewbag();
             if (ModelState.IsValid)
             {
                 _context.Add(tblJobRemark);
@@ -69,6 +72,11 @@ namespace CarService.Controllers
         private bool TblJobRemarkExists(long id)
         {
           return (_context.TblJobRemarks?.Any(e => e.FldJobId == id)).GetValueOrDefault();
+        }
+
+        private void SetJobRemarkSuggestionInViewbag()
+        {
+            ViewBag.Remarks = _context.TblJobRemarkMasters.Select(x => new SelectListItem { Text = x.FldRemarkTitle, Value = x.FldRemarkId + "" }).ToList();
         }
     }
 }

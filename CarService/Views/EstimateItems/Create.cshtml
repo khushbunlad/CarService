@@ -5,43 +5,48 @@
     Layout = null;
 }
 
-
-        <form asp-action="Create">
-            <input hidden asp-for="FldEstimateId" class="form-control" />
+<h3>Add Service Items</h3>
+<form asp-action="Create">
+    <input hidden asp-for="FldEstimateId" class="form-control" />
     <input hidden asp-for="FldCancelReason" class="form-control" />
-    <input hidden class="form-check-input" asp-for="FldIsCancelled" /> 
+    <input hidden class="form-check-input" asp-for="FldIsCancelled" />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldItemTitle" class="control-label"></label>
-                <input asp-for="FldItemTitle" class="form-control" />
+                <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" />
                 <span asp-validation-for="FldItemTitle" class="text-danger"></span>
+                <datalist id="ServiceItemsSuggestions">
+                    @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
+                    {
+                        <option value="@item.FldItemName">@item.FldItemName</option>
+                    }
+                </datalist>
             </div>
             <div class="form-group">
                 <label asp-for="FldItemType" class="control-label"></label>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Part" class="form-control" />
+                    <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Part" value="@ServiceItemTypes.Part" class="form-control" onchange="ItemTypeChanged()" />
                     <label class="form-check-label" for="FldItemType_@ServiceItemTypes.Part">@ServiceItemTypes.Part</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Labor" class="form-control" />
+                    <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Labor" value="@ServiceItemTypes.Labor" class="form-control" onchange="ItemTypeChanged()" />
                     <label class="form-check-label" for="FldItemType_@ServiceItemTypes.Labor">@ServiceItemTypes.Labor</label>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-
+        <div class="col-md-3" id="QtyBlock" >
             <div class="form-group">
                 <label asp-for="FldQuantity" class="control-label"></label>
-                <input asp-for="FldQuantity" class="form-control" />
+                <input asp-for="FldQuantity" class="form-control" onfocusout="SetTotal()" />
                 <span asp-validation-for="FldQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FldQuantityUnit" class="control-label"></label>
-                <input asp-for="FldQuantityUnit" class="form-control" />
+                <select asp-for="FldQuantityUnit" class="form-control form-select" asp-items="Units.UnitList"></select>
                 <span asp-validation-for="FldQuantityUnit" class="text-danger"></span>
             </div>
         </div>
@@ -49,30 +54,63 @@
 
             <div class="form-group">
                 <label asp-for="FldUnitAmount" class="control-label"></label>
-                <input asp-for="FldUnitAmount" class="form-control" />
+                <input asp-for="FldUnitAmount" class="form-control" onfocusout="SetTotal()" />
                 <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FldDiscountAmount" class="control-label"></label>
-                <input asp-for="FldDiscountAmount" class="form-control" />
+                <input asp-for="FldDiscountAmount" class="form-control" onfocusout="SetTotal()" />
                 <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
             </div>
-           
+
         </div>
         <div class="col-md-2">
             <div class="form-group">
                 <label asp-for="FldItemTotal" class="control-label"></label>
-                <input asp-for="FldItemTotal" class="form-control" />
+                <input asp-for="FldItemTotal" class="form-control"  readonly/>
                 <span asp-validation-for="FldItemTotal" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Add Item" class="btn btn-primary" />
+                <input type="button" value="Add Item" class="btn btn-primary" onclick="CreateEstimateItem()" />
             </div>
         </div>
     </div>
 
-        </form>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<script type="text/javascript">
+ 
+    function SetTotal(){
+        var amount = parseFloat("0" + $("#FldUnitAmount").val());
+        var Discount = parseFloat("0" + $("#FldDiscountAmount").val());
+        var Quantity = parseFloat("0" + $("#FldQuantity").val());
+        var total = ((Quantity * amount)-Discount).toFixed(2);
+        $("#FldItemTotal").val(total);
+
+    }
+
+    function ItemTypeChanged()
+    {
+        var selectedvalue = $('input[name="FldItemType"]:checked').val();
+        console.log(selectedvalue);
+        if(selectedvalue == "@ServiceItemTypes.Part")
+        {
+            $("#QtyBlock").show();
+            $("#FldQuantity").val("1");
+            $("#FldQuantityUnit").val("unit");
+
+        }
+        else{
+            $("#FldQuantity").val("1");
+            $("#FldQuantityUnit").val("unit");
+            $("#QtyBlock").hide();
+
+        }
+    }
+
+</script>

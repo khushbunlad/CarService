@@ -82,11 +82,19 @@
         $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
 
     }, 500);
-    function CreateJobItem() {
+    function CreateEstimateItem() {
         var SendData = new Object();
-        SendData.FldJobId = $("#FldJobId").val();
-        SendData.FldRemarkTitle = $("#FldRemarkTitle").val();
-        $.post("../../JobRemarks/Create", SendData, function (res) {
+        SendData.FldEstimateId = $("#FldEstimateId").val();
+        SendData.FldCancelReason = $("#FldCancelReason").val();
+        SendData.FldIsCancelled = $("#FldIsCancelled").val();
+        SendData.FldItemTitle = $("#FldItemTitle").val();
+        SendData.FldItemType = $('input[name="FldItemType"]:checked').val();
+        SendData.FldQuantity = $("#FldQuantity").val();
+        SendData.FldQuantityUnit = $("#FldQuantityUnit").val();
+        SendData.FldUnitAmount = $("#FldUnitAmount").val();
+        SendData.FldDiscountAmount = $("#FldDiscountAmount").val();
+        SendData.FldItemTotal = $("#FldItemTotal").val();
+        $.post("../../EstimateItems/Create", SendData, function (res) {
             $("#AddEstimateItemBlock").html(res);
             $("#AddEstimateItemBlock").load("../../EstimateItems/Create/@Model.FldEstimateId");
             $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");

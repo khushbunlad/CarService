@@ -54,6 +54,7 @@ namespace CarService.Controllers
         // GET: EstimateItems/Create
         public IActionResult Create(long id)
         {
+            SetServiceItemSuggestionInViewbag();
             return View(new TblEstimateItem {FldEstimateId=id });
         }
 
@@ -61,9 +62,9 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
         {
+            SetServiceItemSuggestionInViewbag();
             if (ModelState.IsValid)
             {
                 _context.Add(tblEstimateItem);
@@ -76,6 +77,7 @@ namespace CarService.Controllers
         // GET: EstimateItems/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
+            SetServiceItemSuggestionInViewbag();
             if (id == null || _context.TblEstimateItems == null)
             {
                 return NotFound();
@@ -96,6 +98,7 @@ namespace CarService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
         {
+            SetServiceItemSuggestionInViewbag();
             if (id != tblEstimateItem.FldEstimateItemId)
             {
                 return NotFound();
@@ -165,5 +168,11 @@ namespace CarService.Controllers
         {
           return (_context.TblEstimateItems?.Any(e => e.FldEstimateItemId == id)).GetValueOrDefault();
         }
+
+        private void SetServiceItemSuggestionInViewbag()
+        {
+            ViewBag.ServiceItem = _context.TblServiceItemMasters.ToList();
+        }
+
     }
 }

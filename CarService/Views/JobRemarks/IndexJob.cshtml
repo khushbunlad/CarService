@@ -14,29 +14,34 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@item.FldRemarkTitle</td>
-            <td>
-                <a onclick="DeleteJobItem(@item.FldJobId,'@item.FldRemarkTitle')" >Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FldRemarkTitle</td>
+                <td>
+                    <a onclick="DeleteJobItem(@item.FldJobId,'@item.FldRemarkTitle')">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
 <script type="text/javascript">
 
-    function DeleteJobItem(jobid,title){
-        var SendData = new Object();
-        SendData.FldJobId = jobid;
-        SendData.FldRemarkTitle = title;
-        $.post("../../JobRemarks/DeleteConfirmed", SendData, function (res) {
-            if(res=="success")
-            {
-                $("#ListJobRemarkBlock").load("../../JobRemarks/IndexJob/"+jobid);
-            }
-        });
+    function DeleteJobItem(jobid, title) {
+
+        var isConfirm = confirm("Confirm Delete ?");
+
+        if (isConfirm) {
+            var SendData = new Object();
+            SendData.FldJobId = jobid;
+            SendData.FldRemarkTitle = title;
+            $.post("../../JobRemarks/DeleteConfirmed", SendData, function (res) {
+                if (res == "success") {
+                    $("#ListJobRemarkBlock").load("../../JobRemarks/IndexJob/" + jobid);
+                }
+            });
+        }
     }
 
 </script>

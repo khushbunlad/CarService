@@ -28,24 +28,6 @@ namespace CarService.Controllers
                           Problem("Entity set 'CarServiceContext.TblOrganizationMasters'  is null.");
         }
 
-        // GET: OrganizationMasters/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.TblOrganizationMasters == null)
-            {
-                return NotFound();
-            }
-
-            var tblOrganizationMaster = await _context.TblOrganizationMasters
-                .FirstOrDefaultAsync(m => m.FldOrgId == id);
-            if (tblOrganizationMaster == null)
-            {
-                return NotFound();
-            }
-
-            return View(tblOrganizationMaster);
-        }
-
         // GET: OrganizationMasters/Create
         public IActionResult Create()
         {
@@ -130,7 +112,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
+        public async Task<IActionResult> Edit(int id, [Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldLogoFile,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
         {
 
             if (tblOrganizationMaster.FldLogo == null)
@@ -199,12 +181,69 @@ namespace CarService.Controllers
             {
                 return Problem("Entity set 'CarServiceContext.TblOrganizationMasters'  is null.");
             }
+            //----------Delete Organization master----------
+
             var tblOrganizationMaster = await _context.TblOrganizationMasters.FindAsync(id);
             if (tblOrganizationMaster != null)
             {
                 _context.TblOrganizationMasters.Remove(tblOrganizationMaster);
             }
-            
+
+            //----------Delete users----------
+            List<TblSystemUser> OrgUsers = _context.TblSystemUsers.Where(u => u.FldOrgId == id).ToList();
+            foreach(TblSystemUser u in OrgUsers)
+            {
+                _context.TblSystemUsers.Remove(u);
+                _context.SaveChanges();
+            }
+
+            //----------Delete Jobs----------
+            List<TblJobMaster> Jobs = _context.TblJobMasters.Where(u => u.FldOrgId == id).ToList();
+            foreach (TblJobMaster j in Jobs)
+            {
+                //----------Delete job items----------
+                List<TblJobRemark> jobremarks = _context.TblJobRemarks.Where(u => u.FldJobId == j.FldJobId).ToList();
+                foreach (TblJobRemark jr in jobremarks)
+                {
+                    _context.TblJobRemarks.Remove(jr);
+                    _context.SaveChanges();
+                }
+
+                //----------Delete job payments----------
+                List<TblPayment> jobpayments = _context.TblPayments.Where(u => u.FldJobId == j.FldJobId).ToList();
+                foreach (TblPayment p in jobpayments)
+                {
+                    _context.TblPayments.Remove(p);
+                    _context.SaveChanges();
+                }
+
+                //----------Delete Estimate----------
+                List<TblEstimateMaster> estimate = _context.TblEstimateMasters.Where(u => u.FldJobId == j.FldJobId).ToList();
+                foreach (TblEstimateMaster e in estimate)
+                {
+                    //----------Delete Estimate items----------
+                    List<TblEstimateItem> estimateitems = _context.TblEstimateItems.Where(u => u.FldEstimateId == e.FldEstimateId).ToList();
+                    foreach (TblEstimateItem ei in estimateitems)
+                    {
+                        _context.TblEstimateItems.Remove(ei);
+                        _context.SaveChanges();
+                    }
+
+
+                    _context.TblEstimateMasters.Remove(e);
+                    _context.SaveChanges();
+                }
+
+
+
+                //----------Delete job master----------
+                _context.TblJobMasters.Remove(j);
+                _context.SaveChanges();
+            }
+
+
+
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -62,6 +62,15 @@
         </div>
         <div class="col-md-4">
             <input type="submit" value="Save" class="btn btn-primary" />
+            @if(!string.IsNullOrEmpty(Model.FldInvoiceNumber) && Model.FldInvoiceType !=InvoiceTypes.Estimate)
+            {
+                <a asp-action="Details" asp-route-id="@Model.FldEstimateId" class="btn btn-outline-primary">View Estimate</a>
+            }
+            else
+            {
+                <a asp-action="Details" asp-route-id="@Model.FldEstimateId" class="btn btn-outline-primary">View Invoice</a>
+
+            }
             <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
         </div>
     </div>

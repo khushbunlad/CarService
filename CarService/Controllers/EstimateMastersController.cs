@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarService.Models.Entities;
 using CarService.Models.Constants;
+using CarService.Models;
 
 namespace CarService.Controllers
 {
@@ -22,9 +23,9 @@ namespace CarService.Controllers
         // GET: EstimateMasters
         public async Task<IActionResult> Index()
         {
-              return _context.TblEstimateMasters != null ? 
-                          View(await _context.TblEstimateMasters.ToListAsync()) :
-                          Problem("Entity set 'CarServiceContext.TblEstimateMasters'  is null.");
+            return _context.TblEstimateMasters != null ?
+                        View(await _context.TblEstimateMasters.ToListAsync()) :
+                        Problem("Entity set 'CarServiceContext.TblEstimateMasters'  is null.");
         }
 
         // GET: EstimateMasters/Details/5
@@ -37,12 +38,13 @@ namespace CarService.Controllers
 
             var tblEstimateMaster = await _context.TblEstimateMasters
                 .FirstOrDefaultAsync(m => m.FldEstimateId == id);
-            if (tblEstimateMaster == null)
-            {
-                return NotFound();
-            }
 
-            return View(tblEstimateMaster);
+            EstimateInvoiceViewModel DisaplayData = new EstimateInvoiceViewModel();
+            DisaplayData.Estimate = _context.TblEstimateMasters.Where(m => m.FldEstimateId == id).FirstOrDefault();
+            DisaplayData.Job = _context.TblJobMasters.Where(m => m.FldJobId == DisaplayData.Estimate.FldJobId).FirstOrDefault();
+            DisaplayData.EstimateItems = _context.TblEstimateItems.Where(m => m.FldEstimateId == id).ToList();
+            DisaplayData.Org = _context.TblOrganizationMasters.Where(m => m.FldOrgId == DisaplayData.Job.FldOrgId).FirstOrDefault();
+            return View(DisaplayData);
         }
 
         // GET: EstimateMasters/Create
@@ -59,8 +61,8 @@ namespace CarService.Controllers
 
         public void SetJobListInViewBag()
         {
-            long[] GeneratedEstimates =  _context.TblEstimateMasters.Select(e => e.FldJobId).ToArray();
-            ViewBag.Jobs = _context.TblJobMasters.Where(j=>!GeneratedEstimates.Contains(j.FldJobId)).ToList().Select(x => new SelectListItem { Text = x.FldJobNo, Value = x.FldJobId + "" }).ToList();
+            long[] GeneratedEstimates = _context.TblEstimateMasters.Select(e => e.FldJobId).ToArray();
+            ViewBag.Jobs = _context.TblJobMasters.Where(j => !GeneratedEstimates.Contains(j.FldJobId)).ToList().Select(x => new SelectListItem { Text = x.FldJobNo, Value = x.FldJobId + "" }).ToList();
         }
 
         // POST: EstimateMasters/Create
@@ -75,7 +77,7 @@ namespace CarService.Controllers
             {
                 _context.Add(tblEstimateMaster);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Edit),new { id=tblEstimateMaster.FldEstimateId });
+                return RedirectToAction(nameof(Edit), new { id = tblEstimateMaster.FldEstimateId });
             }
 
             return View(tblEstimateMaster);
@@ -94,7 +96,7 @@ namespace CarService.Controllers
             {
                 return NotFound();
             }
-            ViewBag.JobNumber = _context.TblJobMasters.Where(j=>j.FldJobId == tblEstimateMaster.FldJobId).FirstOrDefault().FldJobNo;
+            ViewBag.JobNumber = _context.TblJobMasters.Where(j => j.FldJobId == tblEstimateMaster.FldJobId).FirstOrDefault().FldJobNo;
             return View(tblEstimateMaster);
         }
 
@@ -167,14 +169,14 @@ namespace CarService.Controllers
             {
                 _context.TblEstimateMasters.Remove(tblEstimateMaster);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TblEstimateMasterExists(long id)
         {
-          return (_context.TblEstimateMasters?.Any(e => e.FldEstimateId == id)).GetValueOrDefault();
+            return (_context.TblEstimateMasters?.Any(e => e.FldEstimateId == id)).GetValueOrDefault();
         }
     }
 }

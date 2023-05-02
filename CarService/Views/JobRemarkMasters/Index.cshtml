@@ -34,9 +34,8 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.FldRemarkTitle)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.FldRemarkId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.FldRemarkId">Delete</a>
+                    <td class="text-end" >
+                        <a asp-action="Delete" asp-route-id="@item.FldRemarkId"><img src="~/images/delete.png" class="IconButton" title="Delete User" /></a>
                     </td>
                 </tr>
             }

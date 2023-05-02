@@ -1,66 +1,135 @@
-﻿@model CarService.Models.Entities.TblEstimateMaster
+﻿@model CarService.Models.EstimateInvoiceViewModel
+@using CarService.Models.Constants;
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="d-flex flex-row justify-content-end p-4 bg-light">
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-warning">Modify</a>
+    <input type="button" class="btn btn-success" value="Print" />
+</div>
 
-<div>
-    <h4>TblEstimateMaster</h4>
+
+<div id="PrintBlock">
+    @*letterhead block *@
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                @Model.Org.FldAddress
+            </div>
+            <div class="row">
+                @Model.Org.FldOrgEmail
+            </div>
+            <div class="row">
+                @Model.Org.FldContactPerson1 : @Model.Org.FldContactNumber1<br />
+                @Model.Org.FldContactPerson2 : @Model.Org.FldContactNumber2
+            </div>
+        </div>
+        <div class="col-md-4">
+            <img src="@Model.Org.FldLogo" />
+        </div>
+    </div>
+    @*title block *@
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldCreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldCreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldJobId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldJobId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldEstimateNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldEstimateNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldIsInvoiceGenerated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldIsInvoiceGenerated)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldInvoiceNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldInvoiceNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldInvoiceCreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldInvoiceCreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldInvoiceType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldInvoiceType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldTotalAmount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldTotalAmount)
-        </dd>
-    </dl>
+    <h2>@Model.Estimate.FldInvoiceType</h2>
+    <hr />
+    @*Client details*@
+    <table class="table table-sm table-borderless">
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>@Model.Job.FldCustomerName</td>
+                <td>Km</td>
+                <td>@Model.Job.FldKmReadingOnRegistration</td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+                <td>@Model.Job.FldCustomerContact1</td>
+                <td>Date</td>
+                <td>@Model.Estimate.FldCreatedOn</td>
+            </tr>
+            <tr>
+                <td>Vehicle Number</td>
+                <td>@Model.Job.FldVehicleRegisteredNumber</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Service Type</td>
+                <td>@Model.Job.FldServiceType</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <h3>Parts</h3>
+    <table class="table table-sm" >
+        <thead>
+            <tr>
+                <th>Sr No</th>
+                <th>Part Detail</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int srNo = 0;}
+            @foreach (CarService.Models.Entities.TblEstimateItem item in Model.EstimateItems)
+            {
+                @if(item.FldItemType == ServiceItemTypes.Part )
+                {
+                    srNo++;
+                    <tr>
+                        <td>@srNo</td>
+                        <td>@item.FldItemTitle</td>
+                        <td>@item.FldQuantity @item.FldQuantityUnit</td>
+                        <td>@item.FldItemTotal</td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end" >Total</td>
+                <td>@Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Part )?i.FldItemTotal:0)</td>
+            </tr>
+        </tfoot>
+    </table>
+    <h3>Labour</h3>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Sr No</th>
+                <th>Part Detail</th>
+                <th>Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                srNo = 0;
+            }
+            @foreach (CarService.Models.Entities.TblEstimateItem item in Model.EstimateItems)
+            {
+                @if (item.FldItemType == ServiceItemTypes.Labor)
+                {
+                    srNo++;
+                    <tr>
+                        <td>@srNo</td>
+                        <td>@item.FldItemTitle</td>
+                        <td>@item.FldItemTotal</td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-end">Total</td>
+                <td>@Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Labor )?i.FldItemTotal:0)</td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.FldEstimateId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

@@ -48,8 +48,8 @@ namespace CarService.Controllers
         public IActionResult Create()
         {
             SetOrganizationsInViewbag();
-            return View();
-        }
+            return View(new TblJobMaster { FldRegisteredOn = DateTime.Now});
+        } 
 
         // POST: JobMasters/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

@@ -59,10 +59,10 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.FldActiveUntil)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.FldOrgId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.FldOrgId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.FldOrgId">Delete</a>
+                    <td class="text-end" >
+
+                        <a asp-action="Edit" asp-route-id="@item.FldOrgId"><img src="~/images/edit.png" class="IconButton" title="Edit Organization" ></a> 
+                        <a asp-action="Delete" asp-route-id="@item.FldOrgId"><img src="~/images/delete.png" class="IconButton" title="Delete Organization"></a>
                     </td>
                 </tr>
             }

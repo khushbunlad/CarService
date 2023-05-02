@@ -33,3 +33,22 @@ body {
     background-color: var(--bs-light);
     border: none !important;
 }
+
+/*--------------- icon button --------------*/
+
+
+.IconButton {
+    width: 33px;
+    height: 33px;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+    filter: drop-shadow(1px 1px 2px #6c757d1c);
+}
+
+    .IconButton:hover {
+        padding: 0px;
+        transition: all linear 0.2s;
+        filter: drop-shadow(2px 2px 5px #6c757d5d);
+    }

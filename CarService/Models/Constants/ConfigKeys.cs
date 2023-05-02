@@ -4,7 +4,6 @@
     {
         public static readonly string DatabaseName = "CarService";
         public static readonly string StorageBasePath = "StorageBasePath";
-
     }
 
 }

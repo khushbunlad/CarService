@@ -17,64 +17,54 @@
 else
 {
     <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Users</div>
-<table class="table">
-    <thead>
-        <tr>
-            @*<th>
-                @Html.DisplayNameFor(model => model.FldOrgId)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.FldFullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldEmailId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldMobileNumber)
-            </th>
-           @* <th>
-                @Html.DisplayNameFor(model => model.FldPassword)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.FldIsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldRole)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           @* <td>
-                @Html.DisplayFor(modelItem => item.FldOrgId)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.FldFullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldEmailId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldMobileNumber)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.FldPassword)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.FldIsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldRole)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FldUserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FldUserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FldUserId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.FldFullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldEmailId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldMobileNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldIsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FldRole)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldEmailId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldMobileNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldIsActive)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldRole)
+                    </td>
+                    <td class="text-end" >
+                        <a asp-action="Edit" asp-route-id="@item.FldUserId"><img src="~/images/edit.png" class="IconButton" title="Edit User" /></a>
+                        <a asp-action="Delete" asp-route-id="@item.FldUserId"><img src="~/images/delete.png" class="IconButton" title="Delete User" /></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

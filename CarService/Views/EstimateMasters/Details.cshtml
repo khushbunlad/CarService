@@ -6,73 +6,116 @@
 }
 
 <div class="d-flex flex-row justify-content-end p-4 bg-light">
-    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
-    <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-warning">Modify</a>
-    <input type="button" class="btn btn-success" value="Print" />
+    <a asp-action="Edit" asp-route-id="@Model.Job.FldJobId" class="btn btn-primary">Modify Job</a>
+    <div class="p-2"></div>
+    <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-primary">Modify Estimate</a>
+    <div class="p-2"></div>
+    <input type="button" class="btn btn-danger" value="Print" onclick="window.print()" />
+    <div class="p-2"></div>
+    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
 </div>
 
 
-<div id="PrintBlock">
-    @*letterhead block *@
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row">
+<div class="PrintArea">
+    @*letterhead block : Organization name address & contact detail *@
+    <div class="d-flex flex-row mb-2">
+        @*Logo*@
+        <div class="d-flex ps-4 pe-4">
+            <img src="@Context.Session.GetString(SessionKeys.OrgLogo)" style="width:100px;height:100px;" />
+        </div>
+        @*org name, address & contact*@
+        <div class="d-flex flex-fill flex-column ps-4 pe-4">
+            <div class="d-flex display-5">@Model.Org.FldOrgName</div>
+            @*Address*@
+            <div class="d-flex mt-3 fst-italic align-items-baseline">
                 @Model.Org.FldAddress
             </div>
-            <div class="row">
-                @Model.Org.FldOrgEmail
+            @*Contact*@
+            <div class="d-flex flex-row align-items-baseline">
+                <div class="d-flex"> Email : @Model.Org.FldOrgEmail</div>
+                @if (!string.IsNullOrEmpty(Model.Org.FldContactNumber1) && !string.IsNullOrEmpty(Model.Org.FldContactPerson1))
+                {
+                    <div class="d-flex ps-2 pe-2">|</div>
+                    <div class="d-flex">@Model.Org.FldContactPerson1 : @Model.Org.FldContactNumber1</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.Org.FldContactNumber2) && !string.IsNullOrEmpty(Model.Org.FldContactPerson2))
+                {
+                    <div class="d-flex ps-2 pe-2">|</div>
+                    <div class="d-flex">@Model.Org.FldContactPerson2 : @Model.Org.FldContactNumber2</div>
+                }
+                
             </div>
-            <div class="row">
-                @Model.Org.FldContactPerson1 : @Model.Org.FldContactNumber1<br />
-                @Model.Org.FldContactPerson2 : @Model.Org.FldContactNumber2
-            </div>
+           
         </div>
-        <div class="col-md-4">
-            <img src="@Model.Org.FldLogo" />
-        </div>
+       
     </div>
-    @*title block *@
-    <hr />
-    <h2>@Model.Estimate.FldInvoiceType</h2>
-    <hr />
-    @*Client details*@
-    <table class="table table-sm table-borderless">
-        <tbody>
-            <tr>
-                <td>Name</td>
-                <td>@Model.Job.FldCustomerName</td>
-                <td>Km</td>
-                <td>@Model.Job.FldKmReadingOnRegistration</td>
-            </tr>
-            <tr>
-                <td>Contact</td>
-                <td>@Model.Job.FldCustomerContact1</td>
-                <td>Date</td>
-                <td>@Model.Estimate.FldCreatedOn</td>
-            </tr>
-            <tr>
-                <td>Vehicle Number</td>
-                <td>@Model.Job.FldVehicleRegisteredNumber</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Service Type</td>
-                <td>@Model.Job.FldServiceType</td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <hr />
-    <h3>Parts</h3>
-    <table class="table table-sm" >
+    @*title block : customer, vehicle & invoice detail *@
+    <div class="d-flex flex-row bg-light border-top border-bottom border-dark p-3">
+        <table class="table table-sm table-borderless">
+            <tbody>
+                <tr>
+                    <td colspan="2" class="fw-bold fs-5">Customer</td>
+                    <td colspan="2" class="fw-bold fs-5 ">Vehicle</td>
+                    <td colspan="2" class="fw-bold fs-5 ">@Model.Estimate.FldInvoiceType</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>@Model.Job.FldCustomerName</td>
+                    <td>Number</td>
+                    <td>@Model.Job.FldVehicleRegisteredNumber</td>
+                    <td>@(Model.Estimate.FldIsInvoiceGenerated?"Invoice No":"Estimate No")</td>
+                    <td>
+                        @if (Model.Estimate.FldIsInvoiceGenerated)
+                        {
+                            <span>@Model.Estimate.FldInvoiceNumber</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Estimate.FldEstimateNumber</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>Contact</td>
+                    <td>@Model.Job.FldCustomerContact1</td>
+                    <td>Vehicle Number</td>
+                    <td>@Model.Job.FldVehicleRegisteredNumber</td>
+                    <td>Date</td>
+                    <td>
+                        @if (Model.Estimate.FldIsInvoiceGenerated)
+                        {
+                            <span>@Model.Estimate.FldInvoiceCreatedOn.Value.ToString("dd-MMM-yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Estimate.FldCreatedOn.ToString("dd-MMM-yyyy")</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Service Type</td>
+                    <td>@Model.Job.FldServiceType</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    
+    <h3 class="p-3">Parts</h3>
+    <table class="table table-borderless" >
         <thead>
             <tr>
-                <th>Sr No</th>
-                <th>Part Detail</th>
-                <th>Quantity</th>
-                <th>Rate</th>
+                <th class="col-md-1" >Sr No</th>
+                <th class="col-md-4">Part Detail</th>
+                <th class="col-md-1">Quantity</th>
+                <th class="col-md-2">Rate</th>
+                <th class="col-md-2">Discount</th>
+                <th class="col-md-2">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -86,25 +129,30 @@
                         <td>@srNo</td>
                         <td>@item.FldItemTitle</td>
                         <td>@item.FldQuantity @item.FldQuantityUnit</td>
+                        <td>@item.FldUnitAmount</td>
+                        <td>@item.FldDiscountAmount</td>
                         <td>@item.FldItemTotal</td>
                     </tr>
                 }
             }
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="3" class="text-end" >Total</td>
+            <tr class="fw-bold" >
+                <td colspan="5" class="text-end" >Total</td>
                 <td>@Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Part )?i.FldItemTotal:0)</td>
             </tr>
         </tfoot>
     </table>
-    <h3>Labour</h3>
-    <table class="table table-sm">
+    
+    <h3 class="p-3">Labour</h3>
+    <table class="table table-borderless">
         <thead>
             <tr>
-                <th>Sr No</th>
-                <th>Part Detail</th>
-                <th>Rate</th>
+                <th class="col-md-1" >Sr No</th>
+                <th class="col-md-5" >Service Description</th>
+                <th class="col-md-2">Rate</th>
+                <th class="col-md-2">Discount</th>
+                <th class="col-md-2">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -119,14 +167,16 @@
                     <tr>
                         <td>@srNo</td>
                         <td>@item.FldItemTitle</td>
+                        <td>@item.FldUnitAmount</td>
+                        <td>@item.FldDiscountAmount</td>
                         <td>@item.FldItemTotal</td>
                     </tr>
                 }
             }
         </tbody>
-        <tfoot>
+        <tfoot class="fw-bold" >
             <tr>
-                <td colspan="2" class="text-end">Total</td>
+                <td colspan="4" class="text-end">Total</td>
                 <td>@Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Labor )?i.FldItemTotal:0)</td>
             </tr>
         </tfoot>

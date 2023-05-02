@@ -11,11 +11,11 @@
 
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row">
+    <div class="row ">
         @*Job Details*@
-        <div class="col-md-3">
+        <div class="col-md-3 p-4 ">
             <h4>Job Details</h4>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="FldOrgId" class="control-label"></label>
                 <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
                 <span asp-validation-for="FldOrgId" class="text-danger"></span>
@@ -45,13 +45,13 @@
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Accident">@ServiceTypes.Accident</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other"  />
+                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other" />
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Other">@ServiceTypes.Other</label>
                 </div>
             </div>
         </div>
         @*Customer Details*@
-        <div class="col-md-3">
+        <div class="col-md-3 p-4">
             <h4>Customer Details</h4>
             <div class="form-group">
                 <label asp-for="FldCustomerName" class="control-label"></label>
@@ -71,7 +71,7 @@
 
         </div>
         @*Vehicle Details*@
-        <div class="col-md-3">
+        <div class="col-md-3 p-4">
             <h4>Vehicle Details</h4>
             <div class="form-group">
                 <label asp-for="FldVehicleRegisteredNumber" class="control-label"></label>
@@ -96,7 +96,7 @@
             </div>
         </div>
         @*Job timing*@
-        <div class="col-md-3">
+        <div class="col-md-3 p-4">
             <h4>Job Records</h4>
             <div class="form-group">
                 <label asp-for="FldRegisteredOn" class="control-label"></label>
@@ -110,13 +110,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="FldHandedOverOn" class="control-label"></label>
-                <input asp-for="FldHandedOverOn" class="form-control" />
+                <input asp-for="FldHandedOverOn" class="form-control"  />
                 <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create Job" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
-            </div>
+
+        </div>
+        @*Buttons*@
+        <div class="d-flex flex-row justify-content-end p-4 bg-light">
+            <input type="submit" value="Create Job" class="btn btn-success" />
+            <div class="d-flex p-2"></div>
+            <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
         </div>
     </div>
 </form>

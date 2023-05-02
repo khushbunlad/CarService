@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Composition.Convention;
 
 namespace CarService.Models.Entities;
 
@@ -16,7 +18,7 @@ public partial class TblJobMaster
     [Required]
     public string FldJobNo { get; set; } = null!;
 
-    [Display(Name ="Vehical Registration No")]
+    [Display(Name ="Vehicle No")]
     [Required]
     public string FldVehicleRegisteredNumber { get; set; } = null!;
 
@@ -33,7 +35,7 @@ public partial class TblJobMaster
     [Required]
     public string FldServiceType { get; set; } = null!;
 
-    [Display(Name = "Job Registered on")]
+    [Display(Name = "Registered")]
     [DataType(DataType.DateTime)]
     [Required]
     public DateTime FldRegisteredOn { get; set; }
@@ -52,10 +54,17 @@ public partial class TblJobMaster
     public string FldCustomerContact1 { get; set; } = null!;
 
     [Display(Name = "Customer Contact Number")]
-    [DataType(DataType.PhoneNumber)]
-    public string FldCustomerContact2 { get; set; } = null!;
+    public string? FldCustomerContact2 { get; set; } = null!;
 
-    [Display(Name = "Job Delivered on")]
+    [Display(Name = "Delivered")]
     [DataType(DataType.DateTime)]
     public DateTime? FldHandedOverOn { get; set; }
+
+
+    [NotMapped]
+    public bool IsEstimateCreated { get; set; } = false;
+    [NotMapped]
+    public bool IsInvoiceCreated { get; set; } = false;
+    [NotMapped]
+    public long EstimateInvoiceId { get; set; } = -1;
 }

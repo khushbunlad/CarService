@@ -8,45 +8,30 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FldEstimateId)
-            </th>
-            <th>
+            <th class="col-md-4" >
                 @Html.DisplayNameFor(model => model.FldItemTitle)
             </th>
-            <th>
+            <th class="col-md-1">
                 @Html.DisplayNameFor(model => model.FldItemType)
             </th>
-            <th>
+            <th class="col-md-2">
                 @Html.DisplayNameFor(model => model.FldQuantity)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldQuantityUnit)
-            </th>
-            <th>
+            <th class="col-md-2">
                 @Html.DisplayNameFor(model => model.FldUnitAmount)
             </th>
-            <th>
+            <th class="col-md-1">
                 @Html.DisplayNameFor(model => model.FldDiscountAmount)
             </th>
-            <th>
+            <th class="col-md-1">
                 @Html.DisplayNameFor(model => model.FldItemTotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldIsCancelled)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FldCancelReason)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldEstimateId)
-            </td>
+        <tr class="@(item.FldIsCancelled?"text-secondary":"")" >
             <td>
                 @Html.DisplayFor(modelItem => item.FldItemTitle)
             </td>
@@ -55,9 +40,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FldQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldQuantityUnit)
+                    @Html.DisplayFor(modelItem => item.FldQuantityUnit)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FldUnitAmount)
@@ -68,16 +51,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FldItemTotal)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldIsCancelled)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldCancelReason)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FldEstimateItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FldEstimateItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FldEstimateItemId">Delete</a>
+            <td class="text-end d-flex flex-row" >
+                    <a asp-action="Edit" asp-route-id="@item.FldEstimateItemId"><img src="~/images/edit.png" class="IconButton" title="Cancel Item" data-toggle="tooltip" data-placement="top"></a>
+                    <a asp-action="Delete" asp-route-id="@item.FldEstimateItemId"><img src="~/images/delete.png" class="IconButton" title="Delete Item" data-toggle="tooltip" data-placement="top"></a>
             </td>
         </tr>
 }

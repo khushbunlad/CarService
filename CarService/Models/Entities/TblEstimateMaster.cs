@@ -13,6 +13,7 @@ public partial class TblEstimateMaster
     [Required]
     public DateTime FldCreatedOn { get; set; }= DateTime.Now;
 
+    [Display(Name = "Job Number")]
     public long FldJobId { get; set; }
 
     [Display(Name = "Estimate Number")]

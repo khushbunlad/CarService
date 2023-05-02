@@ -6,11 +6,10 @@
 }
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="FldJobId" class="form-control" hidden />
         <div class="form-group">
-            <label asp-for="FldRemarkTitle" class="control-label"></label>
             <input asp-for="FldRemarkTitle" class="form-control" list="RemarkSuggestion" />
             <span asp-validation-for="FldRemarkTitle" class="text-danger"></span>
             <datalist id="RemarkSuggestion">
@@ -20,9 +19,11 @@
                 }
             </datalist>
         </div>
+    </div>
+    <div class="col-md-2">
         <div class="form-group">
             @*Method called from parent page*@
-            <input type="button" value="Create" class="btn btn-primary" onclick="CreateJobItem()" />
+            <input type="button" value="Add Remark" class="btn btn-primary" onclick="CreateJobItem()" />
         </div>
     </div>
 </div>

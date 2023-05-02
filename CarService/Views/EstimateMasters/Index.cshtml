@@ -49,10 +49,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FldTotalAmount)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FldEstimateId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FldEstimateId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FldEstimateId">Delete</a>
+            <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@item.FldEstimateId"><img src="~/images/edit.png" class="IconButton" title="Modify Estimate/Invoice" data-toggle="tooltip" data-placement="top"></a>
+                    <a asp-action="Details" asp-route-id="@item.FldEstimateId"><img src="~/images/invoice.png" class="IconButton" title="@(item.FldIsInvoiceGenerated?"View Invoice":"View Estimate")" data-toggle="tooltip" data-placement="top"></a>
+                    <a asp-action="Delete" asp-route-id="@item.FldEstimateId"><img src="~/images/delete.png" class="IconButton" title="Delete Estimate/Invoice" data-toggle="tooltip" data-placement="top"></a>
             </td>
         </tr>
 }

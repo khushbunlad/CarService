@@ -16,7 +16,9 @@ html {
 body {
   margin-bottom: 60px;
 }
-
+.NotAllowed{
+    pointer-events:none;
+}
 /*--------------- form controls modified--------------*/
 .form-group{
     padding-top:1rem;
@@ -29,7 +31,7 @@ body {
     font-size: small;
 }
 /*--------------- table modified--------------*/
-.table thead tr th, .table tr th, .table th {
+.table thead tr th, .table tr th, .table th, tfoot tr td {
     background-color: var(--bs-light);
     border: none !important;
 }
@@ -38,8 +40,8 @@ body {
 
 
 .IconButton {
-    width: 33px;
-    height: 33px;
+    width: 36px;
+    height: 36px;
     cursor: pointer;
     padding: 4px;
     margin-left: 4px;
@@ -52,3 +54,83 @@ body {
         transition: all linear 0.2s;
         filter: drop-shadow(2px 2px 5px #6c757d5d);
     }
+
+@media print {
+
+    @page {
+        margin-left: 0.5in;
+        margin-right: 0.5in;
+        margin-top: 0;
+        margin-bottom: 0;
+        size: A4 portrait;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact;
+        visibility: hidden;
+    }
+    header,footer{
+        display:none;
+    }
+
+    .container {
+        margin: 0px !important;
+        max-width: 100% !important;
+    }
+
+    .PrintArea {
+        visibility: visible !important;
+    }
+
+    .col-md-1 {
+        width: 8%;
+        float: left;
+    }
+
+    .col-md-2 {
+        width: 16%;
+        float: left;
+    }
+
+    .col-md-3 {
+        width: 25%;
+    }
+
+    .col-md-4 {
+        width: 33%;
+    }
+
+    .col-md-5 {
+        width: 42%;
+    }
+
+    .col-md-6 {
+        width: 50%;
+    }
+
+    .col-md-7 {
+        width: 58%;
+    }
+
+    .col-md-8 {
+        width: 66%;
+    }
+
+    .col-md-9 {
+        width: 75%;
+    }
+
+    .col-md-10 {
+        width: 83%;
+    }
+
+    .col-md-11 {
+        width: 92%;
+    }
+
+    .col-md-12 {
+        width: 100%;
+    }
+}

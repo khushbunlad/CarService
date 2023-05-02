@@ -1,16 +1,24 @@
-﻿<!DOCTYPE html>
+﻿@using CarService.Models.Constants;
+@using Microsoft.AspNetCore.Http;
+@{
+    long UserId = (Context.Session.GetString(SessionKeys.UserId) != null ? long.Parse(Context.Session.GetString(SessionKeys.UserId)) : -1);
+    String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CarService</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CarService.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" media="all" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" media="all" />
+    <link rel="stylesheet" href="~/CarService.styles.css" asp-append-version="true" media="all" />
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarService</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -20,27 +28,35 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="JobMasters" asp-action="Index">Jobs</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-primary" asp-area="" asp-controller="JobMasters" asp-action="Index">Jobs</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="EstimateMasters" asp-action="Index">Estimate & Invoices</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-primary" asp-area="" asp-controller="EstimateMasters" asp-action="Index">Estimate & Invoices</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="Index">Service Items</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-primary" asp-area="" asp-controller="ServiceItemMasters" asp-action="Index">Service Items</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="JobRemarkMasters" asp-action="Index">job Remark List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-primary" asp-area="" asp-controller="JobRemarkMasters" asp-action="Index">job Remark List</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-primary" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-primary" asp-area="" asp-controller="OrganizationMasters" asp-action="Index">Organizations</a>
-                        </li>
+                        @if (UserRoles.Admin == UserRole)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="OrganizationMasters" asp-action="Index">Organizations</a>
+                            </li>
+                        }
                     </ul>
+                </div>
+                <div class="d-flex flex-row align-items-baseline">
+
+                    @if (@Context.Session.GetString(SessionKeys.UserName) != null)
+                    {
+                        <div id="UserProfileMenu" class="text-light mr-2 small">@Context.Session.GetString(SessionKeys.UserName)</div>
+                        <a asp-area="" asp-controller="Home" asp-action="Logout" class="text-white small ps-2" >Logout</a>
+                    }
                 </div>
             </div>
         </nav>
@@ -62,3 +78,11 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+    <script type="text/javascript">
+     setTimeout(function(){
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+     },500);
+    </script>

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Models.Entities;
 using CarService.Models.Constants;
 using CarService.Models;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CarService.Controllers
 {
@@ -19,6 +20,16 @@ namespace CarService.Controllers
         {
             _context = context;
         }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (HttpContext.Session.GetString(SessionKeys.UserId) == null && HttpContext.Session.GetString(SessionKeys.UserId) == null)
+            {
+                context.Result = Redirect("~/Home");
+            }
+            base.OnActionExecuting(context);
+        }
+
 
         // GET: EstimateMasters
         public async Task<IActionResult> Index()
@@ -55,7 +66,9 @@ namespace CarService.Controllers
             {
                 FldCreatedOn = DateTime.Now,
                 FldInvoiceType = InvoiceTypes.Estimate,
-                FldJobId = id
+                FldJobId = id,
+                FldIsInvoiceGenerated=false
+                
             });
         }
 
@@ -116,6 +129,14 @@ namespace CarService.Controllers
             {
                 try
                 {
+                    if(tblEstimateMaster.FldInvoiceType != InvoiceTypes.Estimate && !string.IsNullOrEmpty(tblEstimateMaster.FldInvoiceNumber) && tblEstimateMaster.FldInvoiceCreatedOn !=null)
+                    {
+                        tblEstimateMaster.FldIsInvoiceGenerated = true;
+                    }
+                    else
+                    {
+                        tblEstimateMaster.FldIsInvoiceGenerated = false;
+                    }
                     _context.Update(tblEstimateMaster);
                     await _context.SaveChangesAsync();
                 }

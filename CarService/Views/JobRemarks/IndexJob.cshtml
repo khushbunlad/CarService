@@ -18,8 +18,8 @@
         {
             <tr>
                 <td>@item.FldRemarkTitle</td>
-                <td>
-                    <a onclick="DeleteJobItem(@item.FldJobId,'@item.FldRemarkTitle')">Delete</a>
+                <td class="text-end" >
+                    <a onclick="DeleteJobItem(@item.FldJobId,'@item.FldRemarkTitle')"><img src="~/images/delete.png" class="IconButton" /></a>
                 </td>
             </tr>
         }

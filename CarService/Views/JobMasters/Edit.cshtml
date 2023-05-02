@@ -5,127 +5,134 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Job details</h1>
+@*<h1>Job details</h1>
 
-<hr />
+<hr />*@
+<div class="d-flex bg-light ps-3 pe-3">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="FldJobId" />
+        <div class="row">
+            @*Job Details*@
+            <div class="col-md-3 p-4">
+                <h4>Job Details</h4>
+                <div class="form-group" hidden>
+                    <label asp-for="FldOrgId" class="control-label"></label>
+                    <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
+                    <span asp-validation-for="FldOrgId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldJobNo" class="control-label"></label>
+                    <input asp-for="FldJobNo" class="form-control" />
+                    <span asp-validation-for="FldJobNo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldServiceType" class="control-label"></label>
+                    <br />
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Free" value="@ServiceTypes.Free" checked="checked" />
+                        <label class="form-check-label" for="FldServiceType_@ServiceTypes.Free">@ServiceTypes.Free</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Paid" value="@ServiceTypes.Paid" />
+                        <label class="form-check-label" for="FldServiceType_@ServiceTypes.Paid">@ServiceTypes.Paid</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Repair" value="@ServiceTypes.Repair" />
+                        <label class="form-check-label" for="FldServiceType_@ServiceTypes.Repair">@ServiceTypes.Repair</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Accident" value="@ServiceTypes.Accident" />
+                        <label class="form-check-label" for="FldServiceType_@ServiceTypes.Accident">@ServiceTypes.Accident</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other" />
+                        <label class="form-check-label" for="FldServiceType_@ServiceTypes.Other">@ServiceTypes.Other</label>
+                    </div>
+                </div>
+            </div>
+            @*Customer Details*@
+            <div class="col-md-3 p-4">
+                <h4>Customer Details</h4>
+                <div class="form-group">
+                    <label asp-for="FldCustomerName" class="control-label"></label>
+                    <input asp-for="FldCustomerName" class="form-control" />
+                    <span asp-validation-for="FldCustomerName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldCustomerContact1" class="control-label"></label>
+                    <input asp-for="FldCustomerContact1" class="form-control" />
+                    <span asp-validation-for="FldCustomerContact1" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldCustomerContact2" class="control-label"></label>
+                    <input asp-for="FldCustomerContact2" class="form-control" />
+                    <span asp-validation-for="FldCustomerContact2" class="text-danger"></span>
+                </div>
 
-<form asp-action="Edit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="FldJobId" />
-    <div class="row">
-        @*Job Details*@
-        <div class="col-md-3">
-            <h4>Job Details</h4>
-            <div class="form-group">
-                <label asp-for="FldOrgId" class="control-label"></label>
-                <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
-                <span asp-validation-for="FldOrgId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FldJobNo" class="control-label"></label>
-                <input asp-for="FldJobNo" class="form-control" />
-                <span asp-validation-for="FldJobNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldServiceType" class="control-label"></label>
-                <br />
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Free" value="@ServiceTypes.Free" checked="checked" />
-                    <label class="form-check-label" for="FldServiceType_@ServiceTypes.Free">@ServiceTypes.Free</label>
+            @*Vehicle Details*@
+            <div class="col-md-3 p-4">
+                <h4>Vehicle Details</h4>
+                <div class="form-group">
+                    <label asp-for="FldVehicleRegisteredNumber" class="control-label"></label>
+                    <input asp-for="FldVehicleRegisteredNumber" class="form-control" />
+                    <span asp-validation-for="FldVehicleRegisteredNumber" class="text-danger"></span>
                 </div>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Paid" value="@ServiceTypes.Paid" />
-                    <label class="form-check-label" for="FldServiceType_@ServiceTypes.Paid">@ServiceTypes.Paid</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Repair" value="@ServiceTypes.Repair" />
-                    <label class="form-check-label" for="FldServiceType_@ServiceTypes.Repair">@ServiceTypes.Repair</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Accident" value="@ServiceTypes.Accident" />
-                    <label class="form-check-label" for="FldServiceType_@ServiceTypes.Accident">@ServiceTypes.Accident</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other" />
-                    <label class="form-check-label" for="FldServiceType_@ServiceTypes.Other">@ServiceTypes.Other</label>
-                </div>
-            </div>
-        </div>
-        @*Customer Details*@
-        <div class="col-md-3">
-            <h4>Customer Details</h4>
-            <div class="form-group">
-                <label asp-for="FldCustomerName" class="control-label"></label>
-                <input asp-for="FldCustomerName" class="form-control" />
-                <span asp-validation-for="FldCustomerName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldCustomerContact1" class="control-label"></label>
-                <input asp-for="FldCustomerContact1" class="form-control" />
-                <span asp-validation-for="FldCustomerContact1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldCustomerContact2" class="control-label"></label>
-                <input asp-for="FldCustomerContact2" class="form-control" />
-                <span asp-validation-for="FldCustomerContact2" class="text-danger"></span>
-            </div>
 
-        </div>
-        @*Vehicle Details*@
-        <div class="col-md-3">
-            <h4>Vehicle Details</h4>
-            <div class="form-group">
-                <label asp-for="FldVehicleRegisteredNumber" class="control-label"></label>
-                <input asp-for="FldVehicleRegisteredNumber" class="form-control" />
-                <span asp-validation-for="FldVehicleRegisteredNumber" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="FldChessisNumber" class="control-label"></label>
+                    <input asp-for="FldChessisNumber" class="form-control" />
+                    <span asp-validation-for="FldChessisNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldEngineNumber" class="control-label"></label>
+                    <input asp-for="FldEngineNumber" class="form-control" />
+                    <span asp-validation-for="FldEngineNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldModelNameNumber" class="control-label"></label>
+                    <input asp-for="FldModelNameNumber" class="form-control" />
+                    <span asp-validation-for="FldModelNameNumber" class="text-danger"></span>
+                </div>
             </div>
+            @*Job timing*@
+            <div class="col-md-3 p-4">
+                <h4>Job Records</h4>
+                <div class="form-group">
+                    <label asp-for="FldRegisteredOn" class="control-label"></label>
+                    <input asp-for="FldRegisteredOn" class="form-control" />
+                    <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
+                    <input asp-for="FldKmReadingOnRegistration" class="form-control" />
+                    <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FldHandedOverOn" class="control-label"></label>
+                    <input asp-for="FldHandedOverOn" class="form-control" />
+                    <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="FldChessisNumber" class="control-label"></label>
-                <input asp-for="FldChessisNumber" class="form-control" />
-                <span asp-validation-for="FldChessisNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FldEngineNumber" class="control-label"></label>
-                <input asp-for="FldEngineNumber" class="form-control" />
-                <span asp-validation-for="FldEngineNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldModelNameNumber" class="control-label"></label>
-                <input asp-for="FldModelNameNumber" class="form-control" />
-                <span asp-validation-for="FldModelNameNumber" class="text-danger"></span>
-            </div>
-        </div>
-        @*Job timing*@
-        <div class="col-md-3">
-            <h4>Job Records</h4>
-            <div class="form-group">
-                <label asp-for="FldRegisteredOn" class="control-label"></label>
-                <input asp-for="FldRegisteredOn" class="form-control" />
-                <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
-                <input asp-for="FldKmReadingOnRegistration" class="form-control" />
-                <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldHandedOverOn" class="control-label"></label>
-                <input asp-for="FldHandedOverOn" class="form-control" />
-                <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            @*Buttons*@
+            <div class="col-md-12 d-flex flex-row justify-content-end p-3">
                 <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <div class="d-flex p-2"></div>
                 <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+
             </div>
         </div>
-    </div>
-</form>
-
-<div id="AddJobRemarkBlock">
-
+    </form>
 </div>
-<div id="ListJobRemarkBlock">
+<div class="d-flex shadow p-4 flex-column">
+    <h4>Job Remarks</h4>
+
+    <div id="AddJobRemarkBlock">
+    </div>
+    <div id="ListJobRemarkBlock" class="mt-3">
+    </div>
 </div>
 @section Scripts {
     @{
@@ -133,11 +140,11 @@
     }
 }
 <script type="text/javascript">
-    setTimeout(function(){
-    $("#AddJobRemarkBlock").load("../../JobRemarks/Create/@Model.FldJobId");
-    $("#ListJobRemarkBlock").load("../../JobRemarks/IndexJob/@Model.FldJobId");
+    setTimeout(function () {
+        $("#AddJobRemarkBlock").load("../../JobRemarks/Create/@Model.FldJobId");
+        $("#ListJobRemarkBlock").load("../../JobRemarks/IndexJob/@Model.FldJobId");
 
-    },500);
+    }, 500);
     function CreateJobItem() {
         var SendData = new Object();
         SendData.FldJobId = $("#FldJobId").val();

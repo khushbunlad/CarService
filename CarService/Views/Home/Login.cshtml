@@ -1,0 +1,77 @@
+﻿@model CarService.Models.Login;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Service</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="icon" href="~/images/icon.png" type="image/png">
+
+</head>
+<body class="bg-dark">
+    <div class="d-flex flex-fill vh-100 align-items-center justify-content-center p-4 ">
+        <div class="d-flex flex-row card shadow-lg">
+            <div class="col-md-6 p-5 d-flex flex-column align-items-center justify-content-center bg-light">
+                <img src="~/images/car1.png" style="width:100px;height:100px;" />
+                <div class="d-flex m-4 text-secondary display-4 text-center">Car Service</div>
+            </div>
+            <div class="col-md-6 p-5 bg-white">
+                  <div class="p-2 text-secondary d-flex flex-column justify-content-center display-4 text-center">
+                LOGIN
+                </div>
+
+                <div class="d-flex mt-5">
+                    <form asp-action="Login" class="m-3 p-3">
+                        <div class="form-group">
+                            <label asp-for="@Model.UserName" class="control-label"></label>
+                            <input asp-for="@Model.UserName" class="form-control" />
+                            <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Password" class="control-label"></label>
+                            <input type="password" class="form-control" id="tmpPassword" oninput="EncodePassword()" />
+                            <input  asp-for="@Model.Password" class="form-control" hidden />
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        </div>
+                        @if (ViewBag.msg != null)
+                        {
+                            <div class="form-group">
+                                <span class="text-danger">@ViewBag.msg</span>
+                            </div>
+                        }
+                        <div class="form-group pt-4">
+                            <input type="submit" value="LOGIN" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<head>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        function EncodePassword() {
+            var UserInput = $("#tmpPassword").val();
+            if (UserInput != null && UserInput != undefined && UserInput.length > 0) {
+                var EncStr = "";
+                for (var i = 0; i < UserInput.length; i++) {
+                    EncStr += UserInput.codePointAt(i) + "|";
+                }
+                $('#Password').val(EncStr);
+            }
+        }
+    </script>
+</head>
+</html>

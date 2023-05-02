@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarService.Models.Entities;
+using CarService.Models.Constants;
 
 namespace CarService.Controllers
 {
@@ -55,7 +56,7 @@ namespace CarService.Controllers
         public IActionResult Create(long id)
         {
             SetServiceItemSuggestionInViewbag();
-            return View(new TblEstimateItem {FldEstimateId=id });
+            return View(new TblEstimateItem {FldEstimateId=id,FldQuantityUnit = Units.unit,FldItemType=ServiceItemTypes.Part,FldIsCancelled=false });
         }
 
         // POST: EstimateItems/Create
@@ -67,6 +68,7 @@ namespace CarService.Controllers
             SetServiceItemSuggestionInViewbag();
             if (ModelState.IsValid)
             {
+                tblEstimateItem.FldIsCancelled = false;
                 _context.Add(tblEstimateItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -1,96 +1,217 @@
-﻿@model CarService.Models.Entities.TblJobMaster
+﻿@model CarService.Models.JobViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<head>
+    <link rel="stylesheet" href="~/css/print.css" media="print" />
+</head>
 
-<div>
-    <h4>TblJobMaster</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldOrgId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldOrgId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldJobNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldJobNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldVehicleRegisteredNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldChessisNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldChessisNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldEngineNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldEngineNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldModelNameNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldModelNameNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldServiceType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldServiceType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldRegisteredOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldRegisteredOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldKmReadingOnRegistration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldKmReadingOnRegistration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldCustomerName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldCustomerName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldCustomerContact1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldCustomerContact1)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldCustomerContact2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldCustomerContact2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FldHandedOverOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FldHandedOverOn)
-        </dd>
-    </dl>
+<div class="d-flex flex-row justify-content-end mb-4">
+    <a asp-action="Edit" asp-route-id="@Model.Job.FldJobId" class="btn btn-primary">Modify Job</a>
+    <div class="p-2"></div>
+    @if (Model.Estimate != null)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-primary">Modify Estimate</a>
+        <div class="p-2"></div>
+    }
+    <a asp-action="Create" asp-route-id="@Model.Job.FldJobId" class="btn btn-success">Add Payment</a>
+    <div class="p-2"></div>
+    <input type="button" value="Print" class="btn btn-danger" onclick="window.print()" />
+    <div class="p-2"></div>
+    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.FldJobId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="PrintArea">
+
+
+    @*Job Details*@
+    <div class="row bg-light p-4">
+        <div class="col-md-4">
+            <h5 class="text-secondary fw-bold">Customer</h5>
+            <div class="fw-bold fs-5 pb-2">@Model.Job.FldCustomerName</div>
+            <div>@Model.Job.FldCustomerContact1</div>
+            <div>@Model.Job.FldCustomerContact2</div>
+        </div>
+        <div class="col-md-4">
+            <h5 class="text-secondary fw-bold">Vehicle</h5>
+            <div class="fw-bold fs-5  pb-1">@Model.Job.FldVehicleRegisteredNumber</div>
+            @if (!string.IsNullOrEmpty(@Model.Job.FldModelNameNumber))
+            {
+                <div class="pb-1">@Model.Job.FldModelNameNumber</div>
+            }
+            @if (!string.IsNullOrEmpty(@Model.Job.FldEngineNumber))
+            {
+                <div class="pb-1 small fst-italic"> Engine No : @Model.Job.FldEngineNumber</div>
+            }
+            @if (!string.IsNullOrEmpty(@Model.Job.FldChessisNumber))
+            {
+                <div class="small fst-italic">Chessis No : @Model.Job.FldChessisNumber</div>
+            }
+        </div>
+        <div class="col-md-4">
+            <h1> <span class="text-secondary">#@Model.Job.FldJobNo</span> </h1>
+            <div class="p-2">Registered on : @Model.Job.FldRegisteredOn.ToString("dd-MMM-yyyy HH:mm tt") </div>
+            @if (Model.Job.FldHandedOverOn.HasValue)
+            {
+                <div class="p-2">Delivered on : @Model.Job.FldHandedOverOn.Value.ToString("dd-MMM-yyyy HH:mm tt") </div>
+            }
+        </div>
+    </div>
+    @*Job Remarks*@
+    <div class="row p-4">
+        <h4 class="pb-3">Job Remarks</h4>
+        @if (Model.JobRemarks == null || Model.JobRemarks.Count() == 0)
+        {
+            <div class="p-4 text-secondary">No remarks added</div>
+        }
+        else
+        {
+            int srNo = 0;
+            @foreach (CarService.Models.Entities.TblJobRemark remark in Model.JobRemarks)
+            {
+                srNo++;
+                <div class="row p-1">
+                    <div class="col-md-1 text-end">@srNo.</div>
+                    <div class="col-md-11">@remark.FldRemarkTitle</div>
+                </div>
+            }
+        }
+    </div>
+
+
+    @*Estimate , Invoice & items*@
+    @if (Model.Estimate == null)
+    {
+        <div class="row p-4 bg-light">
+            <h4 class="pb-3">Estimate</h4>
+            <div class="p-4 text-secondary">Estimate not created</div>
+        </div>
+    }
+    else
+    {
+        @*Estimate & Invoice details *@
+        <div class="row p-4 bg-light">
+            <div class="col-md-6">
+                <h5 class="text-secondary fw-bold">Estimate</h5>
+                <div class="fw-bold fs-5 pb-2">#@Model.Estimate.FldEstimateNumber</div>
+                <div>@Model.Estimate.FldCreatedOn.ToString("dd-MMM-yyyy")</div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="text-secondary fw-bold">Invoice</h5>
+                @if (Model.Estimate.FldIsInvoiceGenerated)
+                {
+                    <div class="fw-bold fs-5 pb-2">#@Model.Estimate.FldInvoiceNumber</div>
+                    <div>@Model.Estimate.FldInvoiceCreatedOn.Value.ToString("dd-MMM-yyyy")</div>
+                    <div>@Model.Estimate.FldInvoiceType</div>
+                }
+                else
+                {
+                    <div class="text-secondary small">Invoice not generated</div>
+                }
+
+            </div>
+        </div>
+
+
+        @*Estimate / Invoice Items*@
+        <div class="row p-4">
+            <h4 class="pb-3">Estimate / Invoice Items</h4>
+            @if (Model.EstimateItems == null || Model.EstimateItems.Count() == 0)
+            {
+                <div class="p-4 text-secondary">No estimate items found</div>
+            }
+            else
+            {
+                <table class="table table-sm">
+                    <thead>
+                        <tr class="col-md-12" >
+                            <th class="col-md-3">Title</th>
+                            <th class="col-md-1">type</th>
+                            <th class="col-md-1">Quantity</th>
+                            <th class="col-md-1">Amount</th>
+                            <th class="col-md-1">discount</th>
+                            <th class="col-md-1">Total</th>
+                            <th class="col-md-1">status</th>
+                            <th class="col-md-2">Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (CarService.Models.Entities.TblEstimateItem item in Model.EstimateItems)
+                        {
+                            <tr>
+                                <td>@item.FldItemTitle</td>
+                                <td>@item.FldItemType</td>
+                                <td>@item.FldQuantity @item.FldQuantityUnit</td>
+                                <td>@item.FldUnitAmount</td>
+                                <td>@item.FldDiscountAmount</td>
+                                <td>@item.FldItemTotal</td>
+                                <td>@(item.FldIsCancelled ? "Cancelled" : "")</td>
+                                <td>@item.FldCancelReason</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>@Model.EstimateItems.Count() items</td>
+                            <td></td>
+                            <td>@Math.Round(Model.EstimateItems.Sum(p=>p.FldDiscountAmount),2)</td>
+                            <td>@Math.Round(Model.EstimateItems.Sum(p=>p.FldItemTotal),2)</td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                    </tfoot>
+                </table>
+
+            }
+        </div>
+    }
+
+    @*Payments*@
+    <div class="row p-4 bg-light">
+        <h4>Payments</h4>
+    </div>
+    <div class="row p-4">
+
+        @if (Model.Payments == null || Model.Payments.Count() == 0)
+        {
+            <div class="p-4 text-secondary">No Payments</div>
+        }
+        else
+        {
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Mode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (CarService.Models.Entities.TblPayment payment in Model.Payments)
+                    {
+                        <tr>
+                            <td>@payment.FldPaymentDatetime.ToString("dd-MMM-yyyy")</td>
+                            <td>@payment.FldPaidAmount</td>
+                            <td>@payment.FldPaymentMode</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td>@Math.Round(Model.Payments.Sum(p=>p.FldPaidAmount),2)</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        }
+    </div>
+
 </div>
+

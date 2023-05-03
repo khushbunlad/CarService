@@ -9,25 +9,25 @@
 </head>
 
 <div class="d-flex flex-row justify-content-end mb-4">
-    <a asp-action="Edit" asp-route-id="@Model.Job.FldJobId" class="btn btn-primary">Modify Job</a>
+    <a asp-action="Edit" asp-route-id="@Model.Job.FldJobId" class="btn btn-sm btn-primary">Modify Job</a>
     <div class="p-2"></div>
     @if (Model.Estimate != null)
     {
-        <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-primary">Modify Estimate</a>
+        <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-sm btn-primary">Modify Estimate</a>
         <div class="p-2"></div>
     }
-    <a asp-action="Create" asp-route-id="@Model.Job.FldJobId" class="btn btn-success">Add Payment</a>
+    <a asp-action="Create" asp-controller="Payments" asp-route-id="@Model.Job.FldJobId" class="btn btn-sm btn-success">Modify Payments</a>
     <div class="p-2"></div>
-    <input type="button" value="Print" class="btn btn-danger" onclick="window.print()" />
+    <input type="button" value="Print" class="btn btn-sm btn-danger" onclick="window.print()" />
     <div class="p-2"></div>
-    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+    <a asp-action="Index" class="btn btn-sm btn-outline-primary">Back to List</a>
 </div>
 
 <div class="PrintArea">
 
 
     @*Job Details*@
-    <div class="row bg-light p-4">
+    <div class="row bg-light p-3 border-4 border-start border-secondary">
         <div class="col-md-4">
             <h5 class="text-secondary fw-bold">Customer</h5>
             <div class="fw-bold fs-5 pb-2">@Model.Job.FldCustomerName</div>
@@ -52,19 +52,19 @@
         </div>
         <div class="col-md-4">
             <h1> <span class="text-secondary">#@Model.Job.FldJobNo</span> </h1>
-            <div class="p-2">Registered on : @Model.Job.FldRegisteredOn.ToString("dd-MMM-yyyy HH:mm tt") </div>
+            <div class="small">Registered on : @Model.Job.FldRegisteredOn.ToString("dd-MMM-yyyy HH:mm tt") </div>
             @if (Model.Job.FldHandedOverOn.HasValue)
             {
-                <div class="p-2">Delivered on : @Model.Job.FldHandedOverOn.Value.ToString("dd-MMM-yyyy HH:mm tt") </div>
+                <div class="small">Delivered on : @Model.Job.FldHandedOverOn.Value.ToString("dd-MMM-yyyy HH:mm tt") </div>
             }
         </div>
     </div>
     @*Job Remarks*@
     <div class="row p-4">
-        <h4 class="pb-3">Job Remarks</h4>
+        <h6 class="text-secondary ">Job Remarks</h6>
         @if (Model.JobRemarks == null || Model.JobRemarks.Count() == 0)
         {
-            <div class="p-4 text-secondary">No remarks added</div>
+            <div class="p-2 text-secondary">No remarks added</div>
         }
         else
         {
@@ -85,14 +85,14 @@
     @if (Model.Estimate == null)
     {
         <div class="row p-4 bg-light">
-            <h4 class="pb-3">Estimate</h4>
-            <div class="p-4 text-secondary">Estimate not created</div>
+            <h6 class="text-secondary">Estimate</h6>
+            <div class="p-2 text-secondary">Estimate not created</div>
         </div>
     }
     else
     {
         @*Estimate & Invoice details *@
-        <div class="row p-4 bg-light">
+        <div class="row p-3 bg-light border-4 border-start border-secondary">
             <div class="col-md-6">
                 <h5 class="text-secondary fw-bold">Estimate</h5>
                 <div class="fw-bold fs-5 pb-2">#@Model.Estimate.FldEstimateNumber</div>
@@ -172,7 +172,7 @@
     }
 
     @*Payments*@
-    <div class="row p-4 bg-light">
+    <div class="row p-3 bg-light border-4 border-start border-secondary">
         <h4>Payments</h4>
     </div>
     <div class="row p-4">

@@ -63,7 +63,7 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
+        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldHsnNumber,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
         {
             SetServiceItemSuggestionInViewbag();
             if (ModelState.IsValid)
@@ -71,8 +71,9 @@ namespace CarService.Controllers
                 tblEstimateItem.FldIsCancelled = false;
                 _context.Add(tblEstimateItem);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Create));
             }
+           
             return View(tblEstimateItem);
         }
 
@@ -97,8 +98,7 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
+        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldHsnNumber,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
         {
             SetServiceItemSuggestionInViewbag();
             if (id != tblEstimateItem.FldEstimateItemId)
@@ -112,6 +112,7 @@ namespace CarService.Controllers
                 {
                     _context.Update(tblEstimateItem);
                     await _context.SaveChangesAsync();
+                    return Json("success");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +125,7 @@ namespace CarService.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(tblEstimateItem);
             }
             return View(tblEstimateItem);
         }
@@ -148,8 +149,7 @@ namespace CarService.Controllers
         }
 
         // POST: EstimateItems/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]    
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             if (_context.TblEstimateItems == null)
@@ -163,7 +163,7 @@ namespace CarService.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json("success");
         }
 
         private bool TblEstimateItemExists(long id)

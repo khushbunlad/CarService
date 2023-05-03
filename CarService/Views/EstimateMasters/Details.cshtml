@@ -5,18 +5,18 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="d-flex flex-row justify-content-end p-4 bg-light">
-    <a asp-action="Edit" asp-route-id="@Model.Job.FldJobId" class="btn btn-primary">Modify Job</a>
+<div class="d-flex flex-row justify-content-end p-2 bg-light">
+    <a asp-action="Edit" asp-controller="JobMasters" asp-route-id="@Model.Job.FldJobId" class="btn btn-sm btn-primary">Modify Job</a>
     <div class="p-2"></div>
-    <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-primary">Modify Estimate</a>
+    <a asp-action="Edit" asp-route-id="@Model.Estimate.FldEstimateId" class="btn btn-sm btn-primary">Modify Estimate</a>
     <div class="p-2"></div>
-    <input type="button" class="btn btn-danger" value="Print" onclick="window.print()" />
+    <input type="button" class="btn btn-sm btn-danger" value="Print" onclick="window.print()" />
     <div class="p-2"></div>
-    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+    <a asp-action="Index" class="btn btn-sm btn-outline-primary">Back to List</a>
 </div>
 
 
-<div class="PrintArea">
+<div class="PrintArea bg-white">
     @*letterhead block : Organization name address & contact detail *@
     <div class="d-flex flex-row mb-2">
         @*Logo*@
@@ -49,13 +49,14 @@
         </div>
        
     </div>
+    
     @*title block : customer, vehicle & invoice detail *@
-    <div class="d-flex flex-row bg-light border-top border-bottom border-dark p-3">
+    <div class="d-flex flex-row  border-top border-bottom border-dark p-3 mb-2">
         <table class="table table-sm table-borderless">
             <tbody>
                 <tr>
-                    <td colspan="2" class="fw-bold fs-5">Customer</td>
-                    <td colspan="2" class="fw-bold fs-5 ">Vehicle</td>
+                    <td colspan="2" class="fw-bold fs-5 text-secondary pb-3">Customer</td>
+                    <td colspan="2" class="fw-bold fs-5 text-secondary ">Vehicle</td>
                     <td colspan="2" class="fw-bold fs-5 ">@Model.Estimate.FldInvoiceType</td>
                 </tr>
                 <tr>
@@ -106,53 +107,75 @@
 
     </div>
     
-    <h3 class="p-3">Parts</h3>
+    @*Parts breakup*@
+    <h4 class="p-2 ps-3 border-start border-4 border-secondary text-secondary">Parts Breakup</h4>
     <table class="table table-borderless" >
         <thead>
             <tr>
-                <th class="col-md-1" >Sr No</th>
-                <th class="col-md-4">Part Detail</th>
-                <th class="col-md-1">Quantity</th>
-                <th class="col-md-2">Rate</th>
-                <th class="col-md-2">Discount</th>
-                <th class="col-md-2">Amount</th>
+                <td class="col-md-1"></td>
+                <td class="col-md-1"></td>
+                <td class="col-md"></td>
+                <td class="col-md-1"></td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2"></td>
+            </tr>
+            <tr>
+                <th >Sr No</th>
+                <th >HSN</th>
+                <th >Part Detail</th>
+                <th >Quantity</th>
+                <th class="text-end">Rate</th>
+                <th class="text-end">Discount</th>
+                <th class="text-end" >Amount</th>
             </tr>
         </thead>
         <tbody>
             @{int srNo = 0;}
             @foreach (CarService.Models.Entities.TblEstimateItem item in Model.EstimateItems)
             {
-                @if(item.FldItemType == ServiceItemTypes.Part )
+                @if(item.FldItemType == ServiceItemTypes.Part && item.FldIsCancelled==false )
                 {
                     srNo++;
                     <tr>
                         <td>@srNo</td>
+                        <td>@item.FldHsnNumber</td>
                         <td>@item.FldItemTitle</td>
                         <td>@item.FldQuantity @item.FldQuantityUnit</td>
-                        <td>@item.FldUnitAmount</td>
-                        <td>@item.FldDiscountAmount</td>
-                        <td>@item.FldItemTotal</td>
+                        <td class="text-end" >@Math.Round(item.FldUnitAmount,2)</td>
+                        <td class="text-end">@Math.Round(item.FldDiscountAmount,2)</td>
+                        <td class="text-end">@Math.Round(item.FldItemTotal,2)</td>
                     </tr>
                 }
             }
         </tbody>
         <tfoot>
             <tr class="fw-bold" >
-                <td colspan="5" class="text-end" >Total</td>
-                <td>@Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Part )?i.FldItemTotal:0)</td>
+                <td colspan="6" class="text-end" >Parts Total</td>
+                <td class="text-end">@Math.Round(Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Part && i.FldIsCancelled == false )?i.FldItemTotal:0),2)</td>
             </tr>
         </tfoot>
     </table>
     
-    <h3 class="p-3">Labour</h3>
+    @*Services breakup*@
+    <h4 class="p-2 ps-3 border-start border-4 border-secondary text-secondary">Labour Breakup</h4>
     <table class="table table-borderless">
         <thead>
             <tr>
-                <th class="col-md-1" >Sr No</th>
-                <th class="col-md-5" >Service Description</th>
-                <th class="col-md-2">Rate</th>
-                <th class="col-md-2">Discount</th>
-                <th class="col-md-2">Amount</th>
+                <td class="col-md-1"></td>
+                <td class="col-md-1"></td>
+                <td class="col-md"></td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2"></td>
+            </tr>
+            <tr>
+                <th >Sr No</th>
+                <th >HSN</th>
+                <th >Service Description</th>
+                <th class="text-end">Rate</th>
+                <th class="text-end">Discount</th>
+                <th class="text-end">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -161,25 +184,61 @@
             }
             @foreach (CarService.Models.Entities.TblEstimateItem item in Model.EstimateItems)
             {
-                @if (item.FldItemType == ServiceItemTypes.Labor)
+                @if (item.FldItemType == ServiceItemTypes.Labor && item.FldIsCancelled == false)
                 {
                     srNo++;
                     <tr>
                         <td>@srNo</td>
+                        <td>@item.FldHsnNumber</td>
                         <td>@item.FldItemTitle</td>
-                        <td>@item.FldUnitAmount</td>
-                        <td>@item.FldDiscountAmount</td>
-                        <td>@item.FldItemTotal</td>
+                        <td class="text-end">@Math.Round(item.FldUnitAmount,2)</td>
+                        <td class="text-end">@Math.Round(item.FldDiscountAmount,2)</td>
+                        <td class="text-end">@Math.Round(item.FldItemTotal,2)</td>
                     </tr>
                 }
             }
         </tbody>
         <tfoot class="fw-bold" >
             <tr>
-                <td colspan="4" class="text-end">Total</td>
-                <td>@Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Labor )?i.FldItemTotal:0)</td>
+                <td colspan="5" class="text-end">Labour Total</td>
+                <td class="text-end">@Math.Round(Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Labor && i.FldIsCancelled ==false )?i.FldItemTotal:0),2)</td>
             </tr>
         </tfoot>
     </table>
+
+    @*Summary*@
+    <h4 class="p-2 ps-3 border-start border-4 border-secondary text-secondary">Summary</h4>
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <td class="col-md-8" ></td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2"></td>
+            </tr>
+            <tr>
+                <th class="bg-white" ></th>
+                <th>Title</th>
+                <th class=" text-end">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>Parts Total</td>
+                <td class="text-end">@Math.Round(Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Part && i.FldIsCancelled == false )?i.FldItemTotal:0),2)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Labour Total</td>
+                <td class="text-end">@Math.Round(Model.EstimateItems.Sum(i=> (i.FldItemType == ServiceItemTypes.Labor && i.FldIsCancelled == false )?i.FldItemTotal:0),2)</td>
+            </tr>
+            <tr class="fs-4 fw-bold" >
+                <td></td>
+                <td>Grand Total</td>
+                <td class="text-end">@Math.Round(Model.EstimateItems.Sum(i=> (i.FldIsCancelled == false )?i.FldItemTotal:0),2)</td>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
 

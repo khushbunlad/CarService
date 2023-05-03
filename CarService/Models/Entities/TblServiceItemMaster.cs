@@ -25,4 +25,8 @@ public partial class TblServiceItemMaster
     [DataType(DataType.Currency)]
     [Required]
     public decimal FldIdealAmount { get; set; } = 0;
+
+    [Display(Name = "HSN Number")]
+    [Required]
+    public string? FldHsnNumber { get; set; }
 }

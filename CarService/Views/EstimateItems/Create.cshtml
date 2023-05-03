@@ -7,23 +7,24 @@
 
 <h4>Estimate / Invoice Items</h4>
 <form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input hidden asp-for="FldEstimateId" class="form-control" />
     <input hidden asp-for="FldCancelReason" class="form-control" />
-    <input hidden class="form-check-input" asp-for="FldIsCancelled" />
+    <input hidden asp-for="FldIsCancelled" class="form-check-input" />
+    <input hidden asp-for="FldHsnNumber" class="form-control" />
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="row pb-4">
         @*Item Name*@
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="FldItemTitle" class="control-label"></label>
-                <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" />
+                <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" onchange="SetHsnNumber()" />
                 <span asp-validation-for="FldItemTitle" class="text-danger"></span>
                 <datalist id="ServiceItemsSuggestions">
                     @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
                     {
-                        <option value="@item.FldItemName">@item.FldItemName</option>
+                        <option value="@item.FldItemName" hsn="@item.FldHsnNumber" >@item.FldItemName [@item.FldHsnNumber] </option>
                     }
                 </datalist>
             </div>
@@ -101,23 +102,27 @@
 }
 <script type="text/javascript">
 
+    function SetHsnNumber(){
+        var selectedVal = $("#FldItemTitle").val();
+        var hsn = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("hsn");
+        $('#FldHsnNumber').val(hsn);
+    }
+
     function SetTotal() {
-        var amount = parseFloat("0" + $("#FldUnitAmount").val());
-        var Discount = parseFloat("0" + $("#FldDiscountAmount").val());
-        var Quantity = parseFloat("0" + $("#FldQuantity").val());
+        var amount = parseFloat("0" + $("#AddEstimateItemBlock #FldUnitAmount").val());
+        var Discount = parseFloat("0" + $("#AddEstimateItemBlock #FldDiscountAmount").val());
+        var Quantity = parseFloat("0" + $("#AddEstimateItemBlock #FldQuantity").val());
         var total = ((Quantity * amount) - Discount).toFixed(2);
-        $("#FldItemTotal").val(total);
+        $("#AddEstimateItemBlock #FldItemTotal").val(total);
 
     }
 
     function ItemTypeChanged() {
         var selectedvalue = $('input[name="FldItemType"]:checked').val();
-        console.log(selectedvalue);
         if (selectedvalue == "@ServiceItemTypes.Part") {
             $("#QtyBlock").show();
             $("#FldQuantity").val("1");
             $("#FldQuantityUnit").val("unit");
-
         }
         else {
             $("#FldQuantity").val("1");

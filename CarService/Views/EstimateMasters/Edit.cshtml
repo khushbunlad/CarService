@@ -97,8 +97,27 @@
     </div>
     <div id="ListEstimateItemsBlock">
     </div>
-
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit / Cancel Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="LoadEditForm" >
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
 @section Scripts {
     @{
@@ -123,11 +142,59 @@
         SendData.FldUnitAmount = $("#FldUnitAmount").val();
         SendData.FldDiscountAmount = $("#FldDiscountAmount").val();
         SendData.FldItemTotal = $("#FldItemTotal").val();
+        SendData.FldHsnNumber = $("#FldHsnNumber").val();
         $.post("../../EstimateItems/Create", SendData, function (res) {
             $("#AddEstimateItemBlock").html(res);
-            $("#AddEstimateItemBlock").load("../../EstimateItems/Create/@Model.FldEstimateId");
             $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
-
         });
     }
+
+    function DeleteEstimateItem(estitemid, estid) {
+        var isConfirm = confirm("Confirm Delete ?");
+        if (isConfirm) {
+            var SendData = new Object();
+            SendData.id = estitemid;
+            $.post("../../EstimateItems/DeleteConfirmed", SendData, function (res) {
+                if (res == "success") {
+                    $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/" + estid);
+                }
+            });
+        }
+    }
+
+    function EditEstimateItem(estitemid, estid) {
+        $("#LoadEditForm").load("../../EstimateItems/Edit/"+estitemid, function () {
+        
+          new bootstrap.Modal(document.getElementById('exampleModal')).show();
+        });
+    }
+
+    function ModifyEstimateItem() {
+        var SendData = new Object();
+        SendData.Id = $("#LoadEditForm #FldEstimateItemId").val();
+        SendData.FldEstimateItemId = $("#LoadEditForm #FldEstimateItemId").val();
+        SendData.FldEstimateId = $("#LoadEditForm #FldEstimateId").val();
+        SendData.FldCancelReason = $("#LoadEditForm #FldCancelReason").val();
+        SendData.FldIsCancelled = $("#LoadEditForm #FldIsCancelled").is(":checked");
+        SendData.FldItemTitle = $("#LoadEditForm #FldItemTitle").val();
+        SendData.FldItemType = $('#LoadEditForm #FldItemType').val();
+        SendData.FldQuantity = $("#LoadEditForm #FldQuantity").val();
+        SendData.FldQuantityUnit = $("#LoadEditForm #FldQuantityUnit").val();
+        SendData.FldUnitAmount = $("#LoadEditForm #FldUnitAmount").val();
+        SendData.FldDiscountAmount = $("#LoadEditForm #FldDiscountAmount").val();
+        SendData.FldItemTotal = $("#LoadEditForm #FldItemTotal").val();
+        SendData.FldHsnNumber = $("#LoadEditForm #FldHsnNumber").val();
+        $.post("../../EstimateItems/Edit", SendData, function (res) {
+          
+            if(res=="success")
+            {
+                $('#exampleModal').modal('hide');
+            }
+            else{
+                $("#LoadEditForm").html(res);
+            }
+            $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
+        });
+    }
+
 </script>

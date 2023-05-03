@@ -1,56 +1,44 @@
 ﻿@model CarService.Models.Entities.TblEstimateItem
+@using CarService.Models.Constants;
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = null;
 }
-
-<h1>Edit</h1>
-
-<h4>TblEstimateItem</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="FldEstimateId" class="form-control" hidden />
+            <input asp-for="FldItemType" class="form-control" hidden />
+            <input asp-for="FldQuantityUnit" class="form-control" hidden />
+            <input asp-for="FldHsnNumber" class="form-control" hidden />
+
+
             <input type="hidden" asp-for="FldEstimateItemId" />
             <div class="form-group">
-                <label asp-for="FldEstimateId" class="control-label"></label>
-                <input asp-for="FldEstimateId" class="form-control" />
-                <span asp-validation-for="FldEstimateId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldItemTitle" class="control-label"></label>
-                <input asp-for="FldItemTitle" class="form-control" />
+                <label class="control-label">@Model.FldHsnNumber</label>
+                <input asp-for="FldItemTitle" class="form-control-plaintext" readonly />
                 <span asp-validation-for="FldItemTitle" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FldItemType" class="control-label"></label>
-                <input asp-for="FldItemType" class="form-control" />
-                <span asp-validation-for="FldItemType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldQuantity" class="control-label"></label>
+            <div class="form-group" @(Model.FldItemType == ServiceItemTypes.Part?"":"hidden") >
+                <label asp-for="FldQuantity" class="control-label"></label><span class="text-info"> ( @Model.FldQuantityUnit )</span>
                 <input asp-for="FldQuantity" class="form-control" />
                 <span asp-validation-for="FldQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FldQuantityUnit" class="control-label"></label>
-                <input asp-for="FldQuantityUnit" class="form-control" />
-                <span asp-validation-for="FldQuantityUnit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="FldUnitAmount" class="control-label"></label>
-                <input asp-for="FldUnitAmount" class="form-control" />
+                <input asp-for="FldUnitAmount" class="form-control" onfocusout="SetEditTotal()" />
                 <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FldDiscountAmount" class="control-label"></label>
-                <input asp-for="FldDiscountAmount" class="form-control" />
+                <input asp-for="FldDiscountAmount" class="form-control" onfocusout="SetEditTotal()" />
                 <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FldItemTotal" class="control-label"></label>
-                <input asp-for="FldItemTotal" class="form-control" />
+                <input asp-for="FldItemTotal" class="form-control-plaintext"  />
                 <span asp-validation-for="FldItemTotal" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -64,16 +52,22 @@
                 <span asp-validation-for="FldCancelReason" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="button" value="Save Changes" class="btn btn-primary" onclick="ModifyEstimateItem()" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script type="text/javascript">
+    function SetEditTotal() {
+        var amount = parseFloat("0" + $("#LoadEditForm #FldUnitAmount").val());
+        var Discount = parseFloat("0" + $("#LoadEditForm #FldDiscountAmount").val());
+        var Quantity = parseFloat("0" + $("#LoadEditForm #FldQuantity").val());
+        var total = ((Quantity * amount) - Discount).toFixed(2);
+        $("#LoadEditForm #FldItemTotal").val(total);
+
+    }</script>

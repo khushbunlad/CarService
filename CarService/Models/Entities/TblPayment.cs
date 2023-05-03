@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarService.Models.Entities;
 
@@ -9,9 +10,15 @@ public partial class TblPayment
 
     public long FldJobId { get; set; }
 
+    [Display(Name ="Paid Amount")]
+    [Required]
     public decimal FldPaidAmount { get; set; }
 
+    [Display(Name = "Payment Method")]
+    [Required]
     public string FldPaymentMode { get; set; } = null!;
 
+    [Display(Name = "Date & time")]
+    [Required]
     public DateTime FldPaymentDatetime { get; set; }
 }

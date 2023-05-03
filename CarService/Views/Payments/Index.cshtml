@@ -2,19 +2,12 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = null;
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FldJobId)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.FldPaidAmount)
             </th>
@@ -30,9 +23,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldJobId)
-            </td>
+           
             <td>
                 @Html.DisplayFor(modelItem => item.FldPaidAmount)
             </td>
@@ -40,14 +31,29 @@
                 @Html.DisplayFor(modelItem => item.FldPaymentMode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FldPaymentDatetime)
+                @item.FldPaymentDatetime.ToString("dd-MMM-yyyy HH:mm tt")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FldPaymentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FldPaymentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FldPaymentId">Delete</a>
+                    <a onclick="DeletePayment(@item.FldPaymentId,@item.FldJobId)"><img src="~/images/delete.png" class="IconButton" title="Delete Payment" data-toggle="tooltip" data-placement="top"></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<script type="text/javascript">
+
+    function DeletePayment(Paymentid,jobid) {
+        var isConfirm = confirm("Confirm Delete ?");
+        if (isConfirm) {
+            var SendData = new Object();
+            SendData.id = Paymentid;
+            $.post("../../Payments/DeleteConfirmed", SendData, function (res) {
+                if (res == "success") {
+                    $("#SavedPaymentList").load("../../Payments/Index/"+jobid, function () { });
+                }
+            });
+        }
+    }
+
+</script>

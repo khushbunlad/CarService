@@ -52,6 +52,10 @@ public partial class CarServiceContext : DbContext
                 .HasColumnType("decimal(18, 3)")
                 .HasColumnName("fld_DiscountAmount");
             entity.Property(e => e.FldEstimateId).HasColumnName("fld_EstimateId");
+            entity.Property(e => e.FldHsnNumber)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("('')")
+                .HasColumnName("fld_HsnNumber");
             entity.Property(e => e.FldIsCancelled).HasColumnName("fld_IsCancelled");
             entity.Property(e => e.FldItemTitle)
                 .HasMaxLength(100)
@@ -238,6 +242,10 @@ public partial class CarServiceContext : DbContext
             entity.ToTable("tbl_ServiceItemMaster");
 
             entity.Property(e => e.FldServiceItemId).HasColumnName("fld_ServiceItemId");
+            entity.Property(e => e.FldHsnNumber)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("('')")
+                .HasColumnName("fld_HsnNumber");
             entity.Property(e => e.FldIdealAmount)
                 .HasColumnType("decimal(18, 3)")
                 .HasColumnName("fld_IdealAmount");

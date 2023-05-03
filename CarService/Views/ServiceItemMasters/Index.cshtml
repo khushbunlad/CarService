@@ -22,6 +22,9 @@ else
         <thead>
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.FldHsnNumber)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.FldItemName)
                 </th>
                 <th>
@@ -40,6 +43,7 @@ else
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>@item.FldHsnNumber</td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FldItemName)
                     </td>

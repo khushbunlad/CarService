@@ -31,7 +31,13 @@ public partial class TblEstimateItem
     [Display(Name = "Total")]
     public decimal FldItemTotal { get; set; }
 
+    [Display(Name = "Cancel item")]
     public bool FldIsCancelled { get; set; }
 
+    [Display(Name = "Cancellation reason")]
     public string? FldCancelReason { get; set; }
+    [Display(Name = "HSN Number")]
+    [Required]
+    public string? FldHsnNumber { get; set; }
+
 }

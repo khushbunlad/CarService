@@ -65,7 +65,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount")] TblServiceItemMaster tblServiceItemMaster)
+        public async Task<IActionResult> Create([Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber")] TblServiceItemMaster tblServiceItemMaster)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount")] TblServiceItemMaster tblServiceItemMaster)
+        public async Task<IActionResult> Edit(long id, [Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber")] TblServiceItemMaster tblServiceItemMaster)
         {
             if (id != tblServiceItemMaster.FldServiceItemId)
             {

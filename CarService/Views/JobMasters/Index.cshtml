@@ -91,17 +91,22 @@ else
                  
                     <td class="text-end" >
 
-                        <a asp-action="Create" asp-controller="Payments" asp-route-id="@item.FldJobId"><img src="~/images/AddPayment.png" class="IconButton" title="Add Payment" data-toggle="tooltip" data-placement="top"></a>
+                        @if (item.IsInvoiceCreated)
+                        {
+                            <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank" ><img src="~/images/invoice_view.png" class="IconButton" title="View Invoice" data-toggle="tooltip" data-placement="top"></a>
+                        }
                         @if (item.IsEstimateCreated)
                         {
-                            <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId"><img src="~/images/invoice.png" class="IconButton" title="Edit Estimate / Generate Invoice" data-toggle="tooltip" data-placement="top"></a>
+                            <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId"><img src="~/images/estimate_edit.png" class="IconButton" title="Edit Estimate / Invoice" data-toggle="tooltip" data-placement="top"></a>
                         }
                         else
                         {
-                            <a asp-action="Create" asp-controller="EstimateMasters" asp-route-id="@item.FldJobId"><img src="~/images/estimate.png" class="IconButton" title="Generate Estimate" data-toggle="tooltip" data-placement="top"></a>
+                            <a asp-action="Create" asp-controller="EstimateMasters" asp-route-id="@item.FldJobId"><img src="~/images/estimate_add.png" class="IconButton" title="Generate Estimate" data-toggle="tooltip" data-placement="top"></a>
                         }
-                        <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/details.png" class="IconButton" title="Job Details" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Edit" asp-route-id="@item.FldJobId"><img src="~/images/edit.png" class="IconButton" title="Edit Job" data-toggle="tooltip" data-placement="top"></a>
+                        <a asp-action="Create" asp-controller="Payments" asp-route-id="@item.FldJobId"><img src="~/images/AddPayment.png" class="IconButton" title="Payments" data-toggle="tooltip" data-placement="top"></a>
+                        <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Details" data-toggle="tooltip" data-placement="top"></a>
+
                         <a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>
                        
                     </td>

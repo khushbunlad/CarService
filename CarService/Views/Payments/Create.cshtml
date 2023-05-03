@@ -1,22 +1,19 @@
 ﻿@model CarService.Models.Entities.TblPayment
+@using CarService.Models.Constants;
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Add Payment</h1>
 
-<h4>TblPayment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FldJobId" class="control-label"></label>
-                <input asp-for="FldJobId" class="form-control" />
-                <span asp-validation-for="FldJobId" class="text-danger"></span>
-            </div>
+            <input asp-for="FldJobId" class="form-control" hidden />
+
             <div class="form-group">
                 <label asp-for="FldPaidAmount" class="control-label"></label>
                 <input asp-for="FldPaidAmount" class="form-control" />
@@ -24,8 +21,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="FldPaymentMode" class="control-label"></label>
-                <input asp-for="FldPaymentMode" class="form-control" />
-                <span asp-validation-for="FldPaymentMode" class="text-danger"></span>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldPaymentMode" id="FldPaymentMode_@PaymentModes.Cash" value="@PaymentModes.Cash" checked="checked" />
+                    <label class="form-check-label" for="FldPaymentMode_@PaymentModes.Cash">@PaymentModes.Cash</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldPaymentMode" id="FldPaymentMode_@PaymentModes.Card" value="@PaymentModes.Card" />
+                    <label class="form-check-label" for="FldPaymentMode_@PaymentModes.Card">@PaymentModes.Card</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldPaymentMode" id="FldPaymentMode_@PaymentModes.Cheque" value="@PaymentModes.Cheque" />
+                    <label class="form-check-label" for="FldPaymentMode_@PaymentModes.Cheque">@PaymentModes.Cheque</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="FldPaymentMode" id="FldPaymentMode_@PaymentModes.NetBanking" value="@PaymentModes.NetBanking" />
+                    <label class="form-check-label" for="FldPaymentMode_@PaymentModes.NetBanking">@PaymentModes.NetBanking</label>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="FldPaymentDatetime" class="control-label"></label>
@@ -33,16 +44,22 @@
                 <span asp-validation-for="FldPaymentDatetime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Add Payment" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="col-md-8 p-4" id="SavedPaymentList" >
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<script type="text/javascript">
+setTimeout(function(){
+        $("#SavedPaymentList").load("../../Payments/Index/@Model.FldJobId", function () { });
+},200)  ;  
+</script>

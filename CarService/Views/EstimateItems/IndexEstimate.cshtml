@@ -31,8 +31,9 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr class="@(item.FldIsCancelled?"text-secondary":"")" >
+        <tr class="@(item.FldIsCancelled?"text-danger":"")" >
             <td>
+                <span class="text-secondary">[@item.FldHsnNumber]</span>
                 @Html.DisplayFor(modelItem => item.FldItemTitle)
             </td>
             <td>
@@ -52,8 +53,8 @@
                 @Html.DisplayFor(modelItem => item.FldItemTotal)
             </td>
             <td class="text-end d-flex flex-row" >
-                    <a asp-action="Edit" asp-route-id="@item.FldEstimateItemId"><img src="~/images/edit.png" class="IconButton" title="Cancel Item" data-toggle="tooltip" data-placement="top"></a>
-                    <a asp-action="Delete" asp-route-id="@item.FldEstimateItemId"><img src="~/images/delete.png" class="IconButton" title="Delete Item" data-toggle="tooltip" data-placement="top"></a>
+                    <a onclick="EditEstimateItem(@item.FldEstimateItemId, @item.FldEstimateId)"><img src="~/images/edit.png" class="IconButton" title="Cancel Item" data-toggle="tooltip" data-placement="top"></a>
+                    <a onclick="DeleteEstimateItem(@item.FldEstimateItemId, @item.FldEstimateId)"><img src="~/images/delete.png" class="IconButton" title="Delete Item" data-toggle="tooltip" data-placement="top"></a>
             </td>
         </tr>
 }

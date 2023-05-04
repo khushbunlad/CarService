@@ -72,6 +72,7 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldQuantityUnit)
                 .HasMaxLength(20)
                 .HasColumnName("fld_QuantityUnit");
+            entity.Property(e => e.FldServiceItemId).HasColumnName("fld_ServiceItemId");
             entity.Property(e => e.FldUnitAmount)
                 .HasColumnType("decimal(18, 3)")
                 .HasColumnName("fld_UnitAmount");
@@ -131,6 +132,9 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldHandedOverOn)
                 .HasColumnType("datetime")
                 .HasColumnName("fld_HandedOverOn");
+            entity.Property(e => e.FldIsCompleted)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("fld_IsCompleted");
             entity.Property(e => e.FldJobNo)
                 .HasMaxLength(100)
                 .HasColumnName("fld_JobNo");

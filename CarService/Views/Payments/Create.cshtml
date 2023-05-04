@@ -40,12 +40,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="FldPaymentDatetime" class="control-label"></label>
-                <input asp-for="FldPaymentDatetime" class="form-control" />
+                <input asp-for="FldPaymentDatetime" class="form-control" step="60000" />
                 <span asp-validation-for="FldPaymentDatetime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Add Payment" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+                <a asp-action="Index" asp-controller="JobMasters" class="btn btn-outline-primary">Back to List</a>
             </div>
         </form>
     </div>

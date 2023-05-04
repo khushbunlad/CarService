@@ -63,7 +63,7 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldHsnNumber,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
+        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldHsnNumber,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason,FldServiceItemId")] TblEstimateItem tblEstimateItem)
         {
             SetServiceItemSuggestionInViewbag();
             if (ModelState.IsValid)
@@ -71,6 +71,9 @@ namespace CarService.Controllers
                 tblEstimateItem.FldIsCancelled = false;
                 _context.Add(tblEstimateItem);
                 await _context.SaveChangesAsync();
+
+            UpdateTotalInEstimateMaster(tblEstimateItem.FldEstimateId);
+               
                 return RedirectToAction(nameof(Create));
             }
            
@@ -98,7 +101,7 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldHsnNumber,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason")] TblEstimateItem tblEstimateItem)
+        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldHsnNumber,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason,FldServiceItemId")] TblEstimateItem tblEstimateItem)
         {
             SetServiceItemSuggestionInViewbag();
             if (id != tblEstimateItem.FldEstimateItemId)
@@ -112,6 +115,8 @@ namespace CarService.Controllers
                 {
                     _context.Update(tblEstimateItem);
                     await _context.SaveChangesAsync();
+                    UpdateTotalInEstimateMaster(tblEstimateItem.FldEstimateId);
+
                     return Json("success");
                 }
                 catch (DbUpdateConcurrencyException)
@@ -163,6 +168,7 @@ namespace CarService.Controllers
             }
             
             await _context.SaveChangesAsync();
+            UpdateTotalInEstimateMaster(tblEstimateItem.FldEstimateId);
             return Json("success");
         }
 
@@ -174,6 +180,22 @@ namespace CarService.Controllers
         private void SetServiceItemSuggestionInViewbag()
         {
             ViewBag.ServiceItem = _context.TblServiceItemMasters.ToList();
+        }
+
+
+
+        private void UpdateTotalInEstimateMaster(long estid)
+        {
+            TblEstimateMaster estimate = _context.TblEstimateMasters.Where(e=>e.FldEstimateId == estid).FirstOrDefault();
+            if (estimate != null)
+            {
+                estimate.FldTotalAmount =  _context.TblEstimateItems.Where(e => e.FldEstimateId == estimate.FldEstimateId && e.FldIsCancelled == false).Sum(e => e.FldItemTotal);
+                _context.TblEstimateMasters.Update(estimate);
+                _context.SaveChanges();
+                JobMastersController jc = new JobMastersController(_context);
+                jc.CheckAndUpdateJobStatus(estimate.FldJobId);
+
+            }
         }
 
     }

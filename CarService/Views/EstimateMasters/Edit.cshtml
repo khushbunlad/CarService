@@ -2,11 +2,31 @@
 @using CarService.Models.Constants;
 
 @{
+
     ViewData["Title"] = "Edit";
 }
 
 <div class="d-flex flex-column bg-light ps-3 pe-3 pb-3">
     <form asp-action="Edit">
+        @*Buttons*@
+        <div class="col-md-12 d-flex flex-row justify-content-end p-3 pb-0 align-items-baseline">
+            <div class="d-flex flex-fill fw-bold small text-danger justify-content-end pe-3">Enter invoice number,date & type to convert estimate to invoice**</div>
+            <input type="submit" value="Save Changes" class="btn btn-primary" />
+            <span class="p-2"></span>
+            @if (Model.FldIsInvoiceGenerated == false)
+            {
+                <a asp-action="Details" asp-route-id="@Model.FldEstimateId" class="btn btn-outline-success">View Estimate</a>
+                <span class="p-2"></span>
+            }
+            else
+            {
+                <a asp-action="Details" asp-route-id="@Model.FldEstimateId" class="btn btn-success">View Invoice</a>
+                <span class="p-2"></span>
+            }
+            <a asp-action="Details" asp-controller="JobMasters" asp-route-id="@Model.FldJobId" class="btn btn-warning">View Job</a>
+            <span class="p-2"></span>
+            <a asp-action="Index" asp-controller="JobMasters" class="btn btn-outline-primary">Back to List</a>
+        </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="FldEstimateId" />
         <input type="hidden" asp-for="FldCreatedOn" class="form-control" />
@@ -34,8 +54,31 @@
                     <label class="form-control-plaintext">@Model.FldCreatedOn.ToString("dd-MMM-yyyy HH:mm tt")</label>
                 </div>
             </div>
-            @*Invoice details*@
+            @*Type*@
             <div class="col-md-3 p-3">
+                <div class="form-group">
+                    <label asp-for="FldInvoiceType" class="control-label"></label>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Estimate" value="@InvoiceTypes.Estimate" @(Model.FldInvoiceType == InvoiceTypes.Estimate ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Estimate">@InvoiceTypes.Estimate</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Performa" value="@InvoiceTypes.Performa" @(Model.FldInvoiceType == InvoiceTypes.Performa ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Performa">@InvoiceTypes.Performa</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Retail" value="@InvoiceTypes.Retail" @(Model.FldInvoiceType == InvoiceTypes.Retail ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Retail">@InvoiceTypes.Retail</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Tax" value="@InvoiceTypes.Tax" @(Model.FldInvoiceType == InvoiceTypes.Tax ? "checked='checked'" : "") />
+                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Tax">@InvoiceTypes.Tax</label>
+                    </div>
+                    <span asp-validation-for="FldInvoiceType" class="text-danger"></span>
+                </div>
+            </div>
+            @*Invoice details*@
+            <div class="col-md-3 p-3" id="InvoiceDataBlock" style="display:@(Model.FldInvoiceType == InvoiceTypes.Estimate?"none":"")" >
                 <div class="form-group">
                     <label asp-for="FldInvoiceNumber" class="control-label"></label>
                     <input asp-for="FldInvoiceNumber" class="form-control" />
@@ -43,53 +86,14 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="FldInvoiceCreatedOn" class="control-label"></label>
-                    <input asp-for="FldInvoiceCreatedOn" class="form-control" />
+                    <input asp-for="FldInvoiceCreatedOn" class="form-control" step="60000" />
                     <span asp-validation-for="FldInvoiceCreatedOn" class="text-danger"></span>
                 </div>
 
             </div>
-            @*Type*@
-            <div class="col-md-3 p-3">
-                <div class="form-group">
-                    <label asp-for="FldInvoiceType" class="control-label"></label>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Estimate" value="@InvoiceTypes.Estimate" checked="checked" />
-                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Estimate">@InvoiceTypes.Estimate</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Performa" value="@InvoiceTypes.Performa" />
-                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Performa">@InvoiceTypes.Performa</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Retail" value="@InvoiceTypes.Retail" />
-                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Retail">@InvoiceTypes.Retail</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldInvoiceType" id="FldInvoiceType_@InvoiceTypes.Tax" value="@InvoiceTypes.Tax" />
-                        <label class="form-check-label" for="FldInvoiceType_@InvoiceTypes.Tax">@InvoiceTypes.Tax</label>
-                    </div>
-                    <span asp-validation-for="FldInvoiceType" class="text-danger"></span>
-                </div>
-            </div>
+            
         </div>
-        @*Buttons*@
-        <div class="col-md-12 d-flex flex-row justify-content-end p-3">
-            <input type="submit" value="Save Changes" class="btn btn-primary" />
-            <span class="p-2"></span>
-            @if (Model.FldIsInvoiceGenerated == false)
-            {
-                <a asp-action="Details" asp-route-id="@Model.FldEstimateId" class="btn btn-outline-success">View Estimate</a>
-                <span class="p-2"></span>
-            }
-            else
-            {
-                <a asp-action="Details" asp-route-id="@Model.FldEstimateId" class="btn btn-success">View Invoice</a>
-                <span class="p-2"></span>
-            }
-            <a asp-action="Details" asp-controller="JobMasters" asp-route-id="@Model.FldJobId" class="btn btn-warning">View Job</a>
-            <span class="p-2"></span>
-            <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
-        </div>
+
     </form>
 </div>
 <div class="d-flex flex-column shadow p-3">
@@ -107,12 +111,12 @@
                 <h5 class="modal-title" id="exampleModalLabel">Edit / Cancel Item</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="LoadEditForm" >
-               
+            <div class="modal-body" id="LoadEditForm">
             </div>
         </div>
     </div>
 </div>
+
 
 
 
@@ -129,7 +133,20 @@
         $("#AddEstimateItemBlock").load("../../EstimateItems/Create/@Model.FldEstimateId");
         $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
 
+        $('input[name="FldInvoiceType"]').on("change", function () {
+            var CurrentType = $('input[name="FldInvoiceType"]:checked').val();
+            if (CurrentType == "@InvoiceTypes.Estimate") {
+                $("#InvoiceDataBlock").css("display","none");
+            }
+            else {
+                $("#InvoiceDataBlock").css("display", "");
+            }
+        })
+
     }, 500);
+
+
+
     function CreateEstimateItem() {
         var SendData = new Object();
         SendData.FldEstimateId = $("#FldEstimateId").val();
@@ -143,6 +160,7 @@
         SendData.FldDiscountAmount = $("#FldDiscountAmount").val();
         SendData.FldItemTotal = $("#FldItemTotal").val();
         SendData.FldHsnNumber = $("#FldHsnNumber").val();
+        SendData.FldServiceItemId = $("#FldServiceItemId").val();
         $.post("../../EstimateItems/Create", SendData, function (res) {
             $("#AddEstimateItemBlock").html(res);
             $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
@@ -163,9 +181,9 @@
     }
 
     function EditEstimateItem(estitemid, estid) {
-        $("#LoadEditForm").load("../../EstimateItems/Edit/"+estitemid, function () {
-        
-          new bootstrap.Modal(document.getElementById('exampleModal')).show();
+        $("#LoadEditForm").load("../../EstimateItems/Edit/" + estitemid, function () {
+
+            new bootstrap.Modal(document.getElementById('exampleModal')).show();
         });
     }
 
@@ -184,13 +202,14 @@
         SendData.FldDiscountAmount = $("#LoadEditForm #FldDiscountAmount").val();
         SendData.FldItemTotal = $("#LoadEditForm #FldItemTotal").val();
         SendData.FldHsnNumber = $("#LoadEditForm #FldHsnNumber").val();
+        SendData.FldServiceItemId = $("#LoadEditForm #FldServiceItemId").val();
+
         $.post("../../EstimateItems/Edit", SendData, function (res) {
-          
-            if(res=="success")
-            {
+
+            if (res == "success") {
                 $('#exampleModal').modal('hide');
             }
-            else{
+            else {
                 $("#LoadEditForm").html(res);
             }
             $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");

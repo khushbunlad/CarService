@@ -11,27 +11,36 @@
     <input hidden asp-for="FldEstimateId" class="form-control" />
     <input hidden asp-for="FldCancelReason" class="form-control" />
     <input hidden asp-for="FldIsCancelled" class="form-check-input" />
-    <input hidden asp-for="FldHsnNumber" class="form-control" />
-
+    <input hidden asp-for="FldServiceItemId" class="form-check-input" />
+    
 
     <div class="row pb-4">
-        @*Item Name*@
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="FldItemTitle" class="control-label"></label>
-                <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" onchange="SetHsnNumber()" />
-                <span asp-validation-for="FldItemTitle" class="text-danger"></span>
-                <datalist id="ServiceItemsSuggestions">
-                    @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
-                    {
-                        <option value="@item.FldItemName" hsn="@item.FldHsnNumber" >@item.FldItemName [@item.FldHsnNumber] </option>
-                    }
-                </datalist>
+        @*Item Name & HSN Number*@
+        <div class="col-md-4 row">
+            <div class="col-md-3 p-0">
+                <div class="form-group">
+                    <label class="control-label" asp-for="FldHsnNumber"></label>
+                    <input asp-for="FldHsnNumber" class="form-control" />
+                    <span asp-validation-for="FldHsnNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-9 p-0">
+                <div class="form-group">
+                    <label asp-for="FldItemTitle" class="control-label"></label>
+                    <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" onchange="SetHsnNumber()" />
+                    <span asp-validation-for="FldItemTitle" class="text-danger"></span>
+                    <datalist id="ServiceItemsSuggestions">
+                        @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
+                        {
+                            <option value="@item.FldItemName" hsn="@item.FldHsnNumber" type="@item.FldItemType" unit="@item.FldQuanitityUnit" sid="@item.FldServiceItemId">@item.FldItemName [@item.FldHsnNumber] </option>
+                        }
+                    </datalist>
+                </div>
             </div>
         </div>
         @*Type*@
         <div class="col-md-1">
-            <div class="form-group">
+            <div class="form-group" id="FldItemTypeBlock">
                 <label asp-for="FldItemType" class="control-label"></label>
                 <div class="form-check">
                     <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Part" value="@ServiceItemTypes.Part" class="form-control" onchange="ItemTypeChanged()" />
@@ -102,10 +111,53 @@
 }
 <script type="text/javascript">
 
-    function SetHsnNumber(){
+    function SetHsnNumber() {
         var selectedVal = $("#FldItemTitle").val();
         var hsn = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("hsn");
+        var type = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("type");
+        var unit = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("unit");
+        var sid = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("sid");
         $('#FldHsnNumber').val(hsn);
+        $("input[type='radio'][value='" + type + "']").prop("checked", true);
+        $("#FldQuantityUnit option[value='" + unit + "']").prop("selected", true);
+        if(sid==null || sid==undefined){
+            sid="-1";
+        }
+        $("#FldServiceItemId").val(sid);
+        if(hsn != null && hsn !=undefined && hsn !="")
+        {
+            $('#FldHsnNumber').addClass("DisableBlock");
+            $('#FldHsnNumber').attr("tabindex","-1");
+
+        }
+        else{
+            $('#FldHsnNumber').removeClass("DisableBlock");
+            $('#FldHsnNumber').attr("tabindex", "0");
+
+        }
+        if (type != null && type != undefined && type != "") {
+            $('#FldItemTypeBlock').addClass("DisableBlock");
+            $('input[name="FldItemType"]').attr("tabindex", "-1");
+
+        }
+        else{
+            $('#FldItemTypeBlock').removeClass("DisableBlock");
+            $('input[name="FldItemType"]').attr("tabindex", "0");
+
+        }
+        if (unit != null && unit != undefined && unit != "") {
+            $('#FldQuantityUnit').addClass("DisableBlock");
+            $('#FldQuantityUnit').attr("tabindex", "-1");
+        }
+        else{
+            $('#FldQuantityUnit').removeClass("DisableBlock");
+            $('#FldQuantityUnit"]').attr("tabindex", "0");
+        }
+        
+
+
+        $("#FldQuantity").val("1");
+        $("#FldUnitAmount").val("");
     }
 
     function SetTotal() {
@@ -120,15 +172,12 @@
     function ItemTypeChanged() {
         var selectedvalue = $('input[name="FldItemType"]:checked').val();
         if (selectedvalue == "@ServiceItemTypes.Part") {
-            $("#QtyBlock").show();
             $("#FldQuantity").val("1");
             $("#FldQuantityUnit").val("unit");
         }
         else {
             $("#FldQuantity").val("1");
             $("#FldQuantityUnit").val("unit");
-            $("#QtyBlock").hide();
-
         }
     }
 

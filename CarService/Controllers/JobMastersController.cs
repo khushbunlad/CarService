@@ -38,11 +38,11 @@ namespace CarService.Controllers
             List<TblJobMaster> DisplayList = new List<TblJobMaster>();
             if (UserRole == UserRoles.Admin)
             {
-                DisplayList = await _context.TblJobMasters.ToListAsync();
+                DisplayList = await _context.TblJobMasters.Where(j => j.FldIsCompleted == false).ToListAsync();
             }
             else
             {
-                DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId).ToListAsync();
+                DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId && j.FldIsCompleted == false).ToListAsync();
             }
             foreach (TblJobMaster job in DisplayList)
             {
@@ -51,7 +51,99 @@ namespace CarService.Controllers
                 if (job.IsEstimateCreated)
                 {
                     job.EstimateInvoiceId = _context.TblEstimateMasters.Where(e => e.FldJobId == job.FldJobId).FirstOrDefault().FldEstimateId;
+                    job.InvoicedAmount = (double)_context.TblEstimateItems.Where(e => e.FldEstimateId == job.EstimateInvoiceId && e.FldIsCancelled ==false).Sum(se => se.FldItemTotal);
                 }
+                else
+                {
+                    job.InvoicedAmount = 0;
+                }
+                job.PaidAmount = (double)_context.TblPayments.Where(p => p.FldJobId == job.FldJobId).Sum(p => p.FldPaidAmount);
+            }
+
+            return View(DisplayList);
+        }
+
+        public async Task<IActionResult> HistoryFilters()
+        {
+            return View();
+        }
+        public async Task<IActionResult> History(DateTime? StartDate,DateTime EndDate,string? SerchVehicle,string? SearchCustomer)
+        {
+            long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
+            string? UserRole = HttpContext.Session.GetString(SessionKeys.UserId);
+
+            List<TblJobMaster> DisplayList = new List<TblJobMaster>();
+            if (UserRole == UserRoles.Admin)
+            {
+                DisplayList = await _context.TblJobMasters.Where(j => j.FldIsCompleted == false).ToListAsync();
+            }
+            else
+            {
+                if(StartDate !=null && EndDate != null)
+                {
+                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId 
+                                && j.FldIsCompleted == true
+                                && j.FldRegisteredOn >= StartDate
+                                && j.FldHandedOverOn <=EndDate
+                                ).ToListAsync();
+                    if (!string.IsNullOrEmpty(SerchVehicle))
+                    {
+                        DisplayList = DisplayList.Where(j => j.FldVehicleRegisteredNumber.Contains(SerchVehicle)).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(SearchCustomer))
+                    {
+                        DisplayList = DisplayList.Where(j => j.FldCustomerName.Contains(SearchCustomer) 
+                                                || j.FldCustomerContact1.Contains(SearchCustomer)
+                                                || j.FldCustomerContact2.Contains(SearchCustomer)
+                                                ).ToList();
+                    }
+                }
+                else if(!string.IsNullOrEmpty(SerchVehicle) && !string.IsNullOrEmpty(SearchCustomer))
+                {
+                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                                && (
+                                                j.FldCustomerName.Contains(SearchCustomer)
+                                                || j.FldCustomerContact1.Contains(SearchCustomer)
+                                                || j.FldCustomerContact2.Contains(SearchCustomer)
+                                                || j.FldVehicleRegisteredNumber.Contains(SearchCustomer)
+                                )
+                                ).ToListAsync();
+                }
+                else if (!string.IsNullOrEmpty(SerchVehicle) )
+                {
+                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                                && (
+                                               
+                                     j.FldVehicleRegisteredNumber.Contains(SerchVehicle)
+                                )
+                                ).ToListAsync();
+                }
+                else if (!string.IsNullOrEmpty(SearchCustomer))
+                {
+                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                                && (
+                                                j.FldCustomerName.Contains(SearchCustomer)
+                                                || j.FldCustomerContact1.Contains(SearchCustomer)
+                                                || j.FldCustomerContact2.Contains(SearchCustomer)
+                                )
+                                ).ToListAsync();
+                }
+
+            }
+            foreach (TblJobMaster job in DisplayList)
+            {
+                job.IsEstimateCreated = _context.TblEstimateMasters.Count(e => e.FldJobId == job.FldJobId) == 1 ? true : false;
+                job.IsInvoiceCreated = _context.TblEstimateMasters.Count(e => e.FldJobId == job.FldJobId && e.FldIsInvoiceGenerated == true) == 1 ? true : false;
+                if (job.IsEstimateCreated)
+                {
+                    job.EstimateInvoiceId = _context.TblEstimateMasters.Where(e => e.FldJobId == job.FldJobId).FirstOrDefault().FldEstimateId;
+                    job.InvoicedAmount = (double)_context.TblEstimateItems.Where(e => e.FldEstimateId == job.EstimateInvoiceId && e.FldIsCancelled == false).Sum(se => se.FldItemTotal);
+                }
+                else
+                {
+                    job.InvoicedAmount = 0;
+                }
+                job.PaidAmount = (double)_context.TblPayments.Where(p => p.FldJobId == job.FldJobId).Sum(p => p.FldPaidAmount);
             }
 
             return View(DisplayList);
@@ -89,9 +181,11 @@ namespace CarService.Controllers
         public IActionResult Create()
         {
             SetOrganizationsInViewbag();
+            SetCustomerSuggestionInViewbag();
+
             long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
 
-            return View(new TblJobMaster { FldRegisteredOn = DateTime.Now,FldOrgId=OrgId });
+            return View(new TblJobMaster {FldIsCompleted = false, FldRegisteredOn = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0), FldOrgId=OrgId });
         }
 
         // POST: JobMasters/Create
@@ -99,8 +193,13 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldJobId,FldOrgId,FldJobNo,FldVehicleRegisteredNumber,FldChessisNumber,FldEngineNumber,FldModelNameNumber,FldServiceType,FldRegisteredOn,FldKmReadingOnRegistration,FldCustomerName,FldCustomerContact1,FldCustomerContact2,FldHandedOverOn")] TblJobMaster tblJobMaster)
+        public async Task<IActionResult> Create([Bind("FldJobId,FldIsCompleted,FldOrgId,FldJobNo,FldVehicleRegisteredNumber,FldChessisNumber,FldEngineNumber,FldModelNameNumber,FldServiceType,FldRegisteredOn,FldKmReadingOnRegistration,FldCustomerName,FldCustomerContact1,FldCustomerContact2,FldHandedOverOn")] TblJobMaster tblJobMaster)
         {
+            if(_context.TblJobMasters.Count(j=>j.FldJobNo == tblJobMaster.FldJobNo)>0)
+            {
+                ModelState.AddModelError("FldJobNo", "Job number already used");
+            }
+
             if (ModelState.IsValid)
             {
                 if (tblJobMaster.FldCustomerContact2 == null)
@@ -109,9 +208,10 @@ namespace CarService.Controllers
                 }
                 _context.Add(tblJobMaster);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit),new {id=tblJobMaster.FldJobId});
             }
             SetOrganizationsInViewbag();
+            SetCustomerSuggestionInViewbag();
             return View(tblJobMaster);
         }
 
@@ -154,6 +254,7 @@ namespace CarService.Controllers
                 {
                     _context.Update(tblJobMaster);
                     await _context.SaveChangesAsync();
+                    CheckAndUpdateJobStatus(tblJobMaster.FldJobId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -255,7 +356,57 @@ namespace CarService.Controllers
             ViewBag.Organizations = _context.TblOrganizationMasters.Select(x => new SelectListItem { Text = x.FldOrgName, Value = x.FldOrgId + "" }).ToList();
         }
 
+        private void SetCustomerSuggestionInViewbag()
+        {
 
+            ViewBag.Customers = _context.TblJobMasters.Select(x => new CustomerSuggestionListViewModel { 
+            Contact1 = x.FldCustomerContact1,
+            Contact2 = x.FldCustomerContact2+"",
+            CustomerName = x.FldCustomerName,
+            VehicleNumber = x.FldVehicleRegisteredNumber
+            }).ToList();
+        }
+
+
+        public void CheckAndUpdateJobStatus(long jobId)
+        {
+            TblJobMaster Job=  _context.TblJobMasters.Where(j=>j.FldJobId ==jobId).FirstOrDefault();
+            if(Job != null)
+            {
+                if (Job.FldHandedOverOn.HasValue == false)
+                {
+                    return;
+                }
+                TblEstimateMaster Estimate = _context.TblEstimateMasters.Where(e=>e.FldJobId ==jobId).FirstOrDefault();
+                if (Estimate != null)
+                {
+                    if(Estimate.FldIsInvoiceGenerated == false)
+                    {
+                        return;
+                    }
+                    if(_context.TblEstimateItems.Count(i=>i.FldEstimateId == Estimate.FldEstimateId) == 0)
+                    {
+                        return;
+                    }
+
+                    decimal PaiedAmount = _context.TblPayments.Where(p => p.FldJobId == jobId).Sum(p => p.FldPaidAmount);
+                    decimal TotalAmount = _context.TblEstimateItems.Where(i => i.FldEstimateId == Estimate.FldEstimateId && i.FldIsCancelled == false).Sum(a => a.FldItemTotal);
+                    
+                    if(PaiedAmount >=TotalAmount)
+                    {
+                        Job.FldIsCompleted = true;
+                       
+                    }
+                    else
+                    {
+                        Job.FldIsCompleted = false;
+                    }
+                    _context.TblJobMasters.Update(Job);
+                    _context.SaveChanges();
+
+                }
+            }
+        }
 
     }
 }

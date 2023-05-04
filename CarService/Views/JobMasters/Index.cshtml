@@ -17,28 +17,30 @@
 }
 else
 {
-    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Jobs</div>
+    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Running Jobs</div>
     <table class="table">
         <thead>
             <tr>
                 <th class="col-md-1" >
                     @Html.DisplayNameFor(model => model.FldJobNo)
                 </th>
-                <th class="col-md-3">
+                <th class="col-md-2">
                     @Html.DisplayNameFor(model => model.FldCustomerName)
                 </th>
                 <th class="col-md-1">
                     @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
                 </th>
                 <th class="col-md-1">
-                    @Html.DisplayNameFor(model => model.FldServiceType)
+                    Type
                 </th>
-
-                <th class="col-md-1">
-                    @Html.DisplayNameFor(model => model.FldRegisteredOn)
+                <th class="col-md">
+                   Timeline
                 </th>
-                <th class="col-md-1">
-                    @Html.DisplayNameFor(model => model.FldHandedOverOn)
+                <th class="col-md text-end">
+                    Payments
+                </th>
+                <th class="col-md-1 text-center">
+                    Status
                 </th>
                 <th class="col-md-3"></th>
             </tr>
@@ -47,26 +49,13 @@ else
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td class="fw-bold" >
                         @Html.DisplayFor(modelItem => item.FldJobNo)
-                        <br />
-                        @if (item.IsInvoiceCreated)
-                        {
-                            <i class="small text-success">Invoice Generated</i>
-                        }
-                        else if (item.IsEstimateCreated)
-                        {
-                            <i class="small text-warning">Estimate Generated</i>
-                        }
-                        else
-                        {
-                            <i class="small text-primary">Job</i>
-                        }
-
+                       
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FldCustomerName)<br />
-                        <i class="text-primary small">
+                        <i class="text-secondary small">
                             @Html.DisplayFor(modelItem => item.FldCustomerContact1)
                             @if (!string.IsNullOrEmpty(item.FldCustomerContact2))
                             {
@@ -80,15 +69,44 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.FldServiceType)
                     </td>
-                    <td>
-                        @item.FldRegisteredOn.ToString("dd-MMM-yyyy")
+                    <td  >
+                        <span class="text-dark small"> @item.FldRegisteredOn.ToString("dd-MMM-yy HH:mm")</span>
+                        <br>
+                        <span class="text-success fw-bold small">  @(item.FldHandedOverOn.HasValue ? item.FldHandedOverOn.Value.ToString("dd-MMM-yy HH:mm ") : "-")</span>
                     </td>
-                  
-                    <td>
-                        @(item.FldHandedOverOn.HasValue ? item.FldHandedOverOn.Value.ToString("dd-MMM-yyyy") : "-")
-
+                    <td class="text-end small">
+                        @if (item.InvoicedAmount > 0)
+                        {
+                            <span class="text-dark" title="Invoiced" data-toggle="tooltip" data-placement="top"> @Math.Round(item.InvoicedAmount,2)</span>
+                        }
+                        @if (item.FldHandedOverOn.HasValue || item.PaidAmount>0 || item.InvoicedAmount>0)
+                        {
+                            <span class="text-success" title="Paid" data-toggle="tooltip" data-placement="top"> - @Math.Round(item.PaidAmount,2)</span>
+                        }
+                        @if (item.PaidAmount < item.InvoicedAmount && item.InvoicedAmount>0)
+                        {
+                            <br>
+                            <span class="text-danger" title="Pending" data-toggle="tooltip" data-placement="top">@Math.Round(item.InvoicedAmount- item.PaidAmount,2)</span>
+                        }
                     </td>
-                 
+                    <td class="text-center fw-bold" >
+                        @if (item.FldHandedOverOn.HasValue && item.PaidAmount < item.InvoicedAmount)
+                        {
+                            <i class="small text-danger">Payment</i>
+                        }
+                        else if (item.IsInvoiceCreated)
+                        {
+                            <i class="small text-success">Invoiced</i>
+                        }
+                        else if (item.IsEstimateCreated)
+                        {
+                            <i class="small text-warning">Estimated</i>
+                        }
+                        else
+                        {
+                            <i class="small text-primary">Job</i>
+                        }
+                    </td>
                     <td class="text-end" >
 
                         @if (item.IsInvoiceCreated)
@@ -106,7 +124,6 @@ else
                         <a asp-action="Edit" asp-route-id="@item.FldJobId"><img src="~/images/edit.png" class="IconButton" title="Edit Job" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Create" asp-controller="Payments" asp-route-id="@item.FldJobId"><img src="~/images/AddPayment.png" class="IconButton" title="Payments" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Details" data-toggle="tooltip" data-placement="top"></a>
-
                         <a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>
                        
                     </td>

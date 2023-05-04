@@ -20,5 +20,6 @@ public partial class TblPayment
 
     [Display(Name = "Date & time")]
     [Required]
+    [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd-MM-yyyy HH:mm}")]
     public DateTime FldPaymentDatetime { get; set; }
 }

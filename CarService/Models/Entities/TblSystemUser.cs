@@ -22,8 +22,9 @@ public partial class TblSystemUser
     [DataType(DataType.EmailAddress)]
     [Required]
     public string FldEmailId { get; set; } = null!;
+
     [Display(Name = "Mobile Number")]
-    [DataType(DataType.PhoneNumber)]
+    [RegularExpression(@"^(\d{10})$", ErrorMessage = "Invalid mobile number")]
     [Required]
     public string FldMobileNumber { get; set; } = null!;
   

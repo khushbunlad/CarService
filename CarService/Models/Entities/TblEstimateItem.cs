@@ -36,8 +36,10 @@ public partial class TblEstimateItem
 
     [Display(Name = "Cancellation reason")]
     public string? FldCancelReason { get; set; }
-    [Display(Name = "HSN Number")]
+
+    [Display(Name = "HSN / SCN")]
     [Required]
     public string? FldHsnNumber { get; set; }
+    public long? FldServiceItemId { get; set; }
 
 }

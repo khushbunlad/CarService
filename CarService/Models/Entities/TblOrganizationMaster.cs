@@ -30,6 +30,7 @@ public partial class TblOrganizationMaster
 
     [Display(Name = "Contact Number")]
     [DataType(DataType.PhoneNumber)]
+    [RegularExpression(@"^(\d{10})$", ErrorMessage = "Invalid mobile number")]
     [Required]
     public string FldContactNumber1 { get; set; } = null!;
 
@@ -38,6 +39,7 @@ public partial class TblOrganizationMaster
 
     [Display(Name = "Contact Number secondary")]
     [DataType(DataType.PhoneNumber)]
+    [RegularExpression(@"^(\d{10})$", ErrorMessage = "Invalid mobile number")]
     public string FldContactNumber2 { get; set; } = "";
 
     [Display(Name = "Logo")]
@@ -52,6 +54,7 @@ public partial class TblOrganizationMaster
 
     [Display(Name = "Active until")]
     [DataType(DataType.Date)]
+    [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd-MMM-yyyy HH:mm}")]
     public DateTime? FldActiveUntil { get; set; }
 
     [Display(Name = "Subscription License Number")]

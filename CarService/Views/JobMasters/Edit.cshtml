@@ -12,6 +12,8 @@
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="FldJobId" />
+        <input asp-for="FldIsCompleted" hidden />
+
         <div class="row">
             @*Job Details*@
             <div class="col-md-3 p-4">
@@ -23,30 +25,30 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="FldJobNo" class="control-label"></label>
-                    <input asp-for="FldJobNo" class="form-control" />
+                    <input asp-for="FldJobNo" class="form-control"  readonly="readonly"/>
                     <span asp-validation-for="FldJobNo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="FldServiceType" class="control-label"></label>
                     <br />
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Free" value="@ServiceTypes.Free" checked="checked" />
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Free" value="@ServiceTypes.Free" @(Model.FldServiceType == ServiceTypes.Free?"checked='checked'":"") />
                         <label class="form-check-label" for="FldServiceType_@ServiceTypes.Free">@ServiceTypes.Free</label>
                     </div>
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Paid" value="@ServiceTypes.Paid" />
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Paid" value="@ServiceTypes.Paid" @(Model.FldServiceType == ServiceTypes.Paid ? "checked='checked'" : "") />
                         <label class="form-check-label" for="FldServiceType_@ServiceTypes.Paid">@ServiceTypes.Paid</label>
                     </div>
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Repair" value="@ServiceTypes.Repair" />
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Repair" value="@ServiceTypes.Repair" @(Model.FldServiceType == ServiceTypes.Repair ? "checked='checked'" : "") />
                         <label class="form-check-label" for="FldServiceType_@ServiceTypes.Repair">@ServiceTypes.Repair</label>
                     </div>
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Accident" value="@ServiceTypes.Accident" />
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Accident" value="@ServiceTypes.Accident" @(Model.FldServiceType == ServiceTypes.Accident ? "checked='checked'" : "") />
                         <label class="form-check-label" for="FldServiceType_@ServiceTypes.Accident">@ServiceTypes.Accident</label>
                     </div>
                     <div class="form-check">
-                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other" />
+                        <input type="radio" class="form-check-input" name="FldServiceType" id="FldServiceType_@ServiceTypes.Other" value="@ServiceTypes.Other" @(Model.FldServiceType == ServiceTypes.Other ? "checked='checked'" : "") />
                         <label class="form-check-label" for="FldServiceType_@ServiceTypes.Other">@ServiceTypes.Other</label>
                     </div>
                 </div>
@@ -101,17 +103,17 @@
                 <h4>Job Records</h4>
                 <div class="form-group">
                     <label asp-for="FldRegisteredOn" class="control-label"></label>
-                    <input asp-for="FldRegisteredOn" class="form-control" />
+                    <input asp-for="FldRegisteredOn" class="form-control" step="60000" />
                     <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
-                    <input asp-for="FldKmReadingOnRegistration" class="form-control" />
+                    <input asp-for="FldKmReadingOnRegistration" class="form-control"  />
                     <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="FldHandedOverOn" class="control-label"></label>
-                    <input asp-for="FldHandedOverOn" class="form-control" />
+                    <input asp-for="FldHandedOverOn" class="form-control" step="60000" />
                     <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
                 </div>
 

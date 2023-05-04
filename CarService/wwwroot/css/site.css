@@ -19,6 +19,23 @@ body {
 .NotAllowed{
     pointer-events:none;
 }
+.DisableBlock {
+    filter: opacity(0.5);
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    -moz-user-focus: none !important;
+    -webkit-user-focus: none !important;
+    -ms-user-focus: none !important;
+    user-focus: none !important;
+    -moz-user-modify: read-only !important;
+    -webkit-user-modify: read-only !important;
+    -ms-user-modify: read-only !important;
+    user-modify: read-only !important;
+    -moz-user-select: none !important;
+    -webkit-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
 /*--------------- form controls modified--------------*/
 .form-group{
     padding-top:1rem;
@@ -44,8 +61,8 @@ body {
     height: 36px;
     cursor: pointer;
     padding: 4px;
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
     filter: drop-shadow(1px 1px 2px #6c757d1c);
 }
 
@@ -54,6 +71,59 @@ body {
         transition: all linear 0.2s;
         filter: drop-shadow(2px 2px 5px #6c757d5d);
     }
+
+
+/*--------------- transperent background --------------*/
+.bg-primary-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-secondary-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-success-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-info-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-warning-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-danger-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-light-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-dark-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-black-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-black-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-white-transperent {
+    --bs-bg-opacity: 0.2;
+    background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important;
+}
+
 
 @media print {
 

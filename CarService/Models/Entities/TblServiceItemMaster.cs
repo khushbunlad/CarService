@@ -22,11 +22,11 @@ public partial class TblServiceItemMaster
     public string FldQuanitityUnit { get; set; } = null!;
 
     [Display(Name = "Approximate Amount")]
-    [DataType(DataType.Currency)]
     [Required]
     public decimal FldIdealAmount { get; set; } = 0;
 
-    [Display(Name = "HSN Number")]
+    [Display(Name = "HSN / SCN")]
     [Required]
     public string? FldHsnNumber { get; set; }
+
 }

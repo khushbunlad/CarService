@@ -9,6 +9,7 @@ using CarService.Models.Entities;
 using CarService.Models.Constants;
 using CarService.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Data;
 
 namespace CarService.Controllers
 {
@@ -61,14 +62,16 @@ namespace CarService.Controllers
         // GET: EstimateMasters/Create
         public IActionResult Create(long id)
         {
+            string jobNo = _context.TblJobMasters.Where(j => j.FldJobId == id).FirstOrDefault().FldJobNo;
             SetJobListInViewBag();
             return View(new TblEstimateMaster
             {
-                FldCreatedOn = DateTime.Now,
+                FldCreatedOn = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0),
                 FldInvoiceType = InvoiceTypes.Estimate,
                 FldJobId = id,
-                FldIsInvoiceGenerated=false
-                
+                FldIsInvoiceGenerated=false,
+                FldEstimateNumber =  (!string.IsNullOrEmpty(jobNo)?"EST_"+jobNo:""),
+                FldInvoiceNumber =  (!string.IsNullOrEmpty(jobNo)?"INV_"+jobNo:"")
             });
         }
 
@@ -139,6 +142,9 @@ namespace CarService.Controllers
                     }
                     _context.Update(tblEstimateMaster);
                     await _context.SaveChangesAsync();
+
+                    JobMastersController jc = new JobMastersController(_context);
+                    jc.CheckAndUpdateJobStatus(tblEstimateMaster.FldJobId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,7 +157,6 @@ namespace CarService.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewBag.JobNumber = _context.TblJobMasters.Where(j => j.FldJobId == tblEstimateMaster.FldJobId).FirstOrDefault().FldJobNo;
 
@@ -159,41 +164,41 @@ namespace CarService.Controllers
         }
 
         // GET: EstimateMasters/Delete/5
-        public async Task<IActionResult> Delete(long? id)
-        {
-            if (id == null || _context.TblEstimateMasters == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(long? id)
+        //{
+        //    if (id == null || _context.TblEstimateMasters == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var tblEstimateMaster = await _context.TblEstimateMasters
-                .FirstOrDefaultAsync(m => m.FldEstimateId == id);
-            if (tblEstimateMaster == null)
-            {
-                return NotFound();
-            }
+        //    var tblEstimateMaster = await _context.TblEstimateMasters
+        //        .FirstOrDefaultAsync(m => m.FldEstimateId == id);
+        //    if (tblEstimateMaster == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(tblEstimateMaster);
-        }
+        //    return View(tblEstimateMaster);
+        //}
 
-        // POST: EstimateMasters/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            if (_context.TblEstimateMasters == null)
-            {
-                return Problem("Entity set 'CarServiceContext.TblEstimateMasters'  is null.");
-            }
-            var tblEstimateMaster = await _context.TblEstimateMasters.FindAsync(id);
-            if (tblEstimateMaster != null)
-            {
-                _context.TblEstimateMasters.Remove(tblEstimateMaster);
-            }
+        //// POST: EstimateMasters/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(long id)
+        //{
+        //    if (_context.TblEstimateMasters == null)
+        //    {
+        //        return Problem("Entity set 'CarServiceContext.TblEstimateMasters'  is null.");
+        //    }
+        //    var tblEstimateMaster = await _context.TblEstimateMasters.FindAsync(id);
+        //    if (tblEstimateMaster != null)
+        //    {
+        //        _context.TblEstimateMasters.Remove(tblEstimateMaster);
+        //    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool TblEstimateMasterExists(long id)
         {

@@ -57,7 +57,7 @@ namespace CarService.Controllers
         // GET: Payments/Create
         public IActionResult Create(long id)
         {
-            return View( new TblPayment { FldJobId =id,FldPaymentDatetime=DateTime.Now});
+            return View( new TblPayment { FldJobId =id,FldPaymentDatetime= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0) });
         }
 
         // POST: Payments/Create
@@ -71,6 +71,9 @@ namespace CarService.Controllers
             {
                 _context.Add(tblPayment);
                 await _context.SaveChangesAsync();
+
+                JobMastersController jc = new JobMastersController(_context);
+                jc.CheckAndUpdateJobStatus(tblPayment.FldJobId);
             }
             return View(tblPayment);
         }
@@ -109,6 +112,10 @@ namespace CarService.Controllers
             }
             
             await _context.SaveChangesAsync();
+
+            JobMastersController jc = new JobMastersController(_context);
+            jc.CheckAndUpdateJobStatus(tblPayment.FldJobId);
+
             return Json("success");
         }
 

@@ -1,0 +1,96 @@
+﻿@model IEnumerable<CarService.Models.Entities.TblJobMaster>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div class="d-flex p-4 justify-content-center align-items-center text-secondary">No Jobs found</div>
+}
+else
+{
+    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Jobs</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-md-1" >
+                    @Html.DisplayNameFor(model => model.FldJobNo)
+                </th>
+                <th class="col-md-2">
+                    @Html.DisplayNameFor(model => model.FldCustomerName)
+                </th>
+                <th class="col-md-1">
+                    @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
+                </th>
+                <th class="col-md-1">
+                    Type
+                </th>
+                <th class="col-md-1">
+                   Registered
+                </th>
+                <th class="col-md-1">
+                    Delivered
+                </th>
+                <th class="col-md-1 text-end">
+                    Invoiced
+                </th>
+                <th class="col-md-1 text-end">
+                    Paid
+                </th>
+                <th class="col-md-1 text-end">
+                    Credit
+                </th>
+                <th class="col-md-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="fw-bold" >
+                        @Html.DisplayFor(modelItem => item.FldJobNo)
+                       
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldCustomerName)<br />
+                        <i class="text-secondary small">
+                            @Html.DisplayFor(modelItem => item.FldCustomerContact1)
+                            @if (!string.IsNullOrEmpty(item.FldCustomerContact2))
+                            {
+                               <span> , </span>@Html.DisplayFor(modelItem => item.FldCustomerContact2)
+                            }
+                        </i>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldVehicleRegisteredNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldServiceType)
+                    </td>
+                    <td>
+                        <span class="text-dark small"> @item.FldRegisteredOn.ToString("dd-MMM-yy HH:mm")</span>
+                    </td>
+                    <td>
+
+                        <span class="text-dark small">  @(item.FldHandedOverOn.HasValue ? item.FldHandedOverOn.Value.ToString("dd-MMM-yy HH:mm ") : "-")</span>
+                    </td>
+                    <td class="text-end">@Math.Round(item.InvoicedAmount,2)</td>
+                    <td class="text-end">@Math.Round(item.PaidAmount,2)</td>
+                    <td class="text-end">@Math.Round(item.PaidAmount- item.InvoicedAmount,2)</td>
+                    <td class="text-end" >
+
+                        @if (item.IsInvoiceCreated)
+                        {
+                            <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank" ><img src="~/images/invoice_view.png" class="IconButton" title="View Invoice" data-toggle="tooltip" data-placement="top"></a>
+                        }
+                      <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Details" data-toggle="tooltip" data-placement="top"></a>
+                        <a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>
+                       
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -2,8 +2,9 @@
 @using CarService.Models.Constants;
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Job.FldVehicleRegisteredNumber + "_" + Model.Job.FldCustomerName+"_"+DateTime.Now.ToString("dd-MMM-yyyy");
 }
+
 
 <div class="d-flex flex-row justify-content-end p-2 bg-light">
     <a asp-action="Edit" asp-controller="JobMasters" asp-route-id="@Model.Job.FldJobId" class="btn btn-sm btn-primary">Modify Job</a>
@@ -62,7 +63,7 @@
                 <tr>
                     <td>Name</td>
                     <td>@Model.Job.FldCustomerName</td>
-                    <td>Number</td>
+                    <td>Vehicle Number</td>
                     <td>@Model.Job.FldVehicleRegisteredNumber</td>
                     <td>@(Model.Estimate.FldIsInvoiceGenerated?"Invoice No":"Estimate No")</td>
                     <td>
@@ -79,8 +80,8 @@
                 <tr>
                     <td>Contact</td>
                     <td>@Model.Job.FldCustomerContact1</td>
-                    <td>Vehicle Number</td>
-                    <td>@Model.Job.FldVehicleRegisteredNumber</td>
+                    <td>Kilometre</td>
+                    <td>@Math.Round(Model.Job.FldKmReadingOnRegistration,1) km</td>
                     <td>Date</td>
                     <td>
                         @if (Model.Estimate.FldIsInvoiceGenerated)

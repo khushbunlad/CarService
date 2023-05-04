@@ -10,8 +10,9 @@ public partial class TblEstimateMaster
 
     [Display(Name = "Created On")]
     [DataType(DataType.DateTime)]
+    [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd-MMM-yyyy HH:mm}")]
     [Required]
-    public DateTime FldCreatedOn { get; set; }= DateTime.Now;
+    public DateTime FldCreatedOn { get; set; }= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0);
 
     [Display(Name = "Job Number")]
     public long FldJobId { get; set; }
@@ -28,12 +29,12 @@ public partial class TblEstimateMaster
 
     [Display(Name = "Invoice Created On")]
     [DataType(DataType.DateTime)]
+    [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd-MMM-yyyy HH:mm}")]
     public DateTime? FldInvoiceCreatedOn { get; set; }
 
     [Display(Name = "Invoice Type")]
     public string? FldInvoiceType { get; set; }
 
     [Display(Name = "Total Amount")]
-    [DataType(DataType.Currency)]
     public decimal FldTotalAmount { get; set; }
 }

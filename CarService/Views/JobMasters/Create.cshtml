@@ -11,6 +11,8 @@
 
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="FldIsCompleted" hidden />
+
     <div class="row ">
         @*Job Details*@
         <div class="col-md-3 p-4 ">
@@ -55,7 +57,13 @@
             <h4>Customer Details</h4>
             <div class="form-group">
                 <label asp-for="FldCustomerName" class="control-label"></label>
-                <input asp-for="FldCustomerName" class="form-control" />
+                <input asp-for="FldCustomerName" class="form-control" list="CustList" onchange="FillCustomerDetails()" />
+                <datalist id="CustList">
+                    @foreach (CustomerSuggestionListViewModel c in ViewBag.Customers)
+                    {
+                        <option name="@c.CustomerName" c1="@c.Contact1" c2="@c.Contact2" vno="@c.VehicleNumber" value="@c.VehicleNumber" >@c.CustomerName</option>
+                    }
+                </datalist>
                 <span asp-validation-for="FldCustomerName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -110,7 +118,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="FldHandedOverOn" class="control-label"></label>
-                <input asp-for="FldHandedOverOn" class="form-control"  />
+                <input asp-for="FldHandedOverOn" class="form-control" />
                 <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
             </div>
 
@@ -130,3 +138,27 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+<script type="text/javascript">
+    function FillCustomerDetails(val) {
+
+        var selectedVal = $("#FldCustomerName").val();
+        var c1 = $('#CustList option[value="' + selectedVal + '"]').attr("c1");
+        var c2 = $('#CustList option[value="' + selectedVal + '"]').attr("c2");
+        var vno = $('#CustList option[value="' + selectedVal + '"]').attr("vno");
+        var name = $('#CustList option[value="' + selectedVal + '"]').attr("name");
+        
+        if (name != null && name != undefined) {
+            $("#FldCustomerName").val(name);
+        }
+        if (c1 != null && c1 != undefined) {
+            $("#FldCustomerContact1").val(c1);
+        }
+        if (c2 != null && c2 != undefined) {
+            $("#FldCustomerContact2").val(c2);
+        }
+        if (vno != null && vno != undefined) {
+            $("#FldVehicleRegisteredNumber").val(vno);
+        }
+
+    }
+</script>

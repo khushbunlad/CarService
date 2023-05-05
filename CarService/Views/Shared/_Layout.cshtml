@@ -3,6 +3,13 @@
 @{
     long UserId = (Context.Session.GetString(SessionKeys.UserId) != null ? long.Parse(Context.Session.GetString(SessionKeys.UserId)) : -1);
     String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
+    String OrgName = (Context.Session.GetString(SessionKeys.OrganizationName) != null ? Context.Session.GetString(SessionKeys.OrganizationName) : "");
+    String Logo = (Context.Session.GetString(SessionKeys.OrgLogo) != null ? Context.Session.GetString(SessionKeys.OrgLogo) : "");
+    if(string.IsNullOrEmpty(Logo))
+    {
+        Logo = "/images/car1.png";
+    }
+
 }
 
 <!DOCTYPE html>
@@ -10,7 +17,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CarService</title>
+    <title>@OrgName</title>
+    <link rel="icon" type="image/x-icon" href="@Logo">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" media="all" />
     <link rel="stylesheet" href="~/CarService.styles.css" asp-append-version="true" media="all" />
@@ -20,35 +28,46 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarService</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="@Logo" style="width:30px;height:30px;" class="me-2" />
+                    @OrgName
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="JobMasters" asp-action="Index">Jobs</a>
-                        </li>
-                        @*<li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="EstimateMasters" asp-action="Index">Estimate & Invoices</a>
-                        </li>*@
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="JobMasters" asp-action="HistoryFilters">Job History</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="Index">Service Items</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="JobRemarkMasters" asp-action="Index">job Remark List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
-                        </li>
+                       
+                        
                         @if (UserRoles.Admin == UserRole)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="OrganizationMasters" asp-action="Index">Organizations</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="JobMasters" asp-action="Index">Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="JobMasters" asp-action="HistoryFilters">Job History</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="ItemUse">Product Report</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="Index">Service Items</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="JobRemarkMasters" asp-action="Index">job Remark List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
                             </li>
                         }
                     </ul>
@@ -70,10 +89,16 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - CarService - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="border-top footer text-muted bg-dark">
+        @*<div class="container">*@
+            <div class="d-flex flex-row ps-4 pe-4">
+                <div class="d-flex flex-fill text-white">
+                    &copy; 2023 - @OrgName
+
+                </div>
+            <div class="d-flex text-primary small"><a href="https://www.instagram.com/__youarecapable/?igshid=ZWIzMWE5ZmU3Zg%3D%3D" target="_blank" style="text-decoration:none" > <i>Powered by __YouAreCapable</i></a></div>
+            </div>
+        @*</div>*@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

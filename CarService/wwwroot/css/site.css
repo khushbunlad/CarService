@@ -16,8 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
-.NotAllowed{
-    pointer-events:none;
+.footer{
+    line-height:35px !important;
+}
+.NotAllowed {
+    pointer-events: none;
 }
 .DisableBlock {
     filter: opacity(0.5);

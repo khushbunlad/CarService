@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarService.Models.Entities;
+using CarService.Models.Constants;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CarService.Controllers
 {
@@ -19,6 +21,16 @@ namespace CarService.Controllers
             _context = context;
             _config = config;
         }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (HttpContext.Session.GetString(SessionKeys.UserId) == null && HttpContext.Session.GetString(SessionKeys.UserId) == null)
+            {
+                context.Result = Redirect("~/Home");
+            }
+            base.OnActionExecuting(context);
+        }
+
 
         // GET: OrganizationMasters
         public async Task<IActionResult> Index()

@@ -16,14 +16,8 @@
 
     <div class="row pb-4">
         @*Item Name & HSN Number*@
-        <div class="col-md-4 row">
-            <div class="col-md-3 p-0">
-                <div class="form-group">
-                    <label class="control-label" asp-for="FldHsnNumber"></label>
-                    <input asp-for="FldHsnNumber" class="form-control" />
-                    <span asp-validation-for="FldHsnNumber" class="text-danger"></span>
-                </div>
-            </div>
+        <div class="col-md-4 row ps-4">
+           
             <div class="col-md-9 p-0">
                 <div class="form-group">
                     <label asp-for="FldItemTitle" class="control-label"></label>
@@ -35,6 +29,14 @@
                             <option value="@item.FldItemName" hsn="@item.FldHsnNumber" type="@item.FldItemType" unit="@item.FldQuanitityUnit" sid="@item.FldServiceItemId">@item.FldItemName [@item.FldHsnNumber] </option>
                         }
                     </datalist>
+                </div>
+               
+            </div>
+            <div class="col-md-3 p-0">
+                <div class="form-group">
+                    <label class="control-label" asp-for="FldHsnNumber"></label>
+                    <input asp-for="FldHsnNumber" class="form-control" />
+                    <span asp-validation-for="FldHsnNumber" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -153,11 +155,12 @@
             $('#FldQuantityUnit').removeClass("DisableBlock");
             $('#FldQuantityUnit"]').attr("tabindex", "0");
         }
-        
 
 
         $("#FldQuantity").val("1");
         $("#FldUnitAmount").val("");
+        ItemTypeChanged();
+
     }
 
     function SetTotal() {
@@ -174,10 +177,18 @@
         if (selectedvalue == "@ServiceItemTypes.Part") {
             $("#FldQuantity").val("1");
             $("#FldQuantityUnit").val("unit");
+            $('#FldQuantityUnit').removeClass("DisableBlock");
+            $('#FldQuantityUnit"]').attr("tabindex", "0");
+            $('#FldQuantity').removeClass("DisableBlock");
+            $('#FldQuantity').attr("tabindex", "-1");
         }
         else {
             $("#FldQuantity").val("1");
-            $("#FldQuantityUnit").val("unit");
+            $("#FldQuantityUnit").val("N/A");
+            $('#FldQuantityUnit').addClass("DisableBlock");
+            $('#FldQuantityUnit').attr("tabindex", "-1");
+            $('#FldQuantity').addClass("DisableBlock");
+            $('#FldQuantity').attr("tabindex", "-1");
         }
     }
 

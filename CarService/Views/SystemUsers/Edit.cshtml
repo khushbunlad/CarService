@@ -2,6 +2,8 @@
 @using CarService.Models.Constants;
 @{
     ViewData["Title"] = "Edit";
+    String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
+
 }
 
 <h1>Edit User</h1>
@@ -37,7 +39,7 @@
 
         </div>
         <div class="col-md-4">
-            <div class="form-group">
+            <div class="form-group" @(UserRole == UserRoles.Admin?"":"hidden")>
                 <label asp-for="FldOrgId" class="control-label"></label>
                 <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
                 <span asp-validation-for="FldOrgId" class="text-danger"></span>
@@ -50,7 +52,10 @@
             <div class="form-group">
                 <label asp-for="FldRole" class="control-label"></label>
                 <select asp-for="FldRole" class="form-control form-select">
-                    <option value="@UserRoles.Admin">@UserRoles.Admin</option>
+                    @if (UserRole == UserRoles.Admin)
+                    {
+                        <option value="@UserRoles.Admin">@UserRoles.Admin</option>
+                    }
                     <option value="@UserRoles.OrganizationAdmin">@UserRoles.OrganizationAdmin</option>
                     <option value="@UserRoles.User">@UserRoles.User</option>
                 </select>

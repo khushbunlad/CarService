@@ -31,9 +31,16 @@ namespace CarService.Controllers
         // GET: SystemUsers
         public async Task<IActionResult> Index()
         {
-              return _context.TblSystemUsers != null ? 
-                          View(await _context.TblSystemUsers.ToListAsync()) :
-                          Problem("Entity set 'CarServiceContext.TblSystemUsers'  is null.");
+            string? role = HttpContext.Session.GetString(SessionKeys.UserRole);
+            long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
+            if (role == UserRoles.Admin)
+            {
+                return View(await _context.TblSystemUsers.ToListAsync());
+            }
+            else
+            {
+                return View(await _context.TblSystemUsers.Where(u=>u.FldOrgId == OrgId).ToListAsync());
+            }
         }
 
         // GET: SystemUsers/Details/5
@@ -57,8 +64,10 @@ namespace CarService.Controllers
         // GET: SystemUsers/Create
         public IActionResult Create()
         {
+            long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
+
             SetOrganizationsInViewbag();
-            return View();
+            return View(new TblSystemUser { FldOrgId = OrgId});
         }
 
         // POST: SystemUsers/Create

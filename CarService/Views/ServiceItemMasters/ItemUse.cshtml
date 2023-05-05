@@ -1,0 +1,59 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="row">
+    <div class="col-md-2"><input type="date" id="StartDate" class="form-control" /></div>
+    <div class="col-md-2"><input type="date" id="EndDate" class="form-control" /></div>
+    <div class="col-md-4">
+        <input type="text" id="ItemId" class="form-control" hidden />
+        <input type="text" id="ItemUnit" class="form-control" hidden />
+        <input type="text" id="ItemName" class="form-control" list="ItemList" onchange="ItemSelected()" placeholder="Search Item" />
+        <datalist id="ItemList">
+            @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.Items)
+            {
+                <option id="@item.FldServiceItemId" value="@item.FldItemName" unit="@item.FldQuanitityUnit" name="@item.FldItemName" >@item.FldItemName</option>
+            }
+        </datalist>
+    </div>
+    <div class="col-md-2"><input type="button" value="Search" class="btn btn-success" onclick="RefreshResult()" /></div>
+</div>
+<div class="d-flex flex-row justify-content-center p-4"  >
+    <span class="display-4 text-success" id="Results"></span>
+    <span class="p-4"></span>
+    <span class="display-4 text-success" id="ResultUnit" ></span>
+</div>
+
+<script type="text/javascript">
+    setTimeout(function () { 
+        var today = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        var lastweek = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+        $("#EndDate").val(today);
+        $("#StartDate").val(lastweek);
+    
+    }, 200);
+function RefreshResult(){
+    var SendData = new Object();
+        SendData.StartDate = $("#StartDate").val();
+        SendData.EndDate = $("#EndDate").val();
+        SendData.ItemId = ($("#ItemId").val()).toLowerCase();
+       $.post(window.location.origin + "/ServiceItemMasters/ItemUseResult", SendData,function(res){
+            $("#Results").html(res);
+            $("#ResultUnit").html($("#ItemUnit").val());
+        });
+}
+
+function ItemSelected(){
+        var selectedVal = $("#ItemName").val();
+        var name = $('#ItemList option[value="' + selectedVal + '"]').attr("name");
+        var id = $('#ItemList option[value="' + selectedVal + '"]').attr("id");
+        var unit = $('#ItemList option[value="' + selectedVal + '"]').attr("unit");
+        $("#ItemId").val(id);
+        $("#ItemUnit").val(unit);
+        $("#ItemName").val(name);
+}
+
+</script>

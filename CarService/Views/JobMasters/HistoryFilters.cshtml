@@ -6,8 +6,8 @@
 <div class="row">
     <div class="col-md-2"><input type="date" id="StartDate" class="form-control" /></div>
     <div class="col-md-2"><input type="date" id="EndDate" class="form-control" /></div>
-    <div class="col-md-2"> <input type="text" id="SerchVehicle" class="form-control" placeholder="Vehicle Number" /> </div>
-    <div class="col-md-4"> <input type="text" id="SearchCustomer" class="form-control" placeholder="Name / contact" /> </div>
+    <div class="col-md-2"> <input type="text" id="SerchJobInvoice" class="form-control" placeholder="Job / Invoice Number" /> </div>
+    <div class="col-md-4"> <input type="text" id="SearchCustomer" class="form-control" placeholder="Name / contact / Vehicle Number" /> </div>
     <div class="col-md-2"><input type="button" value="Search" class="btn btn-success" onclick="RefreshResult()" /></div>
 </div>
 <div class="row" id="Results" >
@@ -28,8 +28,8 @@ function RefreshResult(){
     var SendData = new Object();
         SendData.StartDate = $("#StartDate").val();
         SendData.EndDate = $("#EndDate").val();
-        SendData.SerchVehicle = $("#SerchVehicle").val();
-        SendData.SearchCustomer = $("#SearchCustomer").val();
+        SendData.SerchJobInvoice = ($("#SerchJobInvoice").val()).toLowerCase();
+        SendData.SearchCustomer = ($("#SearchCustomer").val()+"").toLowerCase();
         //SendData.SearchJob = $("#SearchJob").val();
         //SendData.SearchInvoice = $("#SearchInvoice").val();
         $("#Results").load(window.location.origin +"/JobMasters/History",SendData);

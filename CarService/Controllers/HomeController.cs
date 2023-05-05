@@ -87,6 +87,7 @@ namespace CarService.Controllers
                 HttpContext.Session.SetString(SessionKeys.UserRole, user.FldRole + "");
                 HttpContext.Session.SetString(SessionKeys.OrganizationId, user.FldOrgId + "");
                 HttpContext.Session.SetString(SessionKeys.OrgLogo, "");
+                HttpContext.Session.SetString(SessionKeys.OrganizationName, org.FldOrgName);
 
                 string LogoPath = _config.GetValue<string>(ConfigKeys.StorageBasePath) + org.FldLogo;
                 if (System.IO.File.Exists(LogoPath))

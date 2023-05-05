@@ -67,7 +67,7 @@ namespace CarService.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> History(DateTime? StartDate,DateTime EndDate,string? SerchVehicle,string? SearchCustomer)
+        public async Task<IActionResult> History(DateTime? StartDate,DateTime EndDate,string? SerchJobInvoice,string? SearchCustomer)
         {
             long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
             string? UserRole = HttpContext.Session.GetString(SessionKeys.UserId);
@@ -86,35 +86,37 @@ namespace CarService.Controllers
                                 && j.FldRegisteredOn >= StartDate
                                 && j.FldHandedOverOn <=EndDate
                                 ).ToListAsync();
-                    if (!string.IsNullOrEmpty(SerchVehicle))
+                    if (!string.IsNullOrEmpty(SerchJobInvoice))
                     {
-                        DisplayList = DisplayList.Where(j => j.FldVehicleRegisteredNumber.Contains(SerchVehicle)).ToList();
+                        DisplayList = DisplayList.Where(j => j.FldJobNo.ToLower().Contains(SerchJobInvoice)).ToList();
                     }
                     if (!string.IsNullOrEmpty(SearchCustomer))
                     {
-                        DisplayList = DisplayList.Where(j => j.FldCustomerName.Contains(SearchCustomer) 
-                                                || j.FldCustomerContact1.Contains(SearchCustomer)
-                                                || j.FldCustomerContact2.Contains(SearchCustomer)
+                        DisplayList = DisplayList.Where(j => j.FldCustomerName.ToLower().Contains(SearchCustomer) 
+                                                || j.FldCustomerContact1.ToLower().Contains(SearchCustomer)
+                                                || j.FldCustomerContact2.ToLower().Contains(SearchCustomer)
+                                                || j.FldVehicleRegisteredNumber.ToLower().Contains(SearchCustomer)
                                                 ).ToList();
                     }
                 }
-                else if(!string.IsNullOrEmpty(SerchVehicle) && !string.IsNullOrEmpty(SearchCustomer))
+                else if(!string.IsNullOrEmpty(SerchJobInvoice) && !string.IsNullOrEmpty(SearchCustomer))
                 {
                     DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
                                 && (
-                                                j.FldCustomerName.Contains(SearchCustomer)
-                                                || j.FldCustomerContact1.Contains(SearchCustomer)
-                                                || j.FldCustomerContact2.Contains(SearchCustomer)
-                                                || j.FldVehicleRegisteredNumber.Contains(SearchCustomer)
+                                                j.FldCustomerName.ToLower().Contains(SearchCustomer)
+                                                || j.FldCustomerContact1.ToLower().Contains(SearchCustomer)
+                                                || j.FldCustomerContact2.ToLower().Contains(SearchCustomer)
+                                                || j.FldVehicleRegisteredNumber.ToLower().Contains(SearchCustomer)
+                                                || j.FldJobNo.Contains(SerchJobInvoice)
                                 )
                                 ).ToListAsync();
                 }
-                else if (!string.IsNullOrEmpty(SerchVehicle) )
+                else if (!string.IsNullOrEmpty(SerchJobInvoice) )
                 {
                     DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
                                 && (
                                                
-                                     j.FldVehicleRegisteredNumber.Contains(SerchVehicle)
+                                     j.FldJobNo.ToLower().Contains(SerchJobInvoice)
                                 )
                                 ).ToListAsync();
                 }
@@ -122,9 +124,10 @@ namespace CarService.Controllers
                 {
                     DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
                                 && (
-                                                j.FldCustomerName.Contains(SearchCustomer)
-                                                || j.FldCustomerContact1.Contains(SearchCustomer)
-                                                || j.FldCustomerContact2.Contains(SearchCustomer)
+                                                j.FldCustomerName.ToLower().Contains(SearchCustomer)
+                                                || j.FldCustomerContact1.ToLower().Contains(SearchCustomer)
+                                                || j.FldCustomerContact2.ToLower().Contains(SearchCustomer)
+                                                || j.FldVehicleRegisteredNumber.ToLower().Contains(SearchCustomer)
                                 )
                                 ).ToListAsync();
                 }

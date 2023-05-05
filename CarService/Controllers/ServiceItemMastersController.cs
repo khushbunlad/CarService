@@ -178,5 +178,29 @@ namespace CarService.Controllers
         {
           return (_context.TblServiceItemMasters?.Any(e => e.FldServiceItemId == id)).GetValueOrDefault();
         }
+
+
+        public IActionResult ItemUse()
+        {
+            ViewBag.Items =  _context.TblServiceItemMasters.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ItemUseResult(DateTime? StartDate,DateTime? EndDate, long ItemId)
+        {
+            decimal Count = 0;
+            if (StartDate.HasValue && EndDate.HasValue)
+            {
+                long[] MatchedInvoices = _context.TblEstimateMasters.Where(e => e.FldInvoiceCreatedOn >= StartDate && e.FldInvoiceCreatedOn <= EndDate).Select(e => e.FldEstimateId).ToArray();
+                 Count = _context.TblEstimateItems.Where(i => MatchedInvoices.Contains(i.FldEstimateId) && i.FldServiceItemId == ItemId).Sum(i => i.FldQuantity);
+            }
+            else
+            {
+                Count = _context.TblEstimateItems.Where(i=>i.FldServiceItemId == ItemId).Sum(i => i.FldQuantity);
+            }
+
+            return Json(Math.Round(Count,2));
+        }
     }
 }

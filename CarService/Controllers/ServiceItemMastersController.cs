@@ -67,19 +67,19 @@ namespace CarService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber")] TblServiceItemMaster tblServiceItemMaster)
         {
-            if (_context.TblServiceItemMasters.Count(s => s.FldHsnNumber == tblServiceItemMaster.FldHsnNumber) > 0)
-            {
-                ModelState.AddModelError("FldHsnNumber", "HSN/SAC number already used");
-            }
-            else
-            {
+            //if (_context.TblServiceItemMasters.Count(s => s.FldHsnNumber == tblServiceItemMaster.FldHsnNumber) > 0)
+            //{
+            //    ModelState.AddModelError("FldHsnNumber", "HSN/SAC number already used");
+            //}
+            //else
+            //{
                 if (ModelState.IsValid)
                 {
                     _context.Add(tblServiceItemMaster);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-            }
+           // }
             return View(tblServiceItemMaster);
         }
 
@@ -110,10 +110,10 @@ namespace CarService.Controllers
             {
                 return NotFound();
             }
-            if (_context.TblServiceItemMasters.Count(s => s.FldHsnNumber == tblServiceItemMaster.FldHsnNumber && s.FldServiceItemId != tblServiceItemMaster.FldServiceItemId) > 0)
-            {
-                ModelState.AddModelError("FldHsnNumber", "HSN/SAC number already used");
-            }
+            //if (_context.TblServiceItemMasters.Count(s => s.FldHsnNumber == tblServiceItemMaster.FldHsnNumber && s.FldServiceItemId != tblServiceItemMaster.FldServiceItemId) > 0)
+            //{
+            //    ModelState.AddModelError("FldHsnNumber", "HSN/SAC number already used");
+            //}
             if (ModelState.IsValid)
             {
                 try

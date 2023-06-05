@@ -17,43 +17,45 @@
 }
 else
 {
-    <div class="row">
+    <div class="d-flex flex-row pb-2">
         @*Status filter*@
         <div class="d-flex flex-row fw-bold" id="StatusFilter">
-            <div class="form-check-inline">
+            <div class="form-check-inline" title="Vehicle is delivered & payment is still pending" data-toggle="tooltip" data-placement="top">
                 <input type="checkbox" class="form-check-input" id="Chk_Status_01" value="Payment" onchange="FilterByStatus()" checked>
                 <label for="Chk_Status_01" class="ps-2 form-check-label text-danger">Payment</label>
             </div>
-             <div class="form-check-inline">
+            <div class="form-check-inline" title="Invoice is generated & vehicle is not delivered" data-toggle="tooltip" data-placement="top">
                 <input type="checkbox" class="form-check-input" id="Chk_Status_02" value="Invoiced" onchange="FilterByStatus()" checked >
                 <label for="Chk_Status_02" class="ps-2 form-check-label text-success">Invoiced</label>
             </div>
-            <div class="form-check-inline">
+            <div class="form-check-inline" title="Job Estimation is ready & invoice is pending" data-toggle="tooltip" data-placement="top">
                 <input type="checkbox" class="form-check-input" id="Chk_Status_03" value="Estimated" onchange="FilterByStatus()" checked>
                 <label for="Chk_Status_03" class="ps-2 form-check-label text-warning">Estimated</label>
             </div>
-            <div class="form-check-inline">
+            <div class="form-check-inline" title="Job is created & remarks are added" data-toggle="tooltip" data-placement="top">
                 <input type="checkbox" class="form-check-input" id="Chk_Status_04" value="Job" onchange="FilterByStatus()" checked>
                 <label for="Chk_Status_04" class="ps-2 form-check-label text-primary">Job</label>
             </div>
-            <div class="form-check-inline">
+            <div class="form-check-inline" title="Job is created & remarks are yet to be added" data-toggle="tooltip" data-placement="top">
                 <input type="checkbox" class="form-check-input" id="Chk_Status_05" value="Draft" onchange="FilterByStatus()" checked>
                 <label for="Chk_Status_05" class="ps-2 form-check-label text-info">Draft</label>
             </div>
         </div>
+        @*Result counts*@
+        <div class="d-flex flex-fill justify-content-end fst-italic text-info">@Model.Count() Running Jobs</div>
+
     </div>
-    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Running Jobs</div>
     <table class="table">
         <thead>
             <tr>
                 <th class="col-md-1" >
-                    @Html.DisplayNameFor(model => model.FldJobNo)
+                    #Job 
                 </th>
                 <th class="col-md-2">
-                    @Html.DisplayNameFor(model => model.FldCustomerName)
+                    Customer
                 </th>
                 <th class="col-md-1">
-                    @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
+                    Vehicle
                 </th>
                 <th class="col-md-1">
                     Type
@@ -141,20 +143,21 @@ else
                         @if (item.IsInvoiceCreated)
                         {
                             <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank" ><img src="~/images/invoice_view.png" class="IconButton" title="View Invoice" data-toggle="tooltip" data-placement="top"></a>
+                            <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId"><img src="~/images/invoice_edit.png" class="IconButton" title="Modify Invoice" data-toggle="tooltip" data-placement="top"></a>
                         }
 
                         @if (item.IsEstimateCreated && item.IsInvoiceCreated==false)
                         {
                             <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank"><img src="~/images/recipt.png" class="IconButton" title="View Estimate" data-toggle="tooltip" data-placement="top"></a>
-                            <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId"><img src="~/images/estimate_edit.png" class="IconButton" title="Edit Estimate / Invoice" data-toggle="tooltip" data-placement="top"></a>
+                            <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId"><img src="~/images/estimate_edit.png" class="IconButton" title="Modify Estimate" data-toggle="tooltip" data-placement="top"></a>
                         }
                         @if(item.IsJobItemsCreated && item.IsEstimateCreated ==false)
                         {
                             <a asp-action="Create" asp-controller="EstimateMasters" asp-route-id="@item.FldJobId"><img src="~/images/estimate_add.png" class="IconButton" title="Generate Estimate" data-toggle="tooltip" data-placement="top"></a>
                         }
-                        <a asp-action="Edit" asp-route-id="@item.FldJobId"><img src="~/images/edit.png" class="IconButton" title="Edit Job" data-toggle="tooltip" data-placement="top"></a>
+                        <a asp-action="Edit" asp-route-id="@item.FldJobId"><img src="~/images/job.png" class="IconButton" title="Modify Job" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Create" asp-controller="Payments" asp-route-id="@item.FldJobId"><img src="~/images/AddPayment.png" class="IconButton" title="Payments" data-toggle="tooltip" data-placement="top"></a>
-                        <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Details" data-toggle="tooltip" data-placement="top"></a>
+                        <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Summary" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>
                        
                     </td>

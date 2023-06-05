@@ -158,12 +158,18 @@ body {
         overflow: visible;
     }
 
+.PrintArea {
+    min-width: 230mm;
+    width: 230mm;
+    max-width: 230mm;
+    padding: 10mm;
+}
 
 @media print {
 
     @page {
-        margin : 10mm;
-       /* margin-left: 10mm;
+        margin: 10mm;
+        /* margin-left: 10mm;
         margin-right: 10mm;
         margin-top: 10mm;
         margin-bottom: 10mm;*/
@@ -174,7 +180,6 @@ body {
         print-color-adjust: exact;
     }
 
-
     body {
         -webkit-print-color-adjust: exact;
         visibility: hidden;
@@ -183,11 +188,7 @@ body {
     header, footer {
         display: none;
     }
-    .PrintArea header {
-        visibility: visible !important;
-        display: flex;
-        display: table-header-group;
-    }
+    
     .container {
         margin: 0px !important;
         max-width: 100% !important;
@@ -195,6 +196,7 @@ body {
 
     .PrintArea {
         visibility: visible !important;
+        box-shadow: none !important;
     }
 
     .col-md-1 {

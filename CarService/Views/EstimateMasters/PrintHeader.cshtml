@@ -5,7 +5,7 @@
             //Required : @Model.Org
 }
 
-<div id="header" class="d-flex flex-column pb-2">
+<div id="header" class="d-flex flex-column">
     <div class="Watermark">
         <img src="@ViewBag.Watermark" />
     </div>
@@ -16,7 +16,7 @@
         </div>
         @*org name, address & contact*@
         <div class="d-flex flex-fill flex-column ps-4 pe-2">
-            <div class="d-flex display-5">@Model.Org.FldOrgName</div>
+            <div class="d-flex display-6">@Model.Org.FldOrgName</div>
             @*Address*@
             <div class="d-flex mt-3 fst-italic align-items-baseline">
                 @Model.Org.FldAddress

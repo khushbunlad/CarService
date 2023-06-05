@@ -5,17 +5,17 @@
     //Required : @Model.Org
 }
 
-<div class="d-flex flex-row  border-top border-bottom border-dark pt-2 pb-2 mb-2">
+<div class="d-flex flex-row  border-top border-bottom border-dark pt-2 pb-2 mb-2 text-uppercase">
     <table class="table table-sm table-borderless mb-0">
         <tbody>
             <tr>
-                <td class="fw-bold text-secondary pb-2 col-md-5 ps-2">@(Model.Estimate == null ? "" : Model.Estimate.FldInvoiceType) To</td>
+                <td class="fw-bold text-secondary pb-2 col-md-4 ps-2">@(Model.Estimate == null ? "" : Model.Estimate.FldInvoiceType) To</td>
                 <td class="fw-bold text-secondary col-md-4  ps-2">Vehicle</td>
-                <td class="fw-bold col-md-3 ps-2 ">@(Model.Estimate==null?"Job": Model.Estimate.FldInvoiceType)</td>
+                <td class="fw-bold col-md-4 ps-2 bg-light ">@(Model.Estimate==null?"Job": Model.Estimate.FldInvoiceType)</td>
             </tr>
             <tr class="small">
                 @*Customer Detail*@
-                <td class="border-start">
+                <td class="">
                     <table class="table table-sm table-borderless mb-0">
                         <tr>
                             <td class="fw-bold">@Model.Job.FldCustomerName</td>

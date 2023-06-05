@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label class="control-label"> Item Title & HSN / SCN </label>
                 <div class="input-group">
-                    <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" onchange="SetHsnNumber()" />
+                    <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" onchange="SetHsnNumber()" autofocus />
                     <input asp-for="FldHsnNumber" class="form-control input-group-append" style="max-width:150px;" />
                 </div>
                 <span asp-validation-for="FldItemTitle" class="text-danger"></span>
@@ -61,7 +61,7 @@
             <div class="form-group">
                 <label asp-for="FldQuantity" class="control-label"></label>
                 <div class="input-group">
-                    <input asp-for="FldQuantity" class="form-control" onfocusout="SetTotal()" />
+                    <input type="number" asp-for="FldQuantity" class="form-control" onfocusout="SetTotal()" />
                     <select asp-for="FldQuantityUnit" class="form-control form-select" asp-items="Units.UnitList"></select>
                 </div>
                 <span asp-validation-for="FldQuantity" class="text-danger"></span>
@@ -72,22 +72,19 @@
         <div class="col-md-1 p-0">
             <div class="form-group">
                 <label asp-for="FldUnitAmount" class="control-label"></label>
-                <input asp-for="FldUnitAmount" class="form-control text-end" onfocusout="SetTotal()" />
+                <input type="number" asp-for="FldUnitAmount" class="form-control text-end" onfocusout="SetTotal()" />
                 <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
                 <span id="" class="text-info"></span>
             </div>
         </div>
 
-        <div class="col-md-3 form-control-sm ">
+        <div class="col-md-3">
             @*Amount*@
             <div class="row">
                 <div class="form-group">
                     <label class="control-label">Item Amounts</label>
-
-                    <div class="input-group">
-                        <div class="input-group-prepend Width100">
-                            <label class="input-group-text bg-white">Amount</label>
-                        </div>
+                    <div class="input-group input-group-sm ">
+                        <label class="input-group-text bg-white Width100">Item Total</label>
                         <input id="UnitAmount" class="form-control text-end" tabindex="-1" />
                     </div>
                 </div>
@@ -95,10 +92,8 @@
             @*Discount*@
             <div class="row">
                 <div class="input-group input-group-sm">
-                    <div class="input-group-prepend Width100">
-                        <label asp-for="FldDiscountAmount" class="input-group-text bg-white"></label>
-                    </div>
-                    <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetTotal()" />
+                    <label asp-for="FldDiscountAmount" class="input-group-text bg-white Width100"></label>
+                    <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetTotal()" type="number" />
                     <input id="DiscountAmount" class="form-control text-end Width100" onfocusout="SetTotal()" tabindex="-1" />
                 </div>
                 <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
@@ -106,33 +101,24 @@
             @*Cgst percentage*@
             <div class="row">
                 <div class="input-group  input-group-sm">
-                    <div class="input-group-prepend Width100">
-                        <label asp-for="FldCgstpercentage" class="input-group-text bg-white"></label>
-                    </div>
-                    <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetTotal()" />
+                    <label asp-for="FldCgstpercentage" class="input-group-text bg-white Width100"></label>
+                    <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetTotal()" type="number" />
                     <input id="Cgstpercentage" class="form-control text-end Width100" tabindex="-1" />
                 </div>
                 <span asp-validation-for="FldCgstpercentage" class="text-danger"></span>
             </div>
             @*Sgst percentage*@
             <div class="input-group input-group-sm">
-                <div class="input-group-prepend Width100">
-                    <label asp-for="FldSgstpercentage" class="input-group-text bg-white"></label>
-                </div>
-                <input asp-for="FldSgstpercentage" class="form-control text-end" onfocusout="SetTotal()" />
-                <input id="Sgstpercentage" class="form-control text-end Width100" />
+                <label asp-for="FldSgstpercentage" class="input-group-text bg-white Width100"></label>
+                <input asp-for="FldSgstpercentage" class="form-control text-end" type="number" />
+                <input id="Sgstpercentage" class="form-control text-end Width100" tabindex="-1" />
             </div>
             <span asp-validation-for="FldSgstpercentage" class="text-danger"></span>
             @*Total*@
-            <div class="row  ">
-                <div class="input-group">
-                    <div class="input-group-prepend Width100">
-                        <label class="input-group-text bg-white  fw-bold">Total</label>
-                    </div>
-                    <input asp-for="FldItemTotal" class=" form-control text-end  fw-bold" tabindex="-1" />
-                    <span asp-validation-for="FldItemTotal" class="text-danger"></span>
-
-                </div>
+            <div class="input-group input-group-sm">
+                <label class="input-group-text bg-white  fw-bold Width100">Total</label>
+                <input asp-for="FldItemTotal" class=" form-control text-end  fw-bold" tabindex="-1" />
+                <span asp-validation-for="FldItemTotal" class="text-danger"></span>
             </div>
         </div>
 

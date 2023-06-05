@@ -10,7 +10,7 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="FldJobId" class="form-control" hidden />
         <div class="form-group">
-            <input asp-for="FldRemarkTitle" class="form-control" list="RemarkSuggestion" />
+            <input asp-for="FldRemarkTitle" class="form-control" list="RemarkSuggestion" autofocus />
             <span asp-validation-for="FldRemarkTitle" class="text-danger"></span>
             <datalist id="RemarkSuggestion">
                 @foreach (SelectListItem item in ViewBag.Remarks)

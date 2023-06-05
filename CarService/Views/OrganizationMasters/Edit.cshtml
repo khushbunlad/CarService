@@ -1,10 +1,14 @@
-﻿@model CarService.Models.Entities.TblOrganizationMaster
+﻿@using CarService.Models.Constants;
+@model CarService.Models.Entities.TblOrganizationMaster;
 
 @{
     ViewData["Title"] = "Edit";
+    String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
+
+
 }
 
-<h1>Edit Organization</h1>
+<h1>Modify Billing Information</h1>
 
 <hr />
 
@@ -13,7 +17,8 @@
     <input type="hidden" asp-for="FldOrgId" />
     <div class="row">
         @*Organization basic detail*@
-        <div class="col-md-4">
+        <div class="col-md-4 p-3 bg-success-transperent">
+            <h5>Organization detail</h5>
             <div class="form-group">
                 <label asp-for="FldOrgName" class="control-label"></label>
                 <input asp-for="FldOrgName" class="form-control" />
@@ -29,9 +34,15 @@
                 <textarea asp-for="FldAddress" class="form-control" style="min-height:120px;"  ></textarea>
                 <span asp-validation-for="FldAddress" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="FldGstnumber" class="control-label"></label>
+                <input asp-for="FldGstnumber" class="form-control" />
+                <span asp-validation-for="FldGstnumber" class="text-danger"></span>
+            </div>
         </div>
         @*Contact person and number*@
-        <div class="col-md-4">
+        <div class="col-md-3 p-3 bg-warning-transperent">
+            <h5>Owners</h5>
             <div class="form-group">
                 <label asp-for="FldContactPerson1" class="control-label"></label>
                 <input asp-for="FldContactPerson1" class="form-control" />
@@ -53,34 +64,49 @@
                 <span asp-validation-for="FldContactNumber2" class="text-danger"></span>
             </div>
         </div>
-        @*Subscription detail*@
-        <div class="col-md-4">
+        @*Logo & Watermark*@
+        <div class="col-md-3 p-3">
+            <h5>Logo & Watermark</h5>
             <div class="form-group">
                 <label asp-for="FldLogo" class="control-label"></label>
-                <input type="file" asp-for="FldLogoFile" class="form-control" />
+                <br />
+                <input type="file" asp-for="FldLogoFile" class="form-control" onchange="showImage(this,'SavedLogo')" hidden />
                 <input asp-for="FldLogo" class="form-control" hidden />
+                <img id="SavedLogo" src="@ViewBag.Logo" style="width:200px;height:200px;" onclick="$('#FldLogoFile').click()" />
                 <span asp-validation-for="FldLogo" class="text-danger"></span>
             </div>
-            <div class="form-group form-check pt-5 pb-1">
+            <div class="form-group">
+                <label asp-for="FldWatermark" class="control-label"></label>
+                <br />
+                <input type="file" asp-for="fldWatermarkFile" class="form-control" onchange="showImage(this,'SavedWatermark')" hidden />
+                <input asp-for="FldWatermark" class="form-control"  hidden />
+                <img id="SavedWatermark" src="@ViewBag.Watermark" style="width:200px;height:200px;" onclick="$('#fldWatermarkFile').click()" />
+                <span asp-validation-for="FldWatermark" class="text-danger"></span>
+            </div>
+        </div>
+        @*Subscription detail*@
+        <div class="col-md-2 @(UserRole == UserRoles.Admin?"bg-danger-transperent":"") p-3">
+            <h5 @(UserRole == UserRoles.Admin ? "" : "hidden")>Subscription detail</h5>
+            <div class="form-group form-check pt-5 pb-1" @(UserRole == UserRoles.Admin ? "" : "hidden")>
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="FldIsFullSubscription" /> @Html.DisplayNameFor(model => model.FldIsFullSubscription)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group" @(UserRole == UserRoles.Admin ? "" : "hidden")>
                 <label asp-for="FldActiveUntil" class="control-label"></label>
                 <input asp-for="FldActiveUntil" class="form-control" />
                 <span asp-validation-for="FldActiveUntil" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" @(UserRole == UserRoles.Admin ? "" : "hidden")>
                 <label asp-for="FldLicenseNumber" class="control-label"></label>
                 <input asp-for="FldLicenseNumber" class="form-control" />
                 <span asp-validation-for="FldLicenseNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save Changes" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+            <div class="form-group" >
+                <input type="submit" value="Save Changes" class="btn btn-primary"  />
             </div>
         </div>
+        
     </div>
 </form>
 
@@ -91,6 +117,11 @@
 }
 
 <script type="text/javascript">
+    function showImage(sender, target) {
+        var fr = new FileReader();
+        fr.onload = function (e) { $("#" + target).attr('src', this.result); };
+        fr.readAsDataURL(sender.files[0]);
+    }
     setTimeout(function () {
         $("#FldLogo").rules("remove", "required")
         $("#FldContactPerson2").rules("remove", "required")

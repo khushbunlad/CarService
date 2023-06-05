@@ -51,13 +51,16 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldLogoFile,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
+        public async Task<IActionResult> Create([Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldLogoFile,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber,fldWatermarkFile,FldWatermark,FldGstnumber")] TblOrganizationMaster tblOrganizationMaster)
         {
             if (tblOrganizationMaster.FldLogo == null)
             {
-                tblOrganizationMaster.FldLogo = "";
+                tblOrganizationMaster.FldLogo = "-";
             }
-            tblOrganizationMaster.FldLogo = "-";
+            if (tblOrganizationMaster.FldWatermark == null)
+            {
+                tblOrganizationMaster.FldWatermark = "-";
+            }
             if (tblOrganizationMaster.FldContactNumber2 == null)
             {
                 tblOrganizationMaster.FldContactNumber2 = "";
@@ -80,14 +83,14 @@ namespace CarService.Controllers
 
         public void SaveLogoFileAndUpdatePathInDb( TblOrganizationMaster tblOrganizationMaster)
         {
+            String BasePath = _config.GetValue<string>(CarService.Models.Constants.ConfigKeys.StorageBasePath) ?? "";
+            string SavePath = BasePath + "\\Organization_" + tblOrganizationMaster.FldOrgId;
+            if (!Directory.Exists(SavePath))
+            {
+                Directory.CreateDirectory(SavePath);
+            }
             if (tblOrganizationMaster.FldLogoFile != null)
             {
-                String BasePath = _config.GetValue<string>(CarService.Models.Constants.ConfigKeys.StorageBasePath) ?? "";
-                string SavePath = BasePath + "\\Organization_" + tblOrganizationMaster.FldOrgId;
-                if(!Directory.Exists(SavePath))
-                {
-                    Directory.CreateDirectory(SavePath);
-                }
                 SavePath += "\\Logo" + Path.GetExtension(tblOrganizationMaster.FldLogoFile.FileName);
                 if (System.IO.File.Exists(SavePath))
                 {
@@ -95,12 +98,27 @@ namespace CarService.Controllers
                 }
                 using (Stream fileStream = new FileStream(SavePath, FileMode.Create))
                 {
-                     tblOrganizationMaster.FldLogoFile.CopyToAsync(fileStream);
+                    tblOrganizationMaster.FldLogoFile.CopyToAsync(fileStream);
                 }
                 tblOrganizationMaster.FldLogo = SavePath.Replace(BasePath, "");
-                _context.Update(tblOrganizationMaster);
-                _context.SaveChanges();
             }
+            SavePath = BasePath + "\\Organization_" + tblOrganizationMaster.FldOrgId;
+            if (tblOrganizationMaster.fldWatermarkFile != null)
+            {
+                SavePath += "\\Watermark" + Path.GetExtension(tblOrganizationMaster.fldWatermarkFile.FileName);
+                if (System.IO.File.Exists(SavePath))
+                {
+                    System.IO.File.Delete(SavePath);
+                }
+                using (Stream fileStream = new FileStream(SavePath, FileMode.Create))
+                {
+                    tblOrganizationMaster.fldWatermarkFile.CopyToAsync(fileStream);
+                }
+                tblOrganizationMaster.FldWatermark = SavePath.Replace(BasePath, "");
+            }
+            _context.Update(tblOrganizationMaster);
+            _context.SaveChanges();
+
         }
 
         // GET: OrganizationMasters/Edit/5
@@ -116,6 +134,9 @@ namespace CarService.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Logo = tblOrganizationMaster.Get_SavedLogoData(_config);
+            ViewBag.Watermark = tblOrganizationMaster.Get_SavedWatermarkData(_config);
             return View(tblOrganizationMaster);
         }
 
@@ -124,14 +145,18 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldLogoFile,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber")] TblOrganizationMaster tblOrganizationMaster)
+        public async Task<IActionResult> Edit(int id, [Bind("FldOrgId,FldOrgName,FldOrgEmail,FldAddress,FldContactPerson1,FldContactNumber1,FldContactPerson2,FldContactNumber2,FldLogo,FldLogoFile,FldIsFullSubscription,FldActiveUntil,FldLicenseNumber,fldWatermarkFile,FldWatermark,FldGstnumber")] TblOrganizationMaster tblOrganizationMaster)
         {
 
             if (tblOrganizationMaster.FldLogo == null)
             {
-                tblOrganizationMaster.FldLogo = "";
+                tblOrganizationMaster.FldLogo = "-";
             }
-            tblOrganizationMaster.FldLogo = "-";
+
+            if (tblOrganizationMaster.FldWatermark == null)
+            {
+                tblOrganizationMaster.FldWatermark = "-";
+            }
             if (tblOrganizationMaster.FldContactNumber2 == null)
             {
                 tblOrganizationMaster.FldContactNumber2 = "";
@@ -161,9 +186,11 @@ namespace CarService.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", new { id = tblOrganizationMaster.FldOrgId });
+
+
             }
-            return View(tblOrganizationMaster);
+            return RedirectToAction("Edit",new { id=tblOrganizationMaster.FldOrgId});
         }
 
         // GET: OrganizationMasters/Delete/5

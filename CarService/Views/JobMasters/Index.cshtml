@@ -17,6 +17,31 @@
 }
 else
 {
+    <div class="row">
+        @*Status filter*@
+        <div class="d-flex flex-row fw-bold" id="StatusFilter">
+            <div class="form-check-inline">
+                <input type="checkbox" class="form-check-input" id="Chk_Status_01" value="Payment" onchange="FilterByStatus()" checked>
+                <label for="Chk_Status_01" class="ps-2 form-check-label text-danger">Payment</label>
+            </div>
+             <div class="form-check-inline">
+                <input type="checkbox" class="form-check-input" id="Chk_Status_02" value="Invoiced" onchange="FilterByStatus()" checked >
+                <label for="Chk_Status_02" class="ps-2 form-check-label text-success">Invoiced</label>
+            </div>
+            <div class="form-check-inline">
+                <input type="checkbox" class="form-check-input" id="Chk_Status_03" value="Estimated" onchange="FilterByStatus()" checked>
+                <label for="Chk_Status_03" class="ps-2 form-check-label text-warning">Estimated</label>
+            </div>
+            <div class="form-check-inline">
+                <input type="checkbox" class="form-check-input" id="Chk_Status_04" value="Job" onchange="FilterByStatus()" checked>
+                <label for="Chk_Status_04" class="ps-2 form-check-label text-primary">Job</label>
+            </div>
+            <div class="form-check-inline">
+                <input type="checkbox" class="form-check-input" id="Chk_Status_05" value="Draft" onchange="FilterByStatus()" checked>
+                <label for="Chk_Status_05" class="ps-2 form-check-label text-info">Draft</label>
+            </div>
+        </div>
+    </div>
     <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Running Jobs</div>
     <table class="table">
         <thead>
@@ -45,7 +70,7 @@ else
                 <th class="col-md-3"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="FilterTable">
             @foreach (var item in Model)
             {
                 <tr>
@@ -102,9 +127,13 @@ else
                         {
                             <i class="small text-warning">Estimated</i>
                         }
-                        else
+                        else if (item.IsJobItemsCreated)
                         {
                             <i class="small text-primary">Job</i>
+                        }
+                        else
+                        {
+                            <i class="small text-info">Draft</i>
                         }
                     </td>
                     <td class="text-end" >
@@ -113,11 +142,13 @@ else
                         {
                             <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank" ><img src="~/images/invoice_view.png" class="IconButton" title="View Invoice" data-toggle="tooltip" data-placement="top"></a>
                         }
-                        @if (item.IsEstimateCreated)
+
+                        @if (item.IsEstimateCreated && item.IsInvoiceCreated==false)
                         {
+                            <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank"><img src="~/images/recipt.png" class="IconButton" title="View Estimate" data-toggle="tooltip" data-placement="top"></a>
                             <a asp-action="Edit" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId"><img src="~/images/estimate_edit.png" class="IconButton" title="Edit Estimate / Invoice" data-toggle="tooltip" data-placement="top"></a>
                         }
-                        else
+                        @if(item.IsJobItemsCreated && item.IsEstimateCreated ==false)
                         {
                             <a asp-action="Create" asp-controller="EstimateMasters" asp-route-id="@item.FldJobId"><img src="~/images/estimate_add.png" class="IconButton" title="Generate Estimate" data-toggle="tooltip" data-placement="top"></a>
                         }
@@ -132,3 +163,41 @@ else
         </tbody>
     </table>
 }
+
+
+ <script type="text/javascript">
+    function FilterByStatus(){
+        var CheckedStatus = $("#StatusFilter input[type='checkbox']:checked");
+        var Status = new Array();
+        for(var i=0;i<CheckedStatus.length;i++)
+        {
+            Status.push(">"+$(CheckedStatus[i]).val().toLowerCase()+"<");
+        }
+
+        $("#FilterTable tr").each(function(){
+            var isContain = false;
+            var html = $(this).html().toLowerCase();
+            for (var i = 0; i < Status.length; i++)
+            {
+                if (html.indexOf(Status[i])>=0)
+                {
+                    isContain=true;
+                }
+            }
+            if (Status.length>0)
+            {
+                if(isContain)
+                {
+                    $(this).show();
+                }
+                else{
+                    $(this).hide();
+                }
+            }
+            else{
+                $(this).show();
+            }
+        });
+        
+    }
+ </script>

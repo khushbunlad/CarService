@@ -65,7 +65,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber")] TblServiceItemMaster tblServiceItemMaster)
+        public async Task<IActionResult> Create([Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber,FldCgstpercentage,FldSgstpercentage")] TblServiceItemMaster tblServiceItemMaster)
         {
             //if (_context.TblServiceItemMasters.Count(s => s.FldHsnNumber == tblServiceItemMaster.FldHsnNumber) > 0)
             //{
@@ -104,7 +104,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber")] TblServiceItemMaster tblServiceItemMaster)
+        public async Task<IActionResult> Edit(long id, [Bind("FldServiceItemId,FldItemName,FldItemType,FldQuanitityUnit,FldIdealAmount,FldHsnNumber,FldCgstpercentage,FldSgstpercentage")] TblServiceItemMaster tblServiceItemMaster)
         {
             if (id != tblServiceItemMaster.FldServiceItemId)
             {

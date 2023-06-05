@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using CarService.Models.Entities;
 using CarService.Models.Constants;
 using Microsoft.AspNetCore.Mvc.Filters;
+using CarService.Models;
 
 namespace CarService.Controllers
 {
     public class PaymentsController : Controller
     {
         private readonly CarServiceContext _context;
+        private readonly IConfiguration _config;
 
-        public PaymentsController(CarServiceContext context)
+        public PaymentsController(CarServiceContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -31,32 +34,48 @@ namespace CarService.Controllers
         // GET: Payments
         public async Task<IActionResult> Index(long id)
         {
-              return _context.TblPayments != null ? 
-                          View(await _context.TblPayments.Where(p=>p.FldJobId == id).ToListAsync()) :
-                          Problem("Entity set 'CarServiceContext.TblPayments'  is null.");
+            TblEstimateMaster est = _context.TblEstimateMasters.Where(e => e.FldJobId == id).FirstOrDefault();
+            
+            List<TblPayment> payments = await _context.TblPayments.Where(p => p.FldJobId == id).ToListAsync();
+
+            if (est != null)
+            {
+                ViewBag.PendingAmount = Math.Round(est.FldTotalAmount - payments.Sum(p => p.FldPaidAmount),2);
+            }
+            return View(payments);
         }
 
         // GET: Payments/Details/5
         public async Task<IActionResult> Details(long? id)
         {
+
             if (id == null || _context.TblPayments == null)
             {
                 return NotFound();
             }
 
-            var tblPayment = await _context.TblPayments
-                .FirstOrDefaultAsync(m => m.FldPaymentId == id);
-            if (tblPayment == null)
+            PaymentViewModel DisaplayData = new PaymentViewModel();
+            DisaplayData.Payment = _context.TblPayments.Where(m => m.FldPaymentId == id).FirstOrDefault();
+            DisaplayData.Job = _context.TblJobMasters.Where(m => m.FldJobId == DisaplayData.Payment.FldJobId).FirstOrDefault();
+            DisaplayData.Org = _context.TblOrganizationMasters.Where(m => m.FldOrgId == DisaplayData.Job.FldOrgId).FirstOrDefault();
+            if(DisaplayData.Job.EstimateInvoiceId >=0)
             {
-                return NotFound();
+                DisaplayData.Estimate = _context.TblEstimateMasters.Where(m => m.FldEstimateId == DisaplayData.Job.EstimateInvoiceId).FirstOrDefault();
             }
+            else
+            {
+                DisaplayData.Estimate = null;
+            }
+            ViewBag.Watermark = DisaplayData.Org.Get_SavedWatermarkData(_config);
 
-            return View(tblPayment);
+            return View(DisaplayData);
         }
 
         // GET: Payments/Create
         public IActionResult Create(long id)
         {
+
+            
             return View( new TblPayment { FldJobId =id,FldPaymentDatetime= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0) });
         }
 
@@ -75,7 +94,7 @@ namespace CarService.Controllers
                 JobMastersController jc = new JobMastersController(_context);
                 jc.CheckAndUpdateJobStatus(tblPayment.FldJobId);
             }
-            return View(tblPayment);
+            return RedirectToAction("create");
         }
 
       

@@ -45,10 +45,10 @@ else
                 <th class="col-md-2"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="ReportResult" >
             @foreach (var item in Model)
             {
-                <tr>
+                <tr jobid="@item.FldJobId" invid="@item.EstimateInvoiceId" >
                     <td class="fw-bold" >
                         @Html.DisplayFor(modelItem => item.FldJobNo)
                        
@@ -94,3 +94,32 @@ else
         </tbody>
     </table>
 }
+
+
+<script type="text/javascript">
+    function DownloadCSV(){
+        var rows = $("#ReportResult tr");
+        var JobId = new Array();
+        for (var i = 0; i < rows.length; i++) {
+            JobId.push(parseInt($(rows[i]).attr("jobid")));
+        }
+        var tmp = new Object();
+        tmp.JobIdList = JobId;
+        $.post(window.location.origin + "/JobMasters/DownloadCSV", tmp, function (data) {
+            var encodedUri = encodeURI("data:text/csv;charset=utf-8," + data);
+            window.open(encodedUri);
+        });
+    }
+    function DownloadAllInvoices() {
+        var rows = $("#ReportResult tr");
+        var JobId = new Array();
+        for (var i = 0; i < rows.length; i++) {
+            var invid = parseInt($(rows[i]).attr("invid"));
+            console.log(invid);
+            var Url = window.location.origin + "/EstimateMasters/Details/" + invid;
+          var MyWindow =  window.open(Url);
+            MyWindow.onload = function(){this.print();};
+        }
+    }
+    
+</script>

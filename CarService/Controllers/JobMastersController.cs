@@ -9,6 +9,7 @@ using CarService.Models.Entities;
 using CarService.Models.Constants;
 using Microsoft.AspNetCore.Mvc.Filters;
 using CarService.Models;
+using System.Text;
 
 namespace CarService.Controllers
 {
@@ -48,10 +49,11 @@ namespace CarService.Controllers
             {
                 job.IsEstimateCreated = _context.TblEstimateMasters.Count(e => e.FldJobId == job.FldJobId) == 1 ? true : false;
                 job.IsInvoiceCreated = _context.TblEstimateMasters.Count(e => e.FldJobId == job.FldJobId && e.FldIsInvoiceGenerated == true) == 1 ? true : false;
+                job.IsJobItemsCreated = _context.TblJobRemarks.Count(j => j.FldJobId == job.FldJobId) > 0 ? true : false;
                 if (job.IsEstimateCreated)
                 {
                     job.EstimateInvoiceId = _context.TblEstimateMasters.Where(e => e.FldJobId == job.FldJobId).FirstOrDefault().FldEstimateId;
-                    job.InvoicedAmount = (double)_context.TblEstimateItems.Where(e => e.FldEstimateId == job.EstimateInvoiceId && e.FldIsCancelled ==false).Sum(se => se.FldItemTotal);
+                    job.InvoicedAmount = (double)_context.TblEstimateItems.Where(e => e.FldEstimateId == job.EstimateInvoiceId && e.FldIsCancelled == false).Sum(se => se.FldItemTotal);
                 }
                 else
                 {
@@ -67,7 +69,7 @@ namespace CarService.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> History(DateTime? StartDate,DateTime EndDate,string? SerchJobInvoice,string? SearchCustomer)
+        public async Task<IActionResult> History(DateTime? StartDate, DateTime EndDate, string? SerchJobInvoice, string? SearchCustomer)
         {
             long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
             string? UserRole = HttpContext.Session.GetString(SessionKeys.UserId);
@@ -79,12 +81,12 @@ namespace CarService.Controllers
             }
             else
             {
-                if(StartDate !=null && EndDate != null)
+                if (StartDate != null && EndDate != null)
                 {
-                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId 
-                                && j.FldIsCompleted == true
+                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                              //  && j.FldIsCompleted == true
                                 && j.FldRegisteredOn >= StartDate
-                                && j.FldHandedOverOn <=EndDate
+                                && j.FldHandedOverOn <= EndDate
                                 ).ToListAsync();
                     if (!string.IsNullOrEmpty(SerchJobInvoice))
                     {
@@ -92,16 +94,17 @@ namespace CarService.Controllers
                     }
                     if (!string.IsNullOrEmpty(SearchCustomer))
                     {
-                        DisplayList = DisplayList.Where(j => j.FldCustomerName.ToLower().Contains(SearchCustomer) 
+                        DisplayList = DisplayList.Where(j => j.FldCustomerName.ToLower().Contains(SearchCustomer)
                                                 || j.FldCustomerContact1.ToLower().Contains(SearchCustomer)
                                                 || j.FldCustomerContact2.ToLower().Contains(SearchCustomer)
                                                 || j.FldVehicleRegisteredNumber.ToLower().Contains(SearchCustomer)
                                                 ).ToList();
                     }
                 }
-                else if(!string.IsNullOrEmpty(SerchJobInvoice) && !string.IsNullOrEmpty(SearchCustomer))
+                else if (!string.IsNullOrEmpty(SerchJobInvoice) && !string.IsNullOrEmpty(SearchCustomer))
                 {
-                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                    DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId 
+                               // && j.FldIsCompleted == true
                                 && (
                                                 j.FldCustomerName.ToLower().Contains(SearchCustomer)
                                                 || j.FldCustomerContact1.ToLower().Contains(SearchCustomer)
@@ -111,11 +114,11 @@ namespace CarService.Controllers
                                 )
                                 ).ToListAsync();
                 }
-                else if (!string.IsNullOrEmpty(SerchJobInvoice) )
+                else if (!string.IsNullOrEmpty(SerchJobInvoice))
                 {
                     DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                               // && j.FldIsCompleted == true
                                 && (
-                                               
                                      j.FldJobNo.ToLower().Contains(SerchJobInvoice)
                                 )
                                 ).ToListAsync();
@@ -123,6 +126,7 @@ namespace CarService.Controllers
                 else if (!string.IsNullOrEmpty(SearchCustomer))
                 {
                     DisplayList = await _context.TblJobMasters.Where(j => j.FldOrgId == OrgId
+                                //&& j.FldIsCompleted == true
                                 && (
                                                 j.FldCustomerName.ToLower().Contains(SearchCustomer)
                                                 || j.FldCustomerContact1.ToLower().Contains(SearchCustomer)
@@ -148,6 +152,7 @@ namespace CarService.Controllers
                 }
                 job.PaidAmount = (double)_context.TblPayments.Where(p => p.FldJobId == job.FldJobId).Sum(p => p.FldPaidAmount);
             }
+            DisplayList = DisplayList.Where(j => j.IsInvoiceCreated == true).ToList();
 
             return View(DisplayList);
         }
@@ -162,7 +167,7 @@ namespace CarService.Controllers
             JobViewModel JobDetail = new JobViewModel();
             JobDetail.Job = _context.TblJobMasters.Where(m => m.FldJobId == id).FirstOrDefault();
             JobDetail.JobRemarks = _context.TblJobRemarks.Where(r => r.FldJobId == id).ToList();
-            if(_context.TblEstimateMasters.Count(e=>e.FldJobId == id)>0)
+            if (_context.TblEstimateMasters.Count(e => e.FldJobId == id) > 0)
             {
                 JobDetail.Estimate = _context.TblEstimateMasters.Where(e => e.FldJobId == id).FirstOrDefault();
                 JobDetail.EstimateItems = _context.TblEstimateItems.Where(e => e.FldEstimateId == JobDetail.Estimate.FldEstimateId).ToList();
@@ -188,7 +193,7 @@ namespace CarService.Controllers
 
             long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
 
-            return View(new TblJobMaster {FldIsCompleted = false, FldRegisteredOn = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0), FldOrgId=OrgId });
+            return View(new TblJobMaster { FldIsCompleted = false, FldRegisteredOn = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0), FldOrgId = OrgId });
         }
 
         // POST: JobMasters/Create
@@ -196,9 +201,9 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldJobId,FldIsCompleted,FldOrgId,FldJobNo,FldVehicleRegisteredNumber,FldChessisNumber,FldEngineNumber,FldModelNameNumber,FldServiceType,FldRegisteredOn,FldKmReadingOnRegistration,FldCustomerName,FldCustomerContact1,FldCustomerContact2,FldHandedOverOn")] TblJobMaster tblJobMaster)
+        public async Task<IActionResult> Create([Bind("FldJobId,FldIsCompleted,FldOrgId,FldJobNo,FldVehicleRegisteredNumber,FldChessisNumber,FldEngineNumber,FldModelNameNumber,FldServiceType,FldRegisteredOn,FldKmReadingOnRegistration,FldCustomerName,FldCustomerContact1,FldCustomerContact2,FldHandedOverOn,FldReference,FldClientCompanyName,FldCompanyAddress,FldComanyGstnumber,FldAmcbookNumber")] TblJobMaster tblJobMaster)
         {
-            if(_context.TblJobMasters.Count(j=>j.FldJobNo == tblJobMaster.FldJobNo)>0)
+            if (_context.TblJobMasters.Count(j => j.FldJobNo == tblJobMaster.FldJobNo) > 0)
             {
                 ModelState.AddModelError("FldJobNo", "Job number already used");
             }
@@ -211,7 +216,7 @@ namespace CarService.Controllers
                 }
                 _context.Add(tblJobMaster);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Edit),new {id=tblJobMaster.FldJobId});
+                return RedirectToAction(nameof(Edit), new { id = tblJobMaster.FldJobId });
             }
             SetOrganizationsInViewbag();
             SetCustomerSuggestionInViewbag();
@@ -240,7 +245,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FldJobId,FldOrgId,FldJobNo,FldVehicleRegisteredNumber,FldChessisNumber,FldEngineNumber,FldModelNameNumber,FldServiceType,FldRegisteredOn,FldKmReadingOnRegistration,FldCustomerName,FldCustomerContact1,FldCustomerContact2,FldHandedOverOn")] TblJobMaster tblJobMaster)
+        public async Task<IActionResult> Edit(long id, [Bind("FldJobId,FldOrgId,FldJobNo,FldVehicleRegisteredNumber,FldChessisNumber,FldEngineNumber,FldModelNameNumber,FldServiceType,FldRegisteredOn,FldKmReadingOnRegistration,FldCustomerName,FldCustomerContact1,FldCustomerContact2,FldHandedOverOn,FldReference,FldClientCompanyName,FldCompanyAddress,FldComanyGstnumber,FldAmcbookNumber")] TblJobMaster tblJobMaster)
         {
             if (id != tblJobMaster.FldJobId)
             {
@@ -249,7 +254,7 @@ namespace CarService.Controllers
 
             if (ModelState.IsValid)
             {
-                if(tblJobMaster.FldCustomerContact2 == null)
+                if (tblJobMaster.FldCustomerContact2 == null)
                 {
                     tblJobMaster.FldCustomerContact2 = "";
                 }
@@ -270,7 +275,6 @@ namespace CarService.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             SetOrganizationsInViewbag();
             return View(tblJobMaster);
@@ -362,43 +366,44 @@ namespace CarService.Controllers
         private void SetCustomerSuggestionInViewbag()
         {
 
-            ViewBag.Customers = _context.TblJobMasters.Select(x => new CustomerSuggestionListViewModel { 
-            Contact1 = x.FldCustomerContact1,
-            Contact2 = x.FldCustomerContact2+"",
-            CustomerName = x.FldCustomerName,
-            VehicleNumber = x.FldVehicleRegisteredNumber
+            ViewBag.Customers = _context.TblJobMasters.Select(x => new CustomerSuggestionListViewModel
+            {
+                Contact1 = x.FldCustomerContact1,
+                Contact2 = x.FldCustomerContact2 + "",
+                CustomerName = x.FldCustomerName,
+                VehicleNumber = x.FldVehicleRegisteredNumber
             }).ToList();
         }
 
 
         public void CheckAndUpdateJobStatus(long jobId)
         {
-            TblJobMaster Job=  _context.TblJobMasters.Where(j=>j.FldJobId ==jobId).FirstOrDefault();
-            if(Job != null)
+            TblJobMaster Job = _context.TblJobMasters.Where(j => j.FldJobId == jobId).FirstOrDefault();
+            if (Job != null)
             {
                 if (Job.FldHandedOverOn.HasValue == false)
                 {
                     return;
                 }
-                TblEstimateMaster Estimate = _context.TblEstimateMasters.Where(e=>e.FldJobId ==jobId).FirstOrDefault();
+                TblEstimateMaster Estimate = _context.TblEstimateMasters.Where(e => e.FldJobId == jobId).FirstOrDefault();
                 if (Estimate != null)
                 {
-                    if(Estimate.FldIsInvoiceGenerated == false)
+                    if (Estimate.FldIsInvoiceGenerated == false)
                     {
                         return;
                     }
-                    if(_context.TblEstimateItems.Count(i=>i.FldEstimateId == Estimate.FldEstimateId) == 0)
+                    if (_context.TblEstimateItems.Count(i => i.FldEstimateId == Estimate.FldEstimateId) == 0)
                     {
                         return;
                     }
 
                     decimal PaiedAmount = _context.TblPayments.Where(p => p.FldJobId == jobId).Sum(p => p.FldPaidAmount);
                     decimal TotalAmount = _context.TblEstimateItems.Where(i => i.FldEstimateId == Estimate.FldEstimateId && i.FldIsCancelled == false).Sum(a => a.FldItemTotal);
-                    
-                    if(PaiedAmount >=TotalAmount)
+
+                    if (PaiedAmount >= TotalAmount)
                     {
                         Job.FldIsCompleted = true;
-                       
+
                     }
                     else
                     {
@@ -409,6 +414,83 @@ namespace CarService.Controllers
 
                 }
             }
+        }
+
+
+        [HttpPost]
+        public FileContentResult DownloadCSV(List<long> JobIdList)
+        {
+            List<string> ColumnTitles = new List<string>
+            {
+                "Sr.No",
+                "Date",
+                "Job No",
+                "Mobile No",
+                "Customer Name",
+                "Model",
+                "KM",
+                "Registration No",
+                "Type Of Service",
+                "Total Bill",
+                "Payment Mode",
+                "Paid Amount",
+                "Pending Amount",
+                "Parts",
+                "Labor",
+                "Total",
+            };
+            List<CsvViewModel> CSVData = (from j in _context.TblJobMasters
+                                                      join e in _context.TblEstimateMasters
+                                                      on j.FldJobId equals e.FldJobId
+                                                      where JobIdList.Contains(j.FldJobId)
+                                                      select new CsvViewModel
+                                                      {
+                                                          Job = j,
+                                                          Estimate = e,
+                                                      }).ToList();
+
+            List<string> FileData = new List<string>();
+            FileData.Add(string.Join(",",ColumnTitles));
+            int i = 0;
+            foreach (CsvViewModel item in CSVData)
+            {
+                i++;
+                try
+                {
+                    decimal Paid = _context.TblPayments.Where(p => p.FldJobId == item.Job.FldJobId).ToList().Sum(p => p.FldPaidAmount);
+                    decimal Parts = _context.TblEstimateItems.Where(p => p.FldEstimateId == item.Estimate.FldEstimateId && p.FldIsCancelled == false && p.FldItemType == ServiceItemTypes.Part).ToList().Sum(p => p.FldItemTotal);
+                    decimal Labor = _context.TblEstimateItems.Where(p => p.FldEstimateId == item.Estimate.FldEstimateId && p.FldIsCancelled == false && p.FldItemType == ServiceItemTypes.Labor).ToList().Sum(p => p.FldItemTotal);
+                    List<string> Data = new List<string>
+                                                {
+                                                    i+"",
+                                                    item.Job.FldRegisteredOn.ToString("dd-MMM-yyyy"),
+                                                    item.Job.FldJobNo,
+                                                    item.Job.FldCustomerContact1,
+                                                    item.Job.FldCustomerName,
+                                                    item.Job.FldModelNameNumber,
+                                                    item.Job.FldKmReadingOnRegistration+"",
+                                                    item.Job.FldVehicleRegisteredNumber,
+                                                    item.Job.FldServiceType,
+                                                    item.Estimate.FldTotalAmount+"",
+                                                    "Payment Mode",
+                                                   Paid+"",
+                                                     (item.Estimate.FldTotalAmount -Paid)+ "",
+                                                    Parts+"",
+                                                    Labor+"",
+                                                    (Parts+Labor) +""
+                    };
+                    FileData.Add(string.Join(",", Data));
+                }
+                catch { }
+            }
+
+            var contentType = "text/csv";
+            var content = string.Join("\r\n", FileData);
+            var bytes = Encoding.UTF8.GetBytes(content);
+            var result = new FileContentResult(bytes, contentType);
+            result.FileDownloadName = "Report.csv";
+            return result;
+
         }
 
     }

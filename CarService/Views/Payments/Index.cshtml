@@ -4,7 +4,18 @@
     ViewData["Title"] = "Index";
     Layout = null;
 }
-
+@if (ViewBag.PendingAmount !=null)
+{
+    <div class="alert alert-primary" role="alert">
+        Pending : @ViewBag.PendingAmount
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Estimate not created
+    </div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -33,9 +44,13 @@
             <td>
                 @item.FldPaymentDatetime.ToString("dd-MMM-yyyy HH:mm tt")
             </td>
-            <td>
+            <td class="text-end">
                     <a onclick="DeletePayment(@item.FldPaymentId,@item.FldJobId)"><img src="~/images/delete.png" class="IconButton" title="Delete Payment" data-toggle="tooltip" data-placement="top"></a>
-            </td>
+            
+                <a asp-action="Details" target="_blank" asp-route-id="@item.FldPaymentId">
+                        <img src="~/images/recipt.png" class="IconButton" title="Payment Recipt" data-toggle="tooltip" data-placement="top">
+                </a>
+                </td>
         </tr>
 }
     </tbody>
@@ -50,6 +65,7 @@
             SendData.id = Paymentid;
             $.post("../../Payments/DeleteConfirmed", SendData, function (res) {
                 if (res == "success") {
+                    
                     $("#SavedPaymentList").load("../../Payments/Index/"+jobid, function () { });
                 }
             });

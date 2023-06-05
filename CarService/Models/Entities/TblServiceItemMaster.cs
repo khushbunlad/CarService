@@ -29,4 +29,11 @@ public partial class TblServiceItemMaster
     [Required]
     public string? FldHsnNumber { get; set; }
 
+    [Display(Name = "CGST (%)")]
+    [Required]
+    public decimal? FldCgstpercentage { get; set; }
+
+    [Display(Name = "SGST (%)")]
+    [Required]
+    public decimal? FldSgstpercentage { get; set; }
 }

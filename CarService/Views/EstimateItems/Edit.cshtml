@@ -7,61 +7,89 @@
 }
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="FldEstimateId" class="form-control" hidden />
-            <input asp-for="FldItemType" class="form-control" hidden />
-            <input asp-for="FldQuantityUnit" class="form-control" hidden />
-            <input asp-for="FldHsnNumber" class="form-control" hidden />
-            <input asp-for="FldServiceItemId" class="form-control" hidden />
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="FldEstimateId" class="form-control" hidden />
+        <input asp-for="FldItemType" class="form-control" hidden />
+        <input asp-for="FldQuantityUnit" class="form-control" hidden />
+        <input asp-for="FldHsnNumber" class="form-control" hidden />
+        <input asp-for="FldServiceItemId" class="form-control" hidden />
 
 
-            <input type="hidden" asp-for="FldEstimateItemId" />
-            <div class="form-group">
-                <label class="control-label">@Model.FldHsnNumber</label>
-                <input asp-for="FldItemTitle" class="form-control-plaintext" readonly />
-                <span asp-validation-for="FldItemTitle" class="text-danger"></span>
+        <input type="hidden" asp-for="FldEstimateItemId" />
+        <div class="form-group">
+            <label class="control-label">@Model.FldHsnNumber</label>
+            <input asp-for="FldItemTitle" class="form-control-plaintext" readonly />
+            <span asp-validation-for="FldItemTitle" class="text-danger"></span>
+        </div>
+        <div class="form-group" @(Model.FldItemType == ServiceItemTypes.Part ? "" : "hidden")>
+            <label asp-for="FldQuantity" class="control-label"></label><span class="text-info"> ( @Model.FldQuantityUnit )</span>
+            <input asp-for="FldQuantity" class="form-control" />
+            <span asp-validation-for="FldQuantity" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FldUnitAmount" class="control-label"></label>
+            <input asp-for="FldUnitAmount" class="form-control text-end" onfocusout="SetEditTotal()" />
+            <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
+        </div>
+        <div class="input-group">
+            <div class="input-group-prepend Width100">
+                <label asp-for="FldDiscountAmount" class="input-group-text bg-white"></label>
             </div>
-            <div class="form-group" @(Model.FldItemType == ServiceItemTypes.Part?"":"hidden") >
-                <label asp-for="FldQuantity" class="control-label"></label><span class="text-info"> ( @Model.FldQuantityUnit )</span>
-                <input asp-for="FldQuantity" class="form-control" />
-                <span asp-validation-for="FldQuantity" class="text-danger"></span>
+            <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetEditTotal()" />
+            <input id="DiscountAmount" class="form-control text-end" onfocusout="SetEditTotal()" tabindex="-1" value="@Model.DiscountAmount" />
+        </div>
+        <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
+        <div class="input-group ">
+            <div class="input-group-prepend Width100">
+                <label asp-for="FldCgstpercentage" class="input-group-text bg-white"></label>
             </div>
-            <div class="form-group">
-                <label asp-for="FldUnitAmount" class="control-label"></label>
-                <input asp-for="FldUnitAmount" class="form-control" onfocusout="SetEditTotal()" />
-                <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
+            <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetEditTotal()" />
+            <input id="Cgstpercentage" class="form-control text-end " tabindex="-1" value="@Model.CGST_Amount" />
+        </div>
+        <span asp-validation-for="FldCgstpercentage" class="text-danger"></span>
+        <div class="input-group ">
+            <div class="input-group-prepend Width100">
+                <label asp-for="FldSgstpercentage" class="input-group-text bg-white"></label>
             </div>
-            <div class="form-group">
-                <label asp-for="FldDiscountAmount" class="control-label"></label>
-                <input asp-for="FldDiscountAmount" class="form-control" onfocusout="SetEditTotal()" />
-                <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
+            <input asp-for="FldSgstpercentage" class="form-control text-end" onfocusout="SetEditTotal()" />
+            <input id="Sgstpercentage" class="form-control text-end" tabindex="-1" value="@Model.SGST_Amount" />
+        </div>                <span asp-validation-for="FldSgstpercentage" class="text-danger"></span>
+        <div class="input-group">
+            <div class="input-group-prepend Width100">
+                <label class="input-group-text bg-white  fw-bold">Total</label>
             </div>
-            <div class="form-group">
-                <label asp-for="FldItemTotal" class="control-label"></label>
-                <input asp-for="FldItemTotal" class="form-control-plaintext"  />
-                <span asp-validation-for="FldItemTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="FldIsCancelled" /> @Html.DisplayNameFor(model => model.FldIsCancelled)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldCancelReason" class="control-label"></label>
-                <input asp-for="FldCancelReason" class="form-control" />
-                <span asp-validation-for="FldCancelReason" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="button" value="Save Changes" class="btn btn-primary" onclick="ModifyEstimateItem()" />
-            </div>
-        </form>
-    </div>
+            <input asp-for="FldItemTotal" class=" form-control text-end  fw-bold" tabindex="-1" />
+            <span asp-validation-for="FldItemTotal" class="text-danger"></span>
+
+        </div>
+        @*<div class="form-group">
+            <label asp-for="FldItemTotal" class="control-label"></label>
+            <input asp-for="FldItemTotal" class="form-control-plaintext" />
+            <span asp-validation-for="FldItemTotal" class="text-danger"></span>
+        </div>*@
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="FldIsCancelled" /> @Html.DisplayNameFor(model => model.FldIsCancelled)
+            </label>
+        </div>
+        <div class="form-group">
+            <label asp-for="FldCancelReason" class="control-label"></label>
+            <input asp-for="FldCancelReason" class="form-control" />
+            <span asp-validation-for="FldCancelReason" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="button" value="Save Changes" class="btn btn-primary" onclick="ModifyEstimateItem()" />
+        </div>
+    </form>
+</div>
 </div>
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script type="text/javascript">
     function SetEditTotal() {
@@ -70,5 +98,36 @@
         var Quantity = parseFloat("0" + $("#LoadEditForm #FldQuantity").val());
         var total = ((Quantity * amount) - Discount).toFixed(2);
         $("#LoadEditForm #FldItemTotal").val(total);
+
+
+        var amount = parseFloat("0" + $("#LoadEditForm #FldUnitAmount").val());
+        var Quantity = parseFloat("0" + $("#LoadEditForm #FldQuantity").val());
+
+        var TotalAmount = (amount * Quantity);
+        $("#LoadEditForm UnitAmount").val(TotalAmount.toFixed(2));
+
+        var DiscountPercentage = parseFloat("0" + $("#LoadEditForm #FldDiscountAmount").val());
+        var DiscountAmount = ((TotalAmount * DiscountPercentage) / 100);
+        $("#LoadEditForm #DiscountAmount").val(DiscountAmount.toFixed(2));
+
+        TotalAmount = TotalAmount - DiscountAmount;
+
+        var CGSTPercentage = parseFloat("0" + $("#LoadEditForm #FldCgstpercentage").val());
+        var CGSTAmount = ((TotalAmount * CGSTPercentage) / 100);
+        $("#LoadEditForm #Cgstpercentage").val(CGSTAmount.toFixed(2));
+
+
+        var SGSTPercentage = parseFloat("0" + $("#LoadEditForm #FldSgstpercentage").val());
+        var SGSTAmount = ((TotalAmount * SGSTPercentage) / 100);
+        $("#LoadEditForm #Sgstpercentage").val(SGSTAmount.toFixed(2));
+
+
+        var total = (TotalAmount + CGSTAmount + SGSTAmount);
+        $("#LoadEditForm #FldItemTotal").val(total);
+
+
+
+
+
 
     }</script>

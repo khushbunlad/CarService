@@ -6,94 +6,127 @@
 
 <h1>Create Organization</h1>
 <hr />
-<form asp-action="Create" enctype="multipart/form-data" >
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="row">
+<form asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
 
-    @*Organization basic detail*@
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="FldOrgName" class="control-label"></label>
-            <input asp-for="FldOrgName" class="form-control" />
-            <span asp-validation-for="FldOrgName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldOrgEmail" class="control-label"></label>
-            <input asp-for="FldOrgEmail" class="form-control" />
-            <span asp-validation-for="FldOrgEmail" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldAddress" class="control-label"></label>
+        @*Organization basic detail*@
+        <div class="col-md-4 bg-success-transperent p-3">
+            <h5>Organization detail</h5>
+            <div class="form-group">
+                <label asp-for="FldOrgName" class="control-label"></label>
+                <input asp-for="FldOrgName" class="form-control" />
+                <span asp-validation-for="FldOrgName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldOrgEmail" class="control-label"></label>
+                <input asp-for="FldOrgEmail" class="form-control" />
+                <span asp-validation-for="FldOrgEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldAddress" class="control-label"></label>
                 <textarea asp-for="FldAddress" class="form-control" style="min-height:120px;"></textarea>
-            <span asp-validation-for="FldAddress" class="text-danger"></span>
+                <span asp-validation-for="FldAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldGstnumber" class="control-label"></label>
+                <input asp-for="FldGstnumber" class="form-control" />
+                <span asp-validation-for="FldGstnumber" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    @*Contact person and number*@
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="FldContactPerson1" class="control-label"></label>
-            <input asp-for="FldContactPerson1" class="form-control" />
-            <span asp-validation-for="FldContactPerson1" class="text-danger"></span>
+        @*Contact person and number*@
+        <div class="col-md-3 bg-warning-transperent p-3">
+            <h5>Owners</h5>
+            <div class="form-group">
+                <label asp-for="FldContactPerson1" class="control-label"></label>
+                <input asp-for="FldContactPerson1" class="form-control" />
+                <span asp-validation-for="FldContactPerson1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldContactNumber1" class="control-label"></label>
+                <input asp-for="FldContactNumber1" class="form-control" />
+                <span asp-validation-for="FldContactNumber1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldContactPerson2" class="control-label"></label>
+                <input asp-for="FldContactPerson2" class="form-control" />
+                <span asp-validation-for="FldContactPerson2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldContactNumber2" class="control-label"></label>
+                <input asp-for="FldContactNumber2" class="form-control" />
+                <span asp-validation-for="FldContactNumber2" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="FldContactNumber1" class="control-label"></label>
-            <input asp-for="FldContactNumber1" class="form-control" />
-            <span asp-validation-for="FldContactNumber1" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldContactPerson2" class="control-label"></label>
-            <input asp-for="FldContactPerson2" class="form-control" />
-            <span asp-validation-for="FldContactPerson2" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldContactNumber2" class="control-label"></label>
-            <input asp-for="FldContactNumber2" class="form-control" />
-            <span asp-validation-for="FldContactNumber2" class="text-danger"></span>
-        </div>
-    </div>
-   @*Subscription detail*@
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="FldLogo" class="control-label"></label>
-                <input type="file" asp-for="FldLogoFile" class="form-control" />
+        @*Logo & watermark*@
+        <div class="col-md-3 p-3 bg-white-transperent">
+            <h5>Logo & Watermark</h5>
+            <div class="form-group">
+                <label asp-for="FldLogo" class="control-label"></label>
+                <br />
+                <input type="file" asp-for="FldLogoFile" class="form-control" onchange="showImage(this,'SavedLogo')" hidden />
                 <input asp-for="FldLogo" class="form-control" hidden />
+                <img id="SavedLogo" style="width:200px;height:200px;" onclick="$('#FldLogoFile').click()" />
                 <span asp-validation-for="FldLogo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldWatermark" class="control-label"></label>
+                <br />
+
+                <input type="file" asp-for="fldWatermarkFile" class="form-control" onchange="showImage(this,'SavedWatermark')" hidden />
+                <input asp-for="FldWatermark" class="form-control" hidden />
+
+                <img id="SavedWatermark" style="width:200px;height:200px;" onclick="$('#fldWatermarkFile').click()" />
+
+                <span asp-validation-for="FldWatermark" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group form-check pt-5 pb-1">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="FldIsFullSubscription" /> @Html.DisplayNameFor(model => model.FldIsFullSubscription)
-            </label>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldActiveUntil" class="control-label"></label>
-            <input asp-for="FldActiveUntil" class="form-control" />
-            <span asp-validation-for="FldActiveUntil" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldLicenseNumber" class="control-label"></label>
-            <input asp-for="FldLicenseNumber" class="form-control" />
-            <span asp-validation-for="FldLicenseNumber" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Create Organization" class="btn btn-primary" />
+        @*Subscription detail*@
+        <div class="col-md-2 p-3 bg-danger-transperent">
+            <h5>Subscription detail</h5>
+
+            <div class="form-group form-check pt-5 pb-1">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="FldIsFullSubscription" /> @Html.DisplayNameFor(model => model.FldIsFullSubscription)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldActiveUntil" class="control-label"></label>
+                <input asp-for="FldActiveUntil" class="form-control" />
+                <span asp-validation-for="FldActiveUntil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldLicenseNumber" class="control-label"></label>
+                <input asp-for="FldLicenseNumber" class="form-control" />
+                <span asp-validation-for="FldLicenseNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create Organization" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
 
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </form>
 
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script type="text/javascript">
+}
+<script type="text/javascript">
+
+    function showImage(sender,target) {
+        var fr = new FileReader();
+        fr.onload = function (e) { $("#"+target).attr('src', this.result); };
+        fr.readAsDataURL(sender.files[0]);
+    }
     setTimeout(function () {
         $("#FldLogo").rules("remove", "required")
         $("#FldContactPerson2").rules("remove", "required")
         $("#FldContactNumber2").rules("remove", "required")
         $("#FldLogoFile").rules("remove", "required")
+        $("#fldWatermarkFile").rules("remove", "required")
     }, 500);
 </script>

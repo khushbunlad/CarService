@@ -63,7 +63,7 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldHsnNumber,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason,FldServiceItemId")] TblEstimateItem tblEstimateItem)
+        public async Task<IActionResult> Create([Bind("FldEstimateItemId,FldEstimateId,FldItemTitle,FldHsnNumber,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason,FldServiceItemId,FldSgstpercentage,FldCgstpercentage")] TblEstimateItem tblEstimateItem)
         {
             SetServiceItemSuggestionInViewbag();
             if (ModelState.IsValid)
@@ -101,7 +101,7 @@ namespace CarService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldHsnNumber,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason,FldServiceItemId")] TblEstimateItem tblEstimateItem)
+        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateItemId,FldEstimateId,FldHsnNumber,FldItemTitle,FldItemType,FldQuantity,FldQuantityUnit,FldUnitAmount,FldDiscountAmount,FldItemTotal,FldIsCancelled,FldCancelReason,FldServiceItemId,FldSgstpercentage,FldCgstpercentage")] TblEstimateItem tblEstimateItem)
         {
             SetServiceItemSuggestionInViewbag();
             if (id != tblEstimateItem.FldEstimateItemId)

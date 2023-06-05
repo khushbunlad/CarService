@@ -1,0 +1,42 @@
+﻿@model CarService.Models.PaymentViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="d-flex flex-row justify-content-end p-2 bg-light">
+    <a asp-action="Edit" asp-controller="JobMasters" asp-route-id="@Model.Job.FldJobId" class="btn btn-sm btn-primary">Modify Job</a>
+    <div class="p-2"></div>
+    <input type="button" class="btn btn-sm btn-danger" value="Print" onclick="window.print()" />
+    <div class="p-2"></div>
+    <a asp-action="Index" asp-controller="JobMasters" class="btn btn-sm btn-outline-primary">Back to My Jobs</a>
+</div>
+
+<div class="PrintArea bg-white">
+@*letterhead block : Organization name address & contact detail, Watermark *@
+@Html.Partial("../EstimateMasters/PrintHeader.cshtml")
+
+
+@*title block : customer, vehicle & invoice detail *@
+
+@Html.Partial("../EstimateMasters/PrintTitle.cshtml")
+
+    <h4 class="p-2 ps-3 border-start border-4 border-secondary text-secondary">Payment Recipt</h4>
+    <table class="table table-borderless fs-4">
+        <tr>
+            <td>Date</td>
+            <td>@Model.Payment.FldPaymentDatetime.ToString("dd-MMM-yyyy HH:mm")</td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td>@Math.Round(Model.Payment.FldPaidAmount,2)</td>
+        </tr>
+        <tr>
+            <td>Payment Mode</td>
+            <td>@Model.Payment.FldPaymentMode</td>
+        </tr>
+    </table>
+    <div style="height:400px;"></div>
+
+</div>

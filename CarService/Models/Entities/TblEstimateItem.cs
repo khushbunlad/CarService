@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,10 +23,11 @@ public partial class TblEstimateItem
     [Display(Name = "Unit")]
     public string FldQuantityUnit { get; set; } = null!;
 
-    [Display(Name = "Amount")]
+    [Display(Name = "Rate")]
     public decimal FldUnitAmount { get; set; }
 
-    [Display(Name = "Discount")]
+    [Display(Name = "Discount (%)")]
+    [Range(0,100, ErrorMessage = "range 0 to 100")]
     public decimal FldDiscountAmount { get; set; }
 
     [Display(Name = "Total")]
@@ -41,5 +43,49 @@ public partial class TblEstimateItem
     [Required]
     public string? FldHsnNumber { get; set; }
     public long? FldServiceItemId { get; set; }
+
+    [Display(Name = "CGST (%)")]
+    [Required]
+    [Range(0,100,ErrorMessage ="range 0 to 100")]
+    public decimal? FldCgstpercentage { get; set; } = 0;
+
+    [Display(Name = "SGST (%)")]
+    [Required]
+    [Range(0,100, ErrorMessage = "range 0 to 100")]
+    public decimal? FldSgstpercentage { get; set; } = 0;
+
+    public decimal ItemTotal { get
+        {
+            return FldQuantity * FldUnitAmount;
+        } }
+    public decimal DiscountAmount
+    {
+        get
+        {
+            return Math.Round((ItemTotal*FldDiscountAmount)/100,2);
+        }
+    }
+    public decimal ItemTotal_AfterDiscount
+    {
+        get
+        {
+            return Math.Round((ItemTotal - DiscountAmount), 2);
+        }
+    }
+    public decimal CGST_Amount
+    {
+        get
+        {
+            return Math.Round((ItemTotal_AfterDiscount * FldCgstpercentage??0) / 100, 2);
+        }
+    }
+
+    public decimal SGST_Amount
+    {
+        get
+        {
+            return Math.Round((ItemTotal_AfterDiscount * FldSgstpercentage ?? 0) / 100, 2);
+        }
+    }
 
 }

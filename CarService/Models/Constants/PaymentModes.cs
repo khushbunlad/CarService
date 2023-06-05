@@ -6,6 +6,6 @@
         public static readonly string Card = "Card";
         public static readonly string Cheque = "Cheque";
         public static readonly string NetBanking = "Net Banking";
-
+        public static readonly string Settlement = "Settlement";
     }
 }

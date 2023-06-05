@@ -5,6 +5,14 @@
     Layout = null;
 }
 
+<style>
+    .Width100 {
+        min-width: 100px;
+        width: 100px;
+        max-width: 100px;
+    }
+</style>
+
 <h4>Estimate / Invoice Items</h4>
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -12,89 +20,122 @@
     <input hidden asp-for="FldCancelReason" class="form-control" />
     <input hidden asp-for="FldIsCancelled" class="form-check-input" />
     <input hidden asp-for="FldServiceItemId" class="form-check-input" />
-    
+
 
     <div class="row pb-4">
         @*Item Name & HSN Number*@
         <div class="col-md-4 row ps-4">
-           
-            <div class="col-md-9 p-0">
-                <div class="form-group">
-                    <label asp-for="FldItemTitle" class="control-label"></label>
+            <div class="form-group">
+                <label class="control-label"> Item Title & HSN / SCN </label>
+                <div class="input-group">
                     <input asp-for="FldItemTitle" class="form-control" list="ServiceItemsSuggestions" onchange="SetHsnNumber()" />
-                    <span asp-validation-for="FldItemTitle" class="text-danger"></span>
-                    <datalist id="ServiceItemsSuggestions">
-                        @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
-                        {
-                            <option value="@item.FldItemName" hsn="@item.FldHsnNumber" type="@item.FldItemType" unit="@item.FldQuanitityUnit" sid="@item.FldServiceItemId">@item.FldItemName [@item.FldHsnNumber] </option>
-                        }
-                    </datalist>
+                    <input asp-for="FldHsnNumber" class="form-control input-group-append" style="max-width:150px;" />
                 </div>
-               
-            </div>
-            <div class="col-md-3 p-0">
-                <div class="form-group">
-                    <label class="control-label" asp-for="FldHsnNumber"></label>
-                    <input asp-for="FldHsnNumber" class="form-control" />
-                    <span asp-validation-for="FldHsnNumber" class="text-danger"></span>
-                </div>
+                <span asp-validation-for="FldItemTitle" class="text-danger"></span>
+                <span asp-validation-for="FldHsnNumber" class="text-danger"></span>
+                <datalist id="ServiceItemsSuggestions">
+                    @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
+                    {
+                        <option value="@item.FldItemName" hsn="@item.FldHsnNumber" type="@item.FldItemType" unit="@item.FldQuanitityUnit" sid="@item.FldServiceItemId">@item.FldItemName [@item.FldHsnNumber] </option>
+                    }
+                </datalist>
             </div>
         </div>
         @*Type*@
-        <div class="col-md-1">
+        <div class="col-md-1 p-0">
             <div class="form-group" id="FldItemTypeBlock">
                 <label asp-for="FldItemType" class="control-label"></label>
-                <div class="form-check">
+                <br />
+                <div class="form-check-inline">
                     <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Part" value="@ServiceItemTypes.Part" class="form-control" onchange="ItemTypeChanged()" />
                     <label class="form-check-label" for="FldItemType_@ServiceItemTypes.Part">@ServiceItemTypes.Part</label>
                 </div>
-                <div class="form-check">
+                <div class="form-check-inline">
                     <input type="radio" class="form-check-input" name="FldItemType" id="FldItemType_@ServiceItemTypes.Labor" value="@ServiceItemTypes.Labor" class="form-control" onchange="ItemTypeChanged()" />
                     <label class="form-check-label" for="FldItemType_@ServiceItemTypes.Labor">@ServiceItemTypes.Labor</label>
                 </div>
             </div>
         </div>
         @*Quantity & Unit*@
-        <div class="col-md-2 row" id="QtyBlock">
-            <div class="col-md-6 p-0">
-                <div class="form-group">
-                    <label asp-for="FldQuantity" class="control-label"></label>
+        <div class="col-md-2" id="QtyBlock">
+            <div class="form-group">
+                <label asp-for="FldQuantity" class="control-label"></label>
+                <div class="input-group">
                     <input asp-for="FldQuantity" class="form-control" onfocusout="SetTotal()" />
-                    <span asp-validation-for="FldQuantity" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6 p-0">
-                <div class="form-group">
-                    <label asp-for="FldQuantityUnit" class="control-label"></label>
                     <select asp-for="FldQuantityUnit" class="form-control form-select" asp-items="Units.UnitList"></select>
-                    <span asp-validation-for="FldQuantityUnit" class="text-danger"></span>
                 </div>
+                <span asp-validation-for="FldQuantity" class="text-danger"></span>
+                <span asp-validation-for="FldQuantityUnit" class="text-danger"></span>
             </div>
         </div>
         @*Amount*@
-        <div class="col-md-2">
+        <div class="col-md-1 p-0">
             <div class="form-group">
                 <label asp-for="FldUnitAmount" class="control-label"></label>
-                <input asp-for="FldUnitAmount" class="form-control" onfocusout="SetTotal()" />
+                <input asp-for="FldUnitAmount" class="form-control text-end" onfocusout="SetTotal()" />
                 <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
+                <span id="" class="text-info"></span>
             </div>
         </div>
-        @*Discount*@
-        <div class="col-md-1">
-            <div class="form-group">
-                <label asp-for="FldDiscountAmount" class="control-label"></label>
-                <input asp-for="FldDiscountAmount" class="form-control" onfocusout="SetTotal()" />
+
+        <div class="col-md-3 form-control-sm ">
+            @*Amount*@
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label">Item Amounts</label>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend Width100">
+                            <label class="input-group-text bg-white">Amount</label>
+                        </div>
+                        <input id="UnitAmount" class="form-control text-end" tabindex="-1" />
+                    </div>
+                </div>
+            </div>
+            @*Discount*@
+            <div class="row">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend Width100">
+                        <label asp-for="FldDiscountAmount" class="input-group-text bg-white"></label>
+                    </div>
+                    <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetTotal()" />
+                    <input id="DiscountAmount" class="form-control text-end Width100" onfocusout="SetTotal()" tabindex="-1" />
+                </div>
                 <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
             </div>
-        </div>
-        @*Total*@
-        <div class="col-md-1">
-            <div class="form-group">
-                <label asp-for="FldItemTotal" class="control-label"></label>
-                <input asp-for="FldItemTotal" class="form-control-plaintext" readonly />
-                <span asp-validation-for="FldItemTotal" class="text-danger"></span>
+            @*Cgst percentage*@
+            <div class="row">
+                <div class="input-group  input-group-sm">
+                    <div class="input-group-prepend Width100">
+                        <label asp-for="FldCgstpercentage" class="input-group-text bg-white"></label>
+                    </div>
+                    <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetTotal()" />
+                    <input id="Cgstpercentage" class="form-control text-end Width100" tabindex="-1" />
+                </div>
+                <span asp-validation-for="FldCgstpercentage" class="text-danger"></span>
+            </div>
+            @*Sgst percentage*@
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend Width100">
+                    <label asp-for="FldSgstpercentage" class="input-group-text bg-white"></label>
+                </div>
+                <input asp-for="FldSgstpercentage" class="form-control text-end" onfocusout="SetTotal()" />
+                <input id="Sgstpercentage" class="form-control text-end Width100" />
+            </div>
+            <span asp-validation-for="FldSgstpercentage" class="text-danger"></span>
+            @*Total*@
+            <div class="row  ">
+                <div class="input-group">
+                    <div class="input-group-prepend Width100">
+                        <label class="input-group-text bg-white  fw-bold">Total</label>
+                    </div>
+                    <input asp-for="FldItemTotal" class=" form-control text-end  fw-bold" tabindex="-1" />
+                    <span asp-validation-for="FldItemTotal" class="text-danger"></span>
+
+                </div>
             </div>
         </div>
+
         @*Button *@
         <div class="col-md-1">
             <div class="form-group">
@@ -122,17 +163,16 @@
         $('#FldHsnNumber').val(hsn);
         $("input[type='radio'][value='" + type + "']").prop("checked", true);
         $("#FldQuantityUnit option[value='" + unit + "']").prop("selected", true);
-        if(sid==null || sid==undefined){
-            sid="-1";
+        if (sid == null || sid == undefined) {
+            sid = "-1";
         }
         $("#FldServiceItemId").val(sid);
-        if(hsn != null && hsn !=undefined && hsn !="")
-        {
+        if (hsn != null && hsn != undefined && hsn != "") {
             $('#FldHsnNumber').addClass("DisableBlock");
-            $('#FldHsnNumber').attr("tabindex","-1");
+            $('#FldHsnNumber').attr("tabindex", "-1");
 
         }
-        else{
+        else {
             $('#FldHsnNumber').removeClass("DisableBlock");
             $('#FldHsnNumber').attr("tabindex", "0");
 
@@ -142,7 +182,7 @@
             $('input[name="FldItemType"]').attr("tabindex", "-1");
 
         }
-        else{
+        else {
             $('#FldItemTypeBlock').removeClass("DisableBlock");
             $('input[name="FldItemType"]').attr("tabindex", "0");
 
@@ -151,7 +191,7 @@
             $('#FldQuantityUnit').addClass("DisableBlock");
             $('#FldQuantityUnit').attr("tabindex", "-1");
         }
-        else{
+        else {
             $('#FldQuantityUnit').removeClass("DisableBlock");
             $('#FldQuantityUnit"]').attr("tabindex", "0");
         }
@@ -165,9 +205,28 @@
 
     function SetTotal() {
         var amount = parseFloat("0" + $("#AddEstimateItemBlock #FldUnitAmount").val());
-        var Discount = parseFloat("0" + $("#AddEstimateItemBlock #FldDiscountAmount").val());
         var Quantity = parseFloat("0" + $("#AddEstimateItemBlock #FldQuantity").val());
-        var total = ((Quantity * amount) - Discount).toFixed(2);
+
+        var TotalAmount = (amount * Quantity);
+        $("#UnitAmount").val(TotalAmount.toFixed(2));
+
+        var DiscountPercentage = parseFloat("0" + $("#AddEstimateItemBlock #FldDiscountAmount").val());
+        var DiscountAmount = ((TotalAmount * DiscountPercentage) / 100);
+        $("#AddEstimateItemBlock #DiscountAmount").val(DiscountAmount.toFixed(2));
+
+        TotalAmount = TotalAmount - DiscountAmount;
+
+        var CGSTPercentage = parseFloat("0" + $("#AddEstimateItemBlock #FldCgstpercentage").val());
+        var CGSTAmount = ((TotalAmount * CGSTPercentage) / 100);
+        $("#AddEstimateItemBlock #Cgstpercentage").val(CGSTAmount.toFixed(2));
+
+
+        var SGSTPercentage = parseFloat("0" + $("#AddEstimateItemBlock #FldSgstpercentage").val());
+        var SGSTAmount = ((TotalAmount * SGSTPercentage) / 100);
+        $("#AddEstimateItemBlock #Sgstpercentage").val(SGSTAmount.toFixed(2));
+
+
+        var total = (TotalAmount + CGSTAmount + SGSTAmount);
         $("#AddEstimateItemBlock #FldItemTotal").val(total);
 
     }

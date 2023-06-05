@@ -48,6 +48,9 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldCancelReason)
                 .HasMaxLength(200)
                 .HasColumnName("fld_CancelReason");
+            entity.Property(e => e.FldCgstpercentage)
+                .HasColumnType("decimal(18, 3)")
+                .HasColumnName("fld_CGSTPercentage");
             entity.Property(e => e.FldDiscountAmount)
                 .HasColumnType("decimal(18, 3)")
                 .HasColumnName("fld_DiscountAmount");
@@ -73,6 +76,9 @@ public partial class CarServiceContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("fld_QuantityUnit");
             entity.Property(e => e.FldServiceItemId).HasColumnName("fld_ServiceItemId");
+            entity.Property(e => e.FldSgstpercentage)
+                .HasColumnType("decimal(18, 3)")
+                .HasColumnName("fld_SGSTPercentage");
             entity.Property(e => e.FldUnitAmount)
                 .HasColumnType("decimal(18, 3)")
                 .HasColumnName("fld_UnitAmount");
@@ -114,9 +120,21 @@ public partial class CarServiceContext : DbContext
             entity.ToTable("tbl_JobMaster");
 
             entity.Property(e => e.FldJobId).HasColumnName("fld_JobId");
+            entity.Property(e => e.FldAmcbookNumber)
+                .HasMaxLength(100)
+                .HasColumnName("fld_AMCBookNumber");
             entity.Property(e => e.FldChessisNumber)
                 .HasMaxLength(50)
                 .HasColumnName("fld_ChessisNumber");
+            entity.Property(e => e.FldClientCompanyName)
+                .HasMaxLength(100)
+                .HasColumnName("fld_ClientCompanyName");
+            entity.Property(e => e.FldComanyGstnumber)
+                .HasMaxLength(100)
+                .HasColumnName("fld_ComanyGSTNumber");
+            entity.Property(e => e.FldCompanyAddress)
+                .HasMaxLength(200)
+                .HasColumnName("fld_CompanyAddress");
             entity.Property(e => e.FldCustomerContact1)
                 .HasMaxLength(15)
                 .HasColumnName("fld_CustomerContact1");
@@ -145,6 +163,9 @@ public partial class CarServiceContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("fld_ModelNameNumber");
             entity.Property(e => e.FldOrgId).HasColumnName("fld_OrgId");
+            entity.Property(e => e.FldReference)
+                .HasMaxLength(100)
+                .HasColumnName("fld_Reference");
             entity.Property(e => e.FldRegisteredOn)
                 .HasColumnType("datetime")
                 .HasColumnName("fld_RegisteredOn");
@@ -205,6 +226,9 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldContactPerson2)
                 .HasMaxLength(100)
                 .HasColumnName("fld_ContactPerson2");
+            entity.Property(e => e.FldGstnumber)
+                .HasMaxLength(100)
+                .HasColumnName("fld_GSTNumber");
             entity.Property(e => e.FldIsFullSubscription).HasColumnName("fld_IsFullSubscription");
             entity.Property(e => e.FldLicenseNumber)
                 .HasMaxLength(50)
@@ -218,6 +242,9 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldOrgName)
                 .HasMaxLength(200)
                 .HasColumnName("fld_OrgName");
+            entity.Property(e => e.FldWatermark)
+                .HasMaxLength(100)
+                .HasColumnName("fld_Watermark");
         });
 
         modelBuilder.Entity<TblPayment>(entity =>
@@ -246,6 +273,9 @@ public partial class CarServiceContext : DbContext
             entity.ToTable("tbl_ServiceItemMaster");
 
             entity.Property(e => e.FldServiceItemId).HasColumnName("fld_ServiceItemId");
+            entity.Property(e => e.FldCgstpercentage)
+                .HasColumnType("decimal(18, 3)")
+                .HasColumnName("fld_CGSTPercentage");
             entity.Property(e => e.FldHsnNumber)
                 .HasMaxLength(100)
                 .HasDefaultValueSql("('')")
@@ -262,6 +292,9 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldQuanitityUnit)
                 .HasMaxLength(20)
                 .HasColumnName("fld_QuanitityUnit");
+            entity.Property(e => e.FldSgstpercentage)
+                .HasColumnType("decimal(18, 3)")
+                .HasColumnName("fld_SGSTPercentage");
         });
 
         modelBuilder.Entity<TblSystemUser>(entity =>

@@ -8,55 +8,88 @@
 <table class="table">
     <thead>
         <tr>
-            <th class="col-md-4" >
-                @Html.DisplayNameFor(model => model.FldItemTitle)
-            </th>
-            <th class="col-md-1">
-                @Html.DisplayNameFor(model => model.FldItemType)
-            </th>
+            <th class="col-md-1">HSN/SCN</th>
             <th class="col-md-2">
-                @Html.DisplayNameFor(model => model.FldQuantity)
-            </th>
-            <th class="col-md-2">
-                @Html.DisplayNameFor(model => model.FldUnitAmount)
+                Item Title
             </th>
             <th class="col-md-1">
-                @Html.DisplayNameFor(model => model.FldDiscountAmount)
+                Type
             </th>
             <th class="col-md-1">
+                Quantity
+            </th>
+            <th class="col-md-1 text-end">
+                Rate
+            </th>
+            <th class="col-md-1 text-end">Item total</th>
+
+            <th class="col-md-1 text-end">
+                Discount
+            </th>
+            <th class="col-md-1 text-end">Sell Price</th>
+
+            <th class="col-md-1 text-end">
+               CGST
+            </th>
+            <th class="col-md-1 text-end">
+                SGST
+            </th>
+            <th class="col-md-1 text-end">
                 @Html.DisplayNameFor(model => model.FldItemTotal)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr class="@(item.FldIsCancelled?"text-danger":"")" >
-            <td>
-                <span class="text-secondary">[@item.FldHsnNumber]</span>
-                @Html.DisplayFor(modelItem => item.FldItemTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldItemType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldQuantity)
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.FldIsCancelled?"text-danger":"")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.FldHsnNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FldItemTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FldItemType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FldQuantity)
                     @Html.DisplayFor(modelItem => item.FldQuantityUnit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldUnitAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldDiscountAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FldItemTotal)
-            </td>
-            <td class="text-end d-flex flex-row" >
+                </td>
+                <td class="text-end" >
+                    @Html.DisplayFor(modelItem => item.FldUnitAmount)
+                </td>
+                <td class="text-end">
+                    @Html.DisplayFor(modelItem => item.ItemTotal)
+                </td>
+                <td class="text-end">
+
+                    @Html.DisplayFor(modelItem => item.DiscountAmount)<br />
+                    <i class="text-info small"> @Html.DisplayFor(modelItem => item.FldDiscountAmount) %</i>
+
+                </td>
+                <td class="text-end">
+                    @Html.DisplayFor(modelItem => item.ItemTotal_AfterDiscount)
+                </td>
+                <td class="text-end">
+                    @Html.DisplayFor(modelItem => item.CGST_Amount)<br />
+                    <i class="text-info small">@Html.DisplayFor(modelItem => item.FldCgstpercentage) %</i>
+
+                </td>
+                <td class="text-end">
+                    @Html.DisplayFor(modelItem => item.SGST_Amount)<br />
+                    <i class="text-success small">@Html.DisplayFor(modelItem => item.FldSgstpercentage) %</i>
+                </td>
+
+                <td class="text-end">
+                    @Html.DisplayFor(modelItem => item.FldItemTotal)
+                </td>
+                <td class="text-end d-flex flex-row flex-fill pb-4">
                     <a onclick="EditEstimateItem(@item.FldEstimateItemId, @item.FldEstimateId)"><img src="~/images/edit.png" class="IconButton" title="Cancel Item" data-toggle="tooltip" data-placement="top"></a>
                     <a onclick="DeleteEstimateItem(@item.FldEstimateItemId, @item.FldEstimateId)"><img src="~/images/delete.png" class="IconButton" title="Delete Item" data-toggle="tooltip" data-placement="top"></a>
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

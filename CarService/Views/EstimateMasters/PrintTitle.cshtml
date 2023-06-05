@@ -1,0 +1,117 @@
+﻿@using CarService.Models.Constants;
+@{
+    Layout = null;
+    //Required : @ViewBag.Watermark
+    //Required : @Model.Org
+}
+
+<div class="d-flex flex-row  border-top border-bottom border-dark pt-2 pb-2 mb-2">
+    <table class="table table-sm table-borderless mb-0">
+        <tbody>
+            <tr>
+                <td class="fw-bold text-secondary pb-2 col-md-5 ps-2">@(Model.Estimate == null ? "" : Model.Estimate.FldInvoiceType) To</td>
+                <td class="fw-bold text-secondary col-md-4  ps-2">Vehicle</td>
+                <td class="fw-bold col-md-3 ps-2 ">@(Model.Estimate==null?"Job": Model.Estimate.FldInvoiceType)</td>
+            </tr>
+            <tr class="small">
+                @*Customer Detail*@
+                <td class="border-start">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr>
+                            <td class="fw-bold">@Model.Job.FldCustomerName</td>
+                        </tr>
+                        @if (!string.IsNullOrEmpty(Model.Job.FldClientCompanyName))
+                        {
+                            <tr>
+                                <td class="fw-bold">@Model.Job.FldClientCompanyName</td>
+                            </tr>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Job.FldCompanyAddress))
+                        {
+                            <tr>
+                                <td class="fst-italic">@Model.Job.FldCompanyAddress</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>@Model.Job.FldCustomerContact1</td>
+                        </tr>
+                        @if (!string.IsNullOrEmpty(Model.Job.FldComanyGstnumber))
+                        {
+                            <tr>
+                                <td> <b>GST : </b> @Model.Job.FldComanyGstnumber</td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+                @*Vehicle Detail*@
+                <td class="border-start">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr>
+                            <td class="text-secondary fw-bold">Reg. No</td>
+                            <td>@Model.Job.FldVehicleRegisteredNumber</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary fw-bold">Model</td>
+                            <td>@Model.Job.FldModelNameNumber</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary fw-bold">Pickup-date</td>
+                            <td>@Model.Job.FldRegisteredOn.ToString("dd-MMM-yyyy")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary fw-bold">Pickup-km</td>
+                            <td>@Model.Job.FldKmReadingOnRegistration</td>
+                        </tr>
+                    </table>
+                </td>
+                @*Invoice/Estimate detail*@
+                <td class="border-start">
+                    <table class="table table-sm table-borderless mb-0">
+
+                        <tr>
+
+                            <td class="text-secondary fw-bold">Job No</td>
+                            <td>
+                                <span>@Model.Job.FldJobNo</span>
+                            </td>
+                        </tr>
+                        @if (Model.Estimate != null)
+                        {
+                            <tr>
+
+                                <td class="text-secondary fw-bold">@(Model.Estimate.FldIsInvoiceGenerated ? "Invoice No" : "Estimate No")</td>
+                                <td>
+                                    @if (Model.Estimate.FldIsInvoiceGenerated)
+                                    {
+                                        <span>@Model.Estimate.FldInvoiceNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.Estimate.FldEstimateNumber</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-secondary fw-bold">Issue Date</td>
+                                <td>
+                                    @if (Model.Estimate.FldIsInvoiceGenerated)
+                                    {
+                                        <span>@Model.Estimate.FldInvoiceCreatedOn.ToString("dd-MMM-yyyy")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.Estimate.FldCreatedOn.ToString("dd-MMM-yyyy")</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="text-secondary fw-bold">Service Type</td>
+                            <td>@Model.Job.FldServiceType</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

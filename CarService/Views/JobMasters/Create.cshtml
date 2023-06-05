@@ -15,17 +15,23 @@
 
     <div class="row ">
         @*Job Details*@
-        <div class="col-md-3 p-4 ">
-            <h4>Job Details</h4>
+        <div class="col-md-2 p-4 bg-success-transperent">
+            <h5>Job Details</h5>
             <div class="form-group" hidden>
                 <label asp-for="FldOrgId" class="control-label"></label>
                 <select asp-for="FldOrgId" class="form-control form-select" asp-items="@ViewBag.Organizations"></select>
                 <span asp-validation-for="FldOrgId" class="text-danger"></span>
             </div>
+           
             <div class="form-group">
                 <label asp-for="FldJobNo" class="control-label"></label>
                 <input asp-for="FldJobNo" class="form-control" />
                 <span asp-validation-for="FldJobNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldAmcbookNumber" class="control-label"></label>
+                <input asp-for="FldAmcbookNumber" class="form-control" />
+                <span asp-validation-for="FldAmcbookNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FldServiceType" class="control-label"></label>
@@ -51,10 +57,37 @@
                     <label class="form-check-label" for="FldServiceType_@ServiceTypes.Other">@ServiceTypes.Other</label>
                 </div>
             </div>
+           
+           
+        </div>
+        @*Job Records*@
+        <div class="col-md-2 p-4 bg-success-transperent">
+            <h5>Job Records</h5>
+            <div class="form-group">
+                <label asp-for="FldRegisteredOn" class="control-label"></label>
+                <input asp-for="FldRegisteredOn" class="form-control" />
+                <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
+                <input asp-for="FldKmReadingOnRegistration" class="form-control" value="" />
+                <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldReference" class="control-label"></label>
+                <input asp-for="FldReference" class="form-control" />
+                <span asp-validation-for="FldReference" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden >
+                <label asp-for="FldHandedOverOn" class="control-label"></label>
+                <input asp-for="FldHandedOverOn" class="form-control" />
+                <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
+            </div>
+
         </div>
         @*Customer Details*@
-        <div class="col-md-3 p-4">
-            <h4>Customer Details</h4>
+        <div class="col-md-3 p-4 bg-warning-transperent">
+            <h5>Customer Details</h5>
             <div class="form-group">
                 <label asp-for="FldCustomerName" class="control-label"></label>
                 <input asp-for="FldCustomerName" class="form-control" list="CustList" onchange="FillCustomerDetails()" />
@@ -78,9 +111,30 @@
             </div>
 
         </div>
+        @*Customer company Details*@
+        <div class="col-md-3 p-4 bg-warning-transperent ">
+            <h5>Customer company detail</h5>
+           
+            <div class="form-group">
+                <label asp-for="FldClientCompanyName" class="control-label"></label>
+                <input asp-for="FldClientCompanyName" class="form-control" />
+                <span asp-validation-for="FldClientCompanyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldCompanyAddress" class="control-label"></label>
+                <textarea asp-for="FldCompanyAddress" class="form-control" rows="4" ></textarea>
+                <span asp-validation-for="FldCompanyAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldComanyGstnumber" class="control-label"></label>
+                <input asp-for="FldComanyGstnumber" class="form-control" />
+                <span asp-validation-for="FldComanyGstnumber" class="text-danger"></span>
+            </div>
+
+        </div>
         @*Vehicle Details*@
-        <div class="col-md-3 p-4">
-            <h4>Vehicle Details</h4>
+        <div class="col-md-2 p-4  bg-primary-transperent ">
+            <h5>Vehicle Details</h5>
             <div class="form-group">
                 <label asp-for="FldVehicleRegisteredNumber" class="control-label"></label>
                 <input asp-for="FldVehicleRegisteredNumber" class="form-control" />
@@ -103,26 +157,8 @@
                 <span asp-validation-for="FldModelNameNumber" class="text-danger"></span>
             </div>
         </div>
-        @*Job timing*@
-        <div class="col-md-3 p-4">
-            <h4>Job Records</h4>
-            <div class="form-group">
-                <label asp-for="FldRegisteredOn" class="control-label"></label>
-                <input asp-for="FldRegisteredOn" class="form-control" />
-                <span asp-validation-for="FldRegisteredOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldKmReadingOnRegistration" class="control-label"></label>
-                <input asp-for="FldKmReadingOnRegistration" class="form-control" />
-                <span asp-validation-for="FldKmReadingOnRegistration" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FldHandedOverOn" class="control-label"></label>
-                <input asp-for="FldHandedOverOn" class="form-control" />
-                <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
-            </div>
+        
 
-        </div>
         @*Buttons*@
         <div class="d-flex flex-row justify-content-end p-4 bg-light">
             <input type="submit" value="Create Job" class="btn btn-success" />

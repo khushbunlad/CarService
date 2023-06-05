@@ -1,6 +1,7 @@
 ﻿@using CarService.Models.Constants;
 @using Microsoft.AspNetCore.Http;
 @{
+    long OrgId = (Context.Session.GetString(SessionKeys.OrganizationId) != null ? long.Parse(Context.Session.GetString(SessionKeys.OrganizationId)) : -1);
     long UserId = (Context.Session.GetString(SessionKeys.UserId) != null ? long.Parse(Context.Session.GetString(SessionKeys.UserId)) : -1);
     String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
     String OrgName = (Context.Session.GetString(SessionKeys.OrganizationName) != null ? Context.Session.GetString(SessionKeys.OrganizationName) : "");
@@ -61,13 +62,16 @@
                                 <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="ItemUse">Product Report</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="Index">Service Items</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="ServiceItemMasters" asp-action="Index">Parts & labor</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="JobRemarkMasters" asp-action="Index">job Remark List</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="OrganizationMasters"  asp-action="Edit" asp-route-id="@OrgId">Billing Details</a>
                             </li>
                         }
                     </ul>
@@ -96,7 +100,7 @@
                     &copy; 2023 - @OrgName
 
                 </div>
-            <div class="d-flex text-primary small"><a href="https://www.instagram.com/__youarecapable/?igshid=ZWIzMWE5ZmU3Zg%3D%3D" target="_blank" style="text-decoration:none" > <i>Powered by __YouAreCapable</i></a></div>
+            <div class="d-flex text-primary small"><a href="https://www.instagram.com/__youarecapable/" target="_blank" style="text-decoration:none"> <i>Powered by __YouAreCapable</i></a></div>
             </div>
         @*</div>*@
     </footer>

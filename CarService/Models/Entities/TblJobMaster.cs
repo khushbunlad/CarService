@@ -64,8 +64,26 @@ public partial class TblJobMaster
     [DataType(DataType.DateTime)]
     public DateTime? FldHandedOverOn { get; set; }
 
+
     public bool? FldIsCompleted { get; set; } = false;
 
+    [Display(Name = "Reference")]
+    public string? FldReference { get; set; } = "";
+
+    [Display(Name = "Company Name")]
+    public string? FldClientCompanyName { get; set; } = "";
+
+    [Display(Name = "Company Address")]
+    public string? FldCompanyAddress { get; set; } = "";
+
+    [Display(Name = "Company GST Number")]
+    public string? FldComanyGstnumber { get; set; } = "";
+
+    [Display(Name = "AMC Book number")]
+    public string? FldAmcbookNumber { get; set; } = "";
+
+    [NotMapped]
+    public bool IsJobItemsCreated { get; set; } = false;
     [NotMapped]
     public bool IsEstimateCreated { get; set; } = false;
     [NotMapped]

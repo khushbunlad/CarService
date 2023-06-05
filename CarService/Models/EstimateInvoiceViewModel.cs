@@ -9,4 +9,12 @@ namespace CarService.Models
         public TblOrganizationMaster Org { get;set; } = new TblOrganizationMaster();
         public List<TblEstimateItem> EstimateItems { get;set;} = new List<TblEstimateItem>();
     }
+
+    public class CsvViewModel
+    {
+        public TblJobMaster Job { get; set; } = new TblJobMaster();
+        public TblEstimateMaster Estimate { get; set; } = new TblEstimateMaster();
+    }
+
+
 }

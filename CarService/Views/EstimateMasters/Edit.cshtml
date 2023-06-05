@@ -161,6 +161,8 @@
         SendData.FldItemTotal = $("#FldItemTotal").val();
         SendData.FldHsnNumber = $("#FldHsnNumber").val();
         SendData.FldServiceItemId = $("#FldServiceItemId").val();
+        SendData.FldCgstpercentage = $("#FldCgstpercentage").val();
+        SendData.FldSgstpercentage = $("#FldSgstpercentage").val();
         $.post("../../EstimateItems/Create", SendData, function (res) {
             $("#AddEstimateItemBlock").html(res);
             $("#ListEstimateItemsBlock").load("../../EstimateItems/IndexEstimate/@Model.FldEstimateId");
@@ -182,7 +184,6 @@
 
     function EditEstimateItem(estitemid, estid) {
         $("#LoadEditForm").load("../../EstimateItems/Edit/" + estitemid, function () {
-
             new bootstrap.Modal(document.getElementById('exampleModal')).show();
         });
     }
@@ -203,6 +204,8 @@
         SendData.FldItemTotal = $("#LoadEditForm #FldItemTotal").val();
         SendData.FldHsnNumber = $("#LoadEditForm #FldHsnNumber").val();
         SendData.FldServiceItemId = $("#LoadEditForm #FldServiceItemId").val();
+        SendData.FldCgstpercentage = $("#LoadEditForm #FldCgstpercentage").val();
+        SendData.FldSgstpercentage = $("#LoadEditForm #FldSgstpercentage").val();
 
         $.post("../../EstimateItems/Edit", SendData, function (res) {
 

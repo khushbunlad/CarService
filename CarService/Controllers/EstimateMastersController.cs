@@ -16,10 +16,12 @@ namespace CarService.Controllers
     public class EstimateMastersController : Controller
     {
         private readonly CarServiceContext _context;
+        private readonly IConfiguration _config;
 
-        public EstimateMastersController(CarServiceContext context)
+        public EstimateMastersController(CarServiceContext context,IConfiguration configuration)
         {
             _context = context;
+            _config = configuration;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -56,6 +58,9 @@ namespace CarService.Controllers
             DisaplayData.Job = _context.TblJobMasters.Where(m => m.FldJobId == DisaplayData.Estimate.FldJobId).FirstOrDefault();
             DisaplayData.EstimateItems = _context.TblEstimateItems.Where(m => m.FldEstimateId == id).ToList();
             DisaplayData.Org = _context.TblOrganizationMasters.Where(m => m.FldOrgId == DisaplayData.Job.FldOrgId).FirstOrDefault();
+
+            ViewBag.Watermark = DisaplayData.Org.Get_SavedWatermarkData(_config);
+
             return View(DisaplayData);
         }
 

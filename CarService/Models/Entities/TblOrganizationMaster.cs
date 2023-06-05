@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarService.Models.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +11,7 @@ public partial class TblOrganizationMaster
 
     public int FldOrgId { get; set; }
 
-    [Display(Name ="Organization Name")]
+    [Display(Name = "Organization Name")]
     [Required]
     public string FldOrgName { get; set; } = null!;
 
@@ -47,7 +48,30 @@ public partial class TblOrganizationMaster
 
     [NotMapped]
     public IFormFile? FldLogoFile { get; set; } = null;
+    [NotMapped]
+    public IFormFile? fldWatermarkFile { get; set; } = null;
 
+    public string Get_SavedLogoData(IConfiguration configuration)
+    {
+        string LogoPath = configuration.GetValue<string>(ConfigKeys.StorageBasePath) + this.FldLogo;
+        if (System.IO.File.Exists(LogoPath))
+        {
+            byte[] imageArray = System.IO.File.ReadAllBytes(LogoPath);
+            return "data:image/png;base64," + Convert.ToBase64String(imageArray);
+        }
+        return "";
+    }
+    public string Get_SavedWatermarkData(IConfiguration configuration)
+    {
+        string LogoPath = configuration.GetValue<string>(ConfigKeys.StorageBasePath) + this.FldWatermark;
+        if (System.IO.File.Exists(LogoPath))
+        {
+            byte[] imageArray = System.IO.File.ReadAllBytes(LogoPath);
+            return "data:image/png;base64," + Convert.ToBase64String(imageArray);
+        }
+        return "";
+    }
+    
     [Display(Name = "Full scubscription")]
     [Required]
     public bool FldIsFullSubscription { get; set; }
@@ -60,4 +84,11 @@ public partial class TblOrganizationMaster
     [Display(Name = "Subscription License Number")]
     [Required]
     public string FldLicenseNumber { get; set; } = null!;
+
+    [Display(Name = "Watermark Image")]
+    public string? FldWatermark { get; set; } = "";
+
+    [Display(Name = "GST Number")]
+    public string? FldGstnumber { get; set; } = "";
+
 }

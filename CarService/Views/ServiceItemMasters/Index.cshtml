@@ -1,13 +1,14 @@
-﻿@model IEnumerable<CarService.Models.Entities.TblServiceItemMaster>
+﻿@using CarService.Models.Constants;
+@model IEnumerable<CarService.Models.Entities.TblServiceItemMaster>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <div class="d-flex flex-row pb-5">
-    <div class="d-flex flex-fill display-6">Service Items</div>
+    <div class="d-flex flex-fill display-6">Part & Labor</div>
     <div class="d-flex align-items-center">
-        <a asp-action="Create" class="btn btn-success">Create New Service Item</a>
+        <a asp-action="Create" class="btn btn-success">Create New Part / Labor</a>
     </div>
 </div>
 
@@ -17,26 +18,29 @@
 }
 else
 {
-    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Service Items</div>
+    <div class="d-flex justify-content-end fst-italic text-info">@Model.Count() Items</div>
     <table class="table">
         <thead>
             <tr>
-                <th>
+                <th class="col-md-2" >
                     @Html.DisplayNameFor(model => model.FldHsnNumber)
                 </th>
-                <th>
+                <th class="col-md-5">
                     @Html.DisplayNameFor(model => model.FldItemName)
                 </th>
-                <th>
+                <th class="col-md-1">
                     @Html.DisplayNameFor(model => model.FldItemType)
                 </th>
-                <th>
+                <th class="col-md-1">
                     @Html.DisplayNameFor(model => model.FldQuanitityUnit)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FldIdealAmount)
+                <th class="col-md-1">
+                    @Html.DisplayNameFor(model => model.FldCgstpercentage)
                 </th>
-                <th></th>
+                <th class="col-md-1">
+                    @Html.DisplayNameFor(model => model.FldSgstpercentage)
+                </th>
+                <th class="col-md-1"></th>
             </tr>
         </thead>
         <tbody>
@@ -47,14 +51,18 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.FldItemName)
                     </td>
-                    <td>
+                    <td class="@(item.FldItemType == ServiceItemTypes.Part?"text-primary":"text-success")" >
+                        
                         @Html.DisplayFor(modelItem => item.FldItemType)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FldQuanitityUnit)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FldIdealAmount)
+                        @Html.DisplayFor(modelItem => item.FldCgstpercentage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FldSgstpercentage)
                     </td>
                     <td class="text-end">
                         <a asp-action="Edit" asp-route-id="@item.FldServiceItemId"><img src="~/images/edit.png" class="IconButton" title="Delete item" /></a>

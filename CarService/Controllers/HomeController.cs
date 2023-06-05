@@ -95,7 +95,14 @@ namespace CarService.Controllers
                     byte[] imageArray = System.IO.File.ReadAllBytes(LogoPath);
                     string base64ImageRepresentation = "data:image/png;base64,"+Convert.ToBase64String(imageArray);
                     HttpContext.Session.SetString(SessionKeys.OrgLogo, base64ImageRepresentation);
+                }
 
+                string WatermarkPath = _config.GetValue<string>(ConfigKeys.StorageBasePath) + org.FldWatermark;
+                if (System.IO.File.Exists(WatermarkPath))
+                {
+                    byte[] imageArray = System.IO.File.ReadAllBytes(WatermarkPath);
+                    string base64ImageRepresentation = "data:image/png;base64," + Convert.ToBase64String(imageArray);
+                    HttpContext.Session.SetString(SessionKeys.OrgWatermark, base64ImageRepresentation);
                 }
 
 

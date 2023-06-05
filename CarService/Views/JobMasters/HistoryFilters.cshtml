@@ -8,7 +8,8 @@
     <div class="col-md-2"><input type="date" id="EndDate" class="form-control" /></div>
     <div class="col-md-2"> <input type="text" id="SerchJobInvoice" class="form-control" placeholder="Job / Invoice Number" /> </div>
     <div class="col-md-4"> <input type="text" id="SearchCustomer" class="form-control" placeholder="Name / contact / Vehicle Number" /> </div>
-    <div class="col-md-2"><input type="button" value="Search" class="btn btn-success" onclick="RefreshResult()" /></div>
+    <div class="col-md-1"><input type="button" value="Search" class="btn btn-success" onclick="RefreshResult()" /></div>
+    <div class="col-md-1"><input type="button" id="btn_DownloadCSV" value="Download CSV" class="btn btn-success" onclick="DownloadCSV()" /></div>
 </div>
 <div class="row" id="Results" >
 
@@ -32,6 +33,15 @@ function RefreshResult(){
         SendData.SearchCustomer = ($("#SearchCustomer").val()+"").toLowerCase();
         //SendData.SearchJob = $("#SearchJob").val();
         //SendData.SearchInvoice = $("#SearchInvoice").val();
-        $("#Results").load(window.location.origin +"/JobMasters/History",SendData);
+        $("#Results").load(window.location.origin +"/JobMasters/History",SendData,function(){
+           if($("#ReportResult tr").length>0)
+           {
+                $("#btn_DownloadCSV").show();
+           }
+           else{
+                $("#btn_DownloadCSV").hide();
+           }
+        });
+        
 }
 </script>

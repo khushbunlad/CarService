@@ -12,7 +12,14 @@
     <div class="d-flex flex-row">
         @*Logo*@
         <div class="d-flex ps-4 pe-4">
-            <img src="@Context.Session.GetString(SessionKeys.OrgLogo)" style="width:auto;height:170px;" />
+            @if (ViewBag.Logo ==null)
+            {
+                <img src="@Context.Session.GetString(SessionKeys.OrgLogo)" style="width:auto;height:170px;" />
+            }
+            else
+            {
+                <img src="@ViewBag.Logo" style="width:auto;height:170px;" />
+            }
         </div>
         @*org name, address & contact*@
         <div class="d-flex flex-fill flex-column ps-4 pe-2">

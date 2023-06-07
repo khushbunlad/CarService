@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="input-group input-group-sm">
                     <label asp-for="FldDiscountAmount" class="input-group-text bg-white Width100"></label>
-                    <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetTotal()" type="number" />
+                    <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetTotal()" type="number" oninput="SetTotal()" />
                     <input id="DiscountAmount" class="form-control text-end Width100" onfocusout="SetTotal()" tabindex="-1" />
                 </div>
                 <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
@@ -102,7 +102,7 @@
             <div class="row">
                 <div class="input-group  input-group-sm">
                     <label asp-for="FldCgstpercentage" class="input-group-text bg-white Width100"></label>
-                    <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetTotal()" type="number" />
+                    <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetTotal()" type="number" oninput="SetTotal()" />
                     <input id="Cgstpercentage" class="form-control text-end Width100" tabindex="-1" />
                 </div>
                 <span asp-validation-for="FldCgstpercentage" class="text-danger"></span>
@@ -110,7 +110,7 @@
             @*Sgst percentage*@
             <div class="input-group input-group-sm">
                 <label asp-for="FldSgstpercentage" class="input-group-text bg-white Width100"></label>
-                <input asp-for="FldSgstpercentage" class="form-control text-end" type="number" />
+                <input asp-for="FldSgstpercentage" class="form-control text-end" type="number" onfocusout="SetTotal()"  oninput="SetTotal()"/>
                 <input id="Sgstpercentage" class="form-control text-end Width100" tabindex="-1" />
             </div>
             <span asp-validation-for="FldSgstpercentage" class="text-danger"></span>
@@ -213,7 +213,7 @@
 
 
         var total = (TotalAmount + CGSTAmount + SGSTAmount);
-        $("#AddEstimateItemBlock #FldItemTotal").val(total);
+        $("#AddEstimateItemBlock #FldItemTotal").val(total.toFixed(2));
 
     }
 

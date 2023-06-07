@@ -80,7 +80,6 @@ body {
         filter: drop-shadow(2px 2px 5px #6c757d5d);
     }
 
-
 /*--------------- transperent background --------------*/
 .bg-primary-transperent {
     --bs-bg-opacity: 0.2;
@@ -163,6 +162,11 @@ body {
     width: 230mm;
     max-width: 230mm;
     padding: 10mm;
+}
+.PrintAreaAutoPdf {
+    min-width: 210mm !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
 }
 
 @media print {

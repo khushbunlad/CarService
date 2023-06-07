@@ -11,6 +11,13 @@ using CarService.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Data;
 
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
+using System.Drawing;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.HtmlConverter.Qt;
+
+
 namespace CarService.Controllers
 {
     public class EstimateMastersController : Controller
@@ -18,7 +25,7 @@ namespace CarService.Controllers
         private readonly CarServiceContext _context;
         private readonly IConfiguration _config;
 
-        public EstimateMastersController(CarServiceContext context,IConfiguration configuration)
+        public EstimateMastersController(CarServiceContext context, IConfiguration configuration)
         {
             _context = context;
             _config = configuration;
@@ -26,9 +33,18 @@ namespace CarService.Controllers
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (HttpContext.Session.GetString(SessionKeys.UserId) == null && HttpContext.Session.GetString(SessionKeys.UserId) == null)
+            string action = context.ActionDescriptor.DisplayName.ToLower() ;
+            if (action.Contains(".download") || action.Contains(".details"))
             {
-                context.Result = Redirect("~/Home");
+
+            }
+            else
+            {
+                if (HttpContext.Session.GetString(SessionKeys.UserId) == null && HttpContext.Session.GetString(SessionKeys.UserId) == null)
+                {
+                    context.Result = Redirect("~/Home");
+                }
+
             }
             base.OnActionExecuting(context);
         }
@@ -43,7 +59,7 @@ namespace CarService.Controllers
         }
 
         // GET: EstimateMasters/Details/5
-        public async Task<IActionResult> Details(long? id)
+        public async Task<IActionResult> Details(long? id,bool IsPrintMode=false)
         {
             if (id == null || _context.TblEstimateMasters == null)
             {
@@ -59,8 +75,9 @@ namespace CarService.Controllers
             DisaplayData.EstimateItems = _context.TblEstimateItems.Where(m => m.FldEstimateId == id).ToList();
             DisaplayData.Org = _context.TblOrganizationMasters.Where(m => m.FldOrgId == DisaplayData.Job.FldOrgId).FirstOrDefault();
 
+            ViewBag.Logo = DisaplayData.Org.Get_SavedLogoData(_config);
             ViewBag.Watermark = DisaplayData.Org.Get_SavedWatermarkData(_config);
-
+            ViewBag.IsPrintMode = IsPrintMode;
             return View(DisaplayData);
         }
 
@@ -208,6 +225,25 @@ namespace CarService.Controllers
         private bool TblEstimateMasterExists(long id)
         {
             return (_context.TblEstimateMasters?.Any(e => e.FldEstimateId == id)).GetValueOrDefault();
+        }
+
+
+        public async Task<IActionResult> Download(long? id)
+        {
+            string DownloadFileName = "invoice.pdf";
+            var est = _context.TblEstimateMasters.Where(e => e.FldEstimateId == id).FirstOrDefault();
+            if(est != null)
+            {
+                DownloadFileName = est.FldInvoiceNumber + ".pdf";
+            }
+            MemoryStream s = new MemoryStream();
+            HtmlConverter.Convert("http://"+HttpContext.Request.Host+ "/EstimateMasters/Details/"+id+ "?IsPrintMode=true",s,
+                true,
+                1000 * 1000,
+                new SizeF(612, 792),
+                new PdfMargins(0, 0)
+            );
+            return File(s.ToArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DownloadFileName);
         }
     }
 }

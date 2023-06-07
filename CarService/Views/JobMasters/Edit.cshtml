@@ -71,8 +71,8 @@
                     <input asp-for="FldReference" class="form-control" />
                     <span asp-validation-for="FldReference" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="FldHandedOverOn" class="control-label"></label>
+                <div class="form-group bg-success-transperent" @(Model.IsInvoiceCreated?"":"hidden")>
+                    <label asp-for="FldHandedOverOn" class="control-label fw-bold"></label>
                     <input asp-for="FldHandedOverOn" class="form-control" step="60000" />
                     <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
                 </div>

@@ -4,6 +4,10 @@
     ViewData["Title"] = "Index";
     Layout = null;
 }
+<head>
+    <script src="~/js/html2pdf_0.10.1.bundle.min.js" type="text/javascript" ></script>
+
+</head>
 
 @if (Model == null || Model.Count() == 0)
 {
@@ -19,7 +23,7 @@ else
                     @Html.DisplayNameFor(model => model.FldJobNo)
                 </th>
                 <th class="col-md-2">
-                    @Html.DisplayNameFor(model => model.FldCustomerName)
+                    Customer
                 </th>
                 <th class="col-md-1">
                     @Html.DisplayNameFor(model => model.FldVehicleRegisteredNumber)
@@ -64,7 +68,7 @@ else
                         </i>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FldVehicleRegisteredNumber)
+                        @item.FldVehicleRegisteredNumber.ToUpper()
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FldServiceType)
@@ -78,7 +82,7 @@ else
                     </td>
                     <td class="text-end">@Math.Round(item.InvoicedAmount,2)</td>
                     <td class="text-end">@Math.Round(item.PaidAmount,2)</td>
-                    <td class="text-end">@Math.Round(item.PaidAmount- item.InvoicedAmount,2)</td>
+                    <td class="text-end @(Math.Round(item.PaidAmount- item.InvoicedAmount,2)<0?"text-danger":"text-success") ">@Math.Round(item.PaidAmount- item.InvoicedAmount,2)</td>
                     <td class="text-end" >
 
                         @if (item.IsInvoiceCreated)
@@ -94,6 +98,7 @@ else
         </tbody>
     </table>
 }
+
 
 
 <script type="text/javascript">
@@ -115,10 +120,10 @@ else
         var JobId = new Array();
         for (var i = 0; i < rows.length; i++) {
             var invid = parseInt($(rows[i]).attr("invid"));
-            console.log(invid);
-            var Url = window.location.origin + "/EstimateMasters/Details/" + invid;
-          var MyWindow =  window.open(Url);
-            MyWindow.onload = function(){this.print();};
+            var Url = window.location.origin + "/EstimateMasters/Download/" + invid;
+            var downloadpopup = window.open(Url);
+            downloadpopup.blur();
+            window.focus();
         }
     }
     

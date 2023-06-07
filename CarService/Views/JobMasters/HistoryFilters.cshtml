@@ -4,12 +4,25 @@
 @{
 }
 <div class="row">
-    <div class="col-md-2"><input type="date" id="StartDate" class="form-control" /></div>
-    <div class="col-md-2"><input type="date" id="EndDate" class="form-control" /></div>
+    <div class="col-md-3">
+        <div class="input-group">
+            <input type="date" id="StartDate" class="form-control" />
+            <input type="date" id="EndDate" class="form-control" />
+        </div>
+    </div>
     <div class="col-md-2"> <input type="text" id="SerchJobInvoice" class="form-control" placeholder="Job / Invoice Number" /> </div>
-    <div class="col-md-4"> <input type="text" id="SearchCustomer" class="form-control" placeholder="Name / contact / Vehicle Number" /> </div>
-    <div class="col-md-1"><input type="button" value="Search" class="btn btn-success" onclick="RefreshResult()" /></div>
-    <div class="col-md-1"><input type="button" id="btn_DownloadCSV" value="Download CSV" class="btn btn-success" onclick="DownloadCSV()" /></div>
+    <div class="col-md-3"> <input type="text" id="SearchCustomer" class="form-control" placeholder="Name / contact / Vehicle Number" /> </div>
+    <div class="col-md-2">
+        @*<div class="form-check-inline" title="Vehicle is delivered & payment is still pending" data-toggle="tooltip" data-placement="top">*@
+            <input type="checkbox" class="btn-check" id="Chk_Status_01" value="Payment" onchange="FilterByStatus()">
+            <label for="Chk_Status_01" class="btn btn-outline-danger">Pending payment</label>
+        @*</div>*@
+    </div>
+    <div class="col-md-2 d-flex justify-content-end">
+        <input type="button" value="Search" class="btn btn-primary me-2" onclick="RefreshResult()" />
+        <input type="button" id="btn_DownloadCSV" value="CSV" class="btn btn-success me-2" onclick="DownloadCSV()" />
+        <input type="button" id="btn_DownloadInvoice" value="Invoices" class="btn btn-success" onclick="DownloadAllInvoices()" />
+    </div>
 </div>
 <div class="row" id="Results" >
 
@@ -31,15 +44,18 @@ function RefreshResult(){
         SendData.EndDate = $("#EndDate").val();
         SendData.SerchJobInvoice = ($("#SerchJobInvoice").val()).toLowerCase();
         SendData.SearchCustomer = ($("#SearchCustomer").val()+"").toLowerCase();
+        SendData.PendingPayment = $("#Chk_Status_01").is(":checked");
         //SendData.SearchJob = $("#SearchJob").val();
         //SendData.SearchInvoice = $("#SearchInvoice").val();
         $("#Results").load(window.location.origin +"/JobMasters/History",SendData,function(){
            if($("#ReportResult tr").length>0)
            {
-                $("#btn_DownloadCSV").show();
+                $("#btn_DownloadCSV").show(); 
+                $("#btn_DownloadInvoice").show(); 
            }
            else{
                 $("#btn_DownloadCSV").hide();
+                $("#btn_DownloadInvoice").hide();
            }
         });
         

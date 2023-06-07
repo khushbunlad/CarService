@@ -7,82 +7,82 @@
 }
 <div class="row">
     <div class="col-md-12">
-    <form asp-action="Edit">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input asp-for="FldEstimateId" class="form-control" hidden />
-        <input asp-for="FldItemType" class="form-control" hidden />
-        <input asp-for="FldQuantityUnit" class="form-control" hidden />
-        <input asp-for="FldHsnNumber" class="form-control" hidden />
-        <input asp-for="FldServiceItemId" class="form-control" hidden />
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="FldEstimateId" class="form-control" hidden />
+            <input asp-for="FldItemType" class="form-control" hidden />
+            <input asp-for="FldQuantityUnit" class="form-control" hidden />
+            <input asp-for="FldHsnNumber" class="form-control" hidden />
+            <input asp-for="FldServiceItemId" class="form-control" hidden />
 
 
-        <input type="hidden" asp-for="FldEstimateItemId" />
-        <div class="form-group">
-            <label class="control-label">@Model.FldHsnNumber</label>
-            <input asp-for="FldItemTitle" class="form-control-plaintext" readonly />
-            <span asp-validation-for="FldItemTitle" class="text-danger"></span>
-        </div>
-        <div class="form-group" @(Model.FldItemType == ServiceItemTypes.Part ? "" : "hidden")>
-            <label asp-for="FldQuantity" class="control-label"></label><span class="text-info"> ( @Model.FldQuantityUnit )</span>
-            <input asp-for="FldQuantity" class="form-control" />
-            <span asp-validation-for="FldQuantity" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldUnitAmount" class="control-label"></label>
-            <input asp-for="FldUnitAmount" class="form-control text-end" onfocusout="SetEditTotal()" />
-            <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
-        </div>
-        <div class="input-group">
-            <div class="input-group-prepend Width100">
-                <label asp-for="FldDiscountAmount" class="input-group-text bg-white"></label>
+            <input type="hidden" asp-for="FldEstimateItemId" />
+            <div class="form-group">
+                <label class="control-label">@Model.FldHsnNumber</label>
+                <input asp-for="FldItemTitle" class="form-control-plaintext" readonly />
+                <span asp-validation-for="FldItemTitle" class="text-danger"></span>
             </div>
-            <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetEditTotal()" />
-            <input id="DiscountAmount" class="form-control text-end" onfocusout="SetEditTotal()" tabindex="-1" value="@Model.DiscountAmount" />
-        </div>
-        <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
-        <div class="input-group ">
-            <div class="input-group-prepend Width100">
-                <label asp-for="FldCgstpercentage" class="input-group-text bg-white"></label>
+            <div class="form-group" @(Model.FldItemType == ServiceItemTypes.Part ? "" : "hidden")>
+                <label asp-for="FldQuantity" class="control-label"></label><span class="text-info"> ( @Model.FldQuantityUnit )</span>
+                <input asp-for="FldQuantity" class="form-control" type="number" onfocusout="SetEditTotal()" oninput="SetEditTotal()" />
+                <span asp-validation-for="FldQuantity" class="text-danger"></span>
             </div>
-            <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetEditTotal()" />
-            <input id="Cgstpercentage" class="form-control text-end " tabindex="-1" value="@Model.CGST_Amount" />
-        </div>
-        <span asp-validation-for="FldCgstpercentage" class="text-danger"></span>
-        <div class="input-group ">
-            <div class="input-group-prepend Width100">
-                <label asp-for="FldSgstpercentage" class="input-group-text bg-white"></label>
+            <div class="form-group">
+                <label asp-for="FldUnitAmount" class="control-label"></label>
+                <input asp-for="FldUnitAmount" class="form-control text-end" onfocusout="SetEditTotal()" oninput="SetEditTotal()" type="number" />
+                <span asp-validation-for="FldUnitAmount" class="text-danger"></span>
             </div>
-            <input asp-for="FldSgstpercentage" class="form-control text-end" onfocusout="SetEditTotal()" />
-            <input id="Sgstpercentage" class="form-control text-end" tabindex="-1" value="@Model.SGST_Amount" />
-        </div>                <span asp-validation-for="FldSgstpercentage" class="text-danger"></span>
-        <div class="input-group">
-            <div class="input-group-prepend Width100">
-                <label class="input-group-text bg-white  fw-bold">Total</label>
+            <div class="input-group">
+                <div class="input-group-prepend Width100">
+                    <label asp-for="FldDiscountAmount" class="input-group-text bg-white"></label>
+                </div>
+                <input asp-for="FldDiscountAmount" class="form-control text-end" onfocusout="SetEditTotal()" oninput="SetEditTotal()" type="number" />
+                <input id="DiscountAmount" class="form-control text-end" onfocusout="SetEditTotal()" tabindex="-1" value="@Model.DiscountAmount" />
             </div>
-            <input asp-for="FldItemTotal" class=" form-control text-end  fw-bold" tabindex="-1" />
-            <span asp-validation-for="FldItemTotal" class="text-danger"></span>
+            <span asp-validation-for="FldDiscountAmount" class="text-danger"></span>
+            <div class="input-group ">
+                <div class="input-group-prepend Width100">
+                    <label asp-for="FldCgstpercentage" class="input-group-text bg-white"></label>
+                </div>
+                <input asp-for="FldCgstpercentage" class="form-control text-end" onfocusout="SetEditTotal()" oninput="SetEditTotal()" type="number" />
+                <input id="Cgstpercentage" class="form-control text-end " tabindex="-1" value="@Model.CGST_Amount" />
+            </div>
+            <span asp-validation-for="FldCgstpercentage" class="text-danger"></span>
+            <div class="input-group ">
+                <div class="input-group-prepend Width100">
+                    <label asp-for="FldSgstpercentage" class="input-group-text bg-white"></label>
+                </div>
+                <input asp-for="FldSgstpercentage" class="form-control text-end" onfocusout="SetEditTotal()" oninput="SetEditTotal()" type="number" />
+                <input id="Sgstpercentage" class="form-control text-end" tabindex="-1" value="@Model.SGST_Amount" />
+            </div>                <span asp-validation-for="FldSgstpercentage" class="text-danger"></span>
+            <div class="input-group">
+                <div class="input-group-prepend Width100">
+                    <label class="input-group-text bg-white  fw-bold">Total</label>
+                </div>
+                <input asp-for="FldItemTotal" class=" form-control text-end  fw-bold" tabindex="-1" />
+                <span asp-validation-for="FldItemTotal" class="text-danger"></span>
 
-        </div>
-        @*<div class="form-group">
+            </div>
+            @*<div class="form-group">
             <label asp-for="FldItemTotal" class="control-label"></label>
             <input asp-for="FldItemTotal" class="form-control-plaintext" />
             <span asp-validation-for="FldItemTotal" class="text-danger"></span>
-        </div>*@
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="FldIsCancelled" /> @Html.DisplayNameFor(model => model.FldIsCancelled)
-            </label>
-        </div>
-        <div class="form-group">
-            <label asp-for="FldCancelReason" class="control-label"></label>
-            <input asp-for="FldCancelReason" class="form-control" />
-            <span asp-validation-for="FldCancelReason" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="button" value="Save Changes" class="btn btn-primary" onclick="ModifyEstimateItem()" />
-        </div>
-    </form>
-</div>
+            </div>*@
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="FldIsCancelled" /> @Html.DisplayNameFor(model => model.FldIsCancelled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="FldCancelReason" class="control-label"></label>
+                <input asp-for="FldCancelReason" class="form-control" />
+                <span asp-validation-for="FldCancelReason" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="button" value="Save Changes" class="btn btn-primary" onclick="ModifyEstimateItem()" />
+            </div>
+        </form>
+    </div>
 </div>
 
 
@@ -123,11 +123,7 @@
 
 
         var total = (TotalAmount + CGSTAmount + SGSTAmount);
-        $("#LoadEditForm #FldItemTotal").val(total);
-
-
-
-
+        $("#LoadEditForm #FldItemTotal").val(total.toFixed(2));
 
 
     }</script>

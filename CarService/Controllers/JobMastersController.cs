@@ -69,7 +69,7 @@ namespace CarService.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> History(DateTime? StartDate, DateTime EndDate, string? SerchJobInvoice, string? SearchCustomer)
+        public async Task<IActionResult> History(DateTime? StartDate, DateTime EndDate, string? SerchJobInvoice, string? SearchCustomer,bool? PendingPayment = false)
         {
             long OrgId = long.Parse(HttpContext.Session.GetString(SessionKeys.OrganizationId));
             string? UserRole = HttpContext.Session.GetString(SessionKeys.UserId);
@@ -154,6 +154,11 @@ namespace CarService.Controllers
             }
             DisplayList = DisplayList.Where(j => j.IsInvoiceCreated == true).ToList();
 
+            if(PendingPayment==true)
+            {
+                DisplayList = DisplayList.Where(j=>j.FldIsCompleted == true).ToList();
+            }
+
             return View(DisplayList);
         }
 
@@ -237,6 +242,7 @@ namespace CarService.Controllers
                 return NotFound();
             }
             SetOrganizationsInViewbag();
+            tblJobMaster.IsInvoiceCreated =  _context.TblEstimateMasters.Count(e => e.FldJobId == tblJobMaster.FldJobId && e.FldIsInvoiceGenerated == true) == 1 ? true : false;
             return View(tblJobMaster);
         }
 
@@ -277,6 +283,8 @@ namespace CarService.Controllers
                 }
             }
             SetOrganizationsInViewbag();
+            tblJobMaster.IsInvoiceCreated = _context.TblEstimateMasters.Count(e => e.FldJobId == tblJobMaster.FldJobId && e.FldIsInvoiceGenerated == true) == 1 ? true : false;
+
             return View(tblJobMaster);
         }
 

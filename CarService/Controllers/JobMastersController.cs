@@ -156,7 +156,7 @@ namespace CarService.Controllers
 
             if(PendingPayment==true)
             {
-                DisplayList = DisplayList.Where(j=>j.FldIsCompleted == true).ToList();
+                DisplayList = DisplayList.Where(j=>j.FldIsCompleted == false).ToList();
             }
 
             return View(DisplayList);
@@ -498,6 +498,21 @@ namespace CarService.Controllers
             var result = new FileContentResult(bytes, contentType);
             result.FileDownloadName = "Report.csv";
             return result;
+
+        }
+
+        [HttpPost]
+        public IActionResult DeliverJob(long id)
+        {
+            TblJobMaster job = _context.TblJobMasters.Where(j=>j.FldJobId == id).FirstOrDefault();
+            if (job != null)
+            {
+                job.FldHandedOverOn = DateTime.Now;
+                _context.TblJobMasters.Update(job);
+                _context.SaveChanges();
+                return Json("success");
+            }
+            return Json("failed");
 
         }
 

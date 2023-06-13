@@ -27,16 +27,18 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 p-0">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="@Logo" style="width:30px;height:30px;" class="me-2" />
+                @*Logo & Company Name*@
+                <a class="navbar-brand pt-0 pb-0 text-white fw-bold pe-3 border-end border-secondary" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="@Logo" style="height:60px;" class="me-2" />
                     @OrgName
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @*Menu items*@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                        
@@ -67,21 +69,29 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="JobRemarkMasters" asp-action="Index">job Remark List</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="OrganizationMasters"  asp-action="Edit" asp-route-id="@OrgId">Billing Details</a>
-                            </li>
+                            if(UserRole == UserRoles.OrganizationAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="SystemUsers" asp-action="Index">Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="OrganizationMasters" asp-action="Edit" asp-route-id="@OrgId">Billing Details</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
+                @*User details*@
                 <div class="d-flex flex-row align-items-baseline">
 
                     @if (@Context.Session.GetString(SessionKeys.UserName) != null)
                     {
-                        <div id="UserProfileMenu" class="text-light mr-2 small">@Context.Session.GetString(SessionKeys.UserName)</div>
-                        <a asp-area="" asp-controller="Home" asp-action="Logout" class="text-white small ps-2" >Logout</a>
+                        <div id="UserProfileMenu" class="text-light mr-2 small">
+                            <span class="text-light  fw-bold ">@Context.Session.GetString(SessionKeys.UserName)</span>
+                            <span class="mr-2 small fst-italic text-success fw-normal">@Context.Session.GetString(SessionKeys.UserRole)</span>
+
+                        </div>
+                        <a asp-area="" asp-controller="Home" asp-action="Logout" class="text-primary text-decoration-none  small ps-2" >Logout</a>
                     }
                 </div>
             </div>
@@ -115,6 +125,19 @@
      setTimeout(function(){
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
+
+            $(".nav-link").each(function(){
+                var href = window.location.origin + $(this).attr("href");
+                var loc = window.location.href;
+                //console.log(href,loc,href==loc);
+                if (href == loc) {
+                    $(this).removeClass("text-white");
+                    $(this).removeClass("text-light");
+                    $(this).addClass("text-primary");
+                }
+               
+            });
+           
         })
      },500);
     </script>

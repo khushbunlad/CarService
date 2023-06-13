@@ -36,7 +36,13 @@
                 <datalist id="ServiceItemsSuggestions">
                     @foreach (CarService.Models.Entities.TblServiceItemMaster item in ViewBag.ServiceItem)
                     {
-                        <option value="@item.FldItemName" hsn="@item.FldHsnNumber" type="@item.FldItemType" unit="@item.FldQuanitityUnit" sid="@item.FldServiceItemId">@item.FldItemName [@item.FldHsnNumber] </option>
+                        <option value="@item.FldItemName" 
+                                hsn="@item.FldHsnNumber" 
+                                type="@item.FldItemType" 
+                                unit="@item.FldQuanitityUnit"
+                                sid="@item.FldServiceItemId"
+                                cgst="@item.FldCgstpercentage"
+                                sgst="@item.FldSgstpercentage">@item.FldItemName [@item.FldHsnNumber] </option>
                     }
                 </datalist>
             </div>
@@ -142,10 +148,14 @@
 
     function SetHsnNumber() {
         var selectedVal = $("#FldItemTitle").val();
-        var hsn = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("hsn");
-        var type = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("type");
-        var unit = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("unit");
-        var sid = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]').attr("sid");
+        var SelectionOption = $('#ServiceItemsSuggestions option[value="' + selectedVal + '"]');
+        var hsn = $(SelectionOption).attr("hsn");
+        var type = $(SelectionOption).attr("type");
+        var unit = $(SelectionOption).attr("unit");
+        var sid = $(SelectionOption).attr("sid");
+        var cgst = $(SelectionOption).attr("cgst");
+        var sgst = $(SelectionOption).attr("sgst");
+
         $('#FldHsnNumber').val(hsn);
         $("input[type='radio'][value='" + type + "']").prop("checked", true);
         $("#FldQuantityUnit option[value='" + unit + "']").prop("selected", true);
@@ -163,6 +173,16 @@
             $('#FldHsnNumber').attr("tabindex", "0");
 
         }
+
+        if(cgst != null && cgst !=undefined && cgst !="")
+        {
+            
+            $("#FldCgstpercentage").val(parseFloat(cgst).toFixed(2));
+        }
+        if (sgst != null && sgst != undefined && sgst != "") {
+            $("#FldSgstpercentage").val(parseFloat(sgst).toFixed(2));
+        }
+
         if (type != null && type != undefined && type != "") {
             $('#FldItemTypeBlock').addClass("DisableBlock");
             $('input[name="FldItemType"]').attr("tabindex", "-1");
@@ -223,9 +243,9 @@
             $("#FldQuantity").val("1");
             $("#FldQuantityUnit").val("unit");
             $('#FldQuantityUnit').removeClass("DisableBlock");
-            $('#FldQuantityUnit"]').attr("tabindex", "0");
+            $('#FldQuantityUnit').attr("tabindex", "0");
             $('#FldQuantity').removeClass("DisableBlock");
-            $('#FldQuantity').attr("tabindex", "-1");
+            $('#FldQuantity').attr("tabindex", "0");
         }
         else {
             $("#FldQuantity").val("1");

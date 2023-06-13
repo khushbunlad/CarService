@@ -108,7 +108,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FldEstimateId,FldCreatedOn,FldJobId,FldEstimateNumber,FldIsInvoiceGenerated,FldInvoiceNumber,FldInvoiceCreatedOn,FldInvoiceType,FldTotalAmount")] TblEstimateMaster tblEstimateMaster)
+        public async Task<IActionResult> Create([Bind("FldEstimateId,FldCreatedOn,FldJobId,FldEstimateNumber,FldIsInvoiceGenerated,FldInvoiceNumber,FldInvoiceCreatedOn,FldInvoiceType,FldTotalAmount,FldInvoiceRemark")] TblEstimateMaster tblEstimateMaster)
         {
             SetJobListInViewBag();
             if (ModelState.IsValid)
@@ -143,7 +143,7 @@ namespace CarService.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateId,FldCreatedOn,FldJobId,FldEstimateNumber,FldIsInvoiceGenerated,FldInvoiceNumber,FldInvoiceCreatedOn,FldInvoiceType,FldTotalAmount")] TblEstimateMaster tblEstimateMaster)
+        public async Task<IActionResult> Edit(long id, [Bind("FldEstimateId,FldCreatedOn,FldJobId,FldEstimateNumber,FldIsInvoiceGenerated,FldInvoiceNumber,FldInvoiceCreatedOn,FldInvoiceType,FldTotalAmount,FldInvoiceRemark")] TblEstimateMaster tblEstimateMaster)
         {
             if (id != tblEstimateMaster.FldEstimateId)
             {

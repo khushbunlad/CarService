@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<CarService.Models.Entities.TblJobMaster>
+@using CarService.Models.Constants;
 
 @{
     ViewData["Title"] = "Index";
     Layout = null;
+    String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
+
 }
 <head>
     <script src="~/js/html2pdf_0.10.1.bundle.min.js" type="text/javascript" ></script>
@@ -67,7 +70,7 @@ else
                             }
                         </i>
                     </td>
-                    <td>
+                    <td class="text-uppercase">
                         @item.FldVehicleRegisteredNumber.ToUpper()
                     </td>
                     <td>
@@ -90,7 +93,10 @@ else
                             <a asp-action="Details" asp-controller="EstimateMasters" asp-route-id="@item.EstimateInvoiceId" target="_blank" ><img src="~/images/invoice_view.png" class="IconButton" title="View Invoice" data-toggle="tooltip" data-placement="top"></a>
                         }
                       <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Details" data-toggle="tooltip" data-placement="top"></a>
+                    @if(UserRole == UserRoles.OrganizationAdmin)
+                        {
                         <a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>
+                        }
                        
                     </td>
                 </tr>

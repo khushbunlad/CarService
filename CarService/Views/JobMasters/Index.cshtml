@@ -90,7 +90,7 @@ else
                             }
                         </i>
                     </td>
-                    <td>
+                    <td class="text-uppercase" >
                         @Html.DisplayFor(modelItem => item.FldVehicleRegisteredNumber)
                     </td>
                     <td>
@@ -139,6 +139,10 @@ else
                         }
                     </td>
                     <td class="text-end" >
+                        @if(item.FldHandedOverOn ==null && item.IsInvoiceCreated)
+                        {
+                            <img src="~/images/deliver.png" class="IconButton" title="Deliver Car" data-toggle="tooltip" data-placement="top" onclick="DeliverCarNow(@item.FldJobId)">
+                        }
 
                         @if (item.IsInvoiceCreated)
                         {
@@ -158,7 +162,7 @@ else
                         <a asp-action="Edit" asp-route-id="@item.FldJobId"><img src="~/images/job.png" class="IconButton" title="Modify Job" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Create" asp-controller="Payments" asp-route-id="@item.FldJobId"><img src="~/images/AddPayment.png" class="IconButton" title="Payments" data-toggle="tooltip" data-placement="top"></a>
                         <a asp-action="Details" asp-route-id="@item.FldJobId"><img src="~/images/job_view.png" class="IconButton" title="Job Summary" data-toggle="tooltip" data-placement="top"></a>
-                        <a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>
+                        @*<a asp-action="Delete" asp-route-id="@item.FldJobId"><img src="~/images/delete.png" class="IconButton" title="Delete Job" data-toggle="tooltip" data-placement="top"></a>*@
                        
                     </td>
                 </tr>
@@ -202,5 +206,15 @@ else
             }
         });
         
+    }
+
+    function DeliverCarNow(jobid){
+        var url = window.location.origin + "/JobMasters/DeliverJob/"+jobid;
+        $.post(url,function(data){
+            if(data == "success")
+            {
+                window.location.reload();
+            }
+        });
     }
  </script>

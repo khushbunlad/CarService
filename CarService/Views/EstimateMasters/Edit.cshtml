@@ -17,7 +17,7 @@
 
         <div class="row">
             @*Job details*@
-            <div class="col-md-3 p-3 bg-white">
+            <div class="col-md-2 p-3 bg-white">
                 <h5>1. Job Details</h5>
 
                 <div class="form-group">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             @*Estimate details*@
-            <div class="col-md-3 p-3 bg-info-transperent">
+            <div class="col-md-2 p-3 bg-info-transperent">
                 <h5>2. Estimate Details</h5>
                 <div class="form-group">
                     <label asp-for="FldEstimateNumber" class="control-label"></label>
@@ -39,7 +39,7 @@
                 </div>
             </div>
             @*Type*@
-            <div class="col-md-3 p-3 bg-warning-transperent">
+            <div class="col-md-2 p-3 bg-warning-transperent">
                 <h5>3. Choose type & Create Invoice</h5>
                 <div class="form-group">
                     <label asp-for="FldInvoiceType" class="control-label"></label>
@@ -63,7 +63,7 @@
                 </div>
             </div>
             @*Invoice details*@
-            <div class="col-md-3 p-3 bg-success-transperent" id="InvoiceDataBlock" style="display:@(Model.FldInvoiceType == InvoiceTypes.Estimate?"none":"")" >
+            <div class="col-md-3 p-3 bg-success-transperent InvoiceDataBlock" style="display:@(Model.FldInvoiceType == InvoiceTypes.Estimate?"none":"")">
                 <h5>4. Invoice Details</h5>
                 <div class="form-group">
                     <label asp-for="FldInvoiceNumber" class="control-label"></label>
@@ -76,6 +76,13 @@
                     <span asp-validation-for="FldInvoiceCreatedOn" class="text-danger"></span>
                 </div>
 
+            </div>
+            <div class="col-md-3 p-3 bg-success-transperent InvoiceDataBlock" style="display:@(Model.FldInvoiceType == InvoiceTypes.Estimate?"none":"")">
+                <div class="form-group">
+                    <label asp-for="FldInvoiceRemark" class="control-label"></label>
+                    <textarea asp-for="FldInvoiceRemark" class="form-control" rows="10" ></textarea>
+                    <span asp-validation-for="FldInvoiceRemark" class="text-danger"></span>
+                </div>
             </div>
             @*Buttons*@
             <div class="col-md-12 d-flex flex-row justify-content-end p-3 pb-0 align-items-baseline bg-light">
@@ -148,10 +155,10 @@
         $('input[name="FldInvoiceType"]').on("change", function () {
             var CurrentType = $('input[name="FldInvoiceType"]:checked').val();
             if (CurrentType == "@InvoiceTypes.Estimate") {
-                $("#InvoiceDataBlock").css("display","none");
+                $(".InvoiceDataBlock").css("display","none");
             }
             else {
-                $("#InvoiceDataBlock").css("display", "");
+                $(".InvoiceDataBlock").css("display", "");
             }
         })
 

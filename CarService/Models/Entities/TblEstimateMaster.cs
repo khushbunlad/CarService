@@ -37,4 +37,8 @@ public partial class TblEstimateMaster
 
     [Display(Name = "Total Amount")]
     public decimal FldTotalAmount { get; set; }
+
+    [Display(Name = "Invoice Remarks")]
+    public string? FldInvoiceRemark { get; set; }
+
 }

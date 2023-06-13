@@ -14,45 +14,62 @@
         <div class="d-flex ps-4 pe-4">
             @if (ViewBag.Logo ==null)
             {
-                <img src="@Context.Session.GetString(SessionKeys.OrgLogo)" style="width:auto;height:170px;" />
+                <img src="@Context.Session.GetString(SessionKeys.OrgLogo)" style="width:auto;height:30mm;" />
             }
             else
             {
-                <img src="@ViewBag.Logo" style="width:auto;height:170px;" />
+                <img src="@ViewBag.Logo" style="width:auto;height:30mm;" />
             }
         </div>
         @*org name, address & contact*@
-        <div class="d-flex flex-fill flex-column ps-4 pe-2">
-            <div class="d-flex display-6">@Model.Org.FldOrgName</div>
+        <div class="d-flex flex-fill flex-column ps-3 pe-2">
+            <div class="d-flex fs-2">@Model.Org.FldOrgName</div>
             @*Address*@
-            <div class="d-flex mt-3 fst-italic align-items-baseline">
-                @Model.Org.FldAddress
+            <div class="d-flex mt-2 fst-italic align-items-baseline">
+               <img src="~/images/address.png" style="width:15px;height:15px;" />
+                <span class="ps-2">@Model.Org.FldAddress</span>
             </div>
-            @*GST Number*@
-            @if (!String.IsNullOrEmpty(Model.Org.FldGstnumber))
-            {
-                <div class="d-flex mt-1 align-items-baseline small">
-                    <b class="text-secondary pe-2">GSTIN</b> @Model.Org.FldGstnumber
+            <div class="d-flex flex-row">
+                @*Email & GST*@
+                <div class="d-flex flex-column">
+                    @*Email*@
+                    @if (!String.IsNullOrEmpty(Model.Org.FldOrgEmail))
+                    {
+                        <div class="d-flex small mt-1">
+                            <img src="~/images/email.png" style="width:15px;height:15px;" />
+                            <span class="ps-2 text-primary">@Model.Org.FldOrgEmail</span>
+                        </div>
+                    }
+                    @*GST Number*@
+                    @if (!String.IsNullOrEmpty(Model.Org.FldGstnumber))
+                    {
+                        <div class="d-flex mt-1 align-items-baseline small">
+                            <b class="pe-2">GSTIN</b> @Model.Org.FldGstnumber
+                        </div>
+                    }
                 </div>
-            }
-            @if (!String.IsNullOrEmpty(Model.Org.FldOrgEmail))
-            {
-                <div class="d-flex small mt-1"> <b class="text-secondary pe-2">Email</b> <span class="text-primary">@Model.Org.FldOrgEmail</span></div>
-            }
-            @*Contact*@
-            <div class="d-flex flex-row align-items-baseline small mt-1">
-                @if (!string.IsNullOrEmpty(Model.Org.FldContactNumber1) && !string.IsNullOrEmpty(Model.Org.FldContactPerson1))
-                {
-                    <div class="d-flex"><b class="text-secondary pe-2">@Model.Org.FldContactPerson1</b>@Model.Org.FldContactNumber1</div>
-                }
-                @if (!string.IsNullOrEmpty(Model.Org.FldContactNumber2) && !string.IsNullOrEmpty(Model.Org.FldContactPerson2))
-                {
-                    <div class="d-flex ps-2 pe-2">|</div>
-                    <div class="d-flex"><b class="text-secondary pe-2">@Model.Org.FldContactPerson2</b>@Model.Org.FldContactNumber2</div>
-                }
-
+                @*Contact numbers*@
+                <div class="d-flex flex-column small  flex-fill mt-1 small align-items-end">
+                    @*Contact*@
+                        @if (!string.IsNullOrEmpty(Model.Org.FldContactNumber1) && !string.IsNullOrEmpty(Model.Org.FldContactPerson1))
+                        {
+                        <div class="d-flex flex-fill justify-content-end align-items-end">
+                            <b class="pe-2">@Model.Org.FldContactPerson1</b>
+                            <span> @Model.Org.FldContactNumber1</span>
+                        </div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Org.FldContactNumber2) && !string.IsNullOrEmpty(Model.Org.FldContactPerson2))
+                        {
+                        <div class="d-flex  flex-fill justify-content-end align-items-end">
+                            <b class="pe-2">@Model.Org.FldContactPerson2</b>
+                            <span>@Model.Org.FldContactNumber2</span>
+                        </div>
+                        }
+                </div>
             </div>
-
+           
+            
+           
         </div>
     </div>
 </div>

@@ -3,11 +3,10 @@
 
 @{
     ViewData["Title"] = "Edit";
+    String UserRole = (Context.Session.GetString(SessionKeys.UserRole) != null ? Context.Session.GetString(SessionKeys.UserRole) : "");
+
 }
 
-@*<h1>Job details</h1>
-
-<hr />*@
 <div class="d-flex bg-light ps-3 pe-3">
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -71,7 +70,7 @@
                     <input asp-for="FldReference" class="form-control" />
                     <span asp-validation-for="FldReference" class="text-danger"></span>
                 </div>
-                <div class="form-group bg-success-transperent" @(Model.IsInvoiceCreated?"":"hidden")>
+                <div class="form-group" @(Model.IsInvoiceCreated?"":"hidden")>
                     <label asp-for="FldHandedOverOn" class="control-label fw-bold"></label>
                     <input asp-for="FldHandedOverOn" class="form-control" step="60000" />
                     <span asp-validation-for="FldHandedOverOn" class="text-danger"></span>
@@ -149,8 +148,14 @@
             @*Buttons*@
             <div class="col-md-12 d-flex flex-row justify-content-end p-3">
                 <input type="submit" value="Save Changes" class="btn btn-primary" />
+                @if(UserRole == UserRoles.OrganizationAdmin)
+                {
+                    <div class="d-flex p-2"></div>
+                    <a asp-action="Delete" asp-route-id="@Model.FldJobId" class="btn btn-danger">Delete Job</a>
+
+                }
                 <div class="d-flex p-2"></div>
-                <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+                <a asp-action="Index"  class="btn btn-outline-primary">Back to List</a>
             </div>
         </div>
     </form>
@@ -175,9 +180,9 @@
 }
 <script type="text/javascript">
     setTimeout(function () {
-        $('html, body').animate({
-            scrollTop: $("#AddJobRemarkBlock").offset().top
-        }, 500);
+        //$('html, body').animate({
+        //    scrollTop: $("#AddJobRemarkBlock").offset().top
+        //}, 500);
         $("#AddJobRemarkBlock").load("../../JobRemarks/Create/@Model.FldJobId");
         $("#ListJobRemarkBlock").load("../../JobRemarks/IndexJob/@Model.FldJobId");
 

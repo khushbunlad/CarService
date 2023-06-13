@@ -103,6 +103,7 @@ public partial class CarServiceContext : DbContext
             entity.Property(e => e.FldInvoiceNumber)
                 .HasMaxLength(50)
                 .HasColumnName("fld_InvoiceNumber");
+            entity.Property(e => e.FldInvoiceRemark).HasColumnName("fld_InvoiceRemark");
             entity.Property(e => e.FldInvoiceType)
                 .HasMaxLength(50)
                 .HasColumnName("fld_InvoiceType");

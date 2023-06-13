@@ -4,82 +4,84 @@
     //Required : @ViewBag.Watermark
     //Required : @Model.Org
 }
-
-<div class="d-flex flex-row  border-top border-bottom border-dark pt-2 pb-2 mb-2 text-uppercase">
-    <table class="table table-sm table-borderless mb-0">
+<div class="d-flex flex-row  border-top border-bottom border-dark pt-0 mt-2">
+    <table class="table table-sm table-borderless mb-0 small text-capitalize">
         <tbody>
             <tr>
-                <td class="fw-bold text-secondary pb-2 col-md-4 ps-2">@(Model.Estimate == null ? "" : Model.Estimate.FldInvoiceType) To</td>
-                <td class="fw-bold text-secondary col-md-4  ps-2">Vehicle</td>
-                <td class="fw-bold col-md-4 ps-2 bg-light ">@(Model.Estimate==null?"Job": Model.Estimate.FldInvoiceType)</td>
-            </tr>
-            <tr class="small">
                 @*Customer Detail*@
-                <td class="">
+                <td class="col-md-5">
                     <table class="table table-sm table-borderless mb-0">
                         <tr>
+                            <td class="col-md-3 fw-bold" >Name</td>
                             <td class="fw-bold">@Model.Job.FldCustomerName</td>
                         </tr>
                         @if (!string.IsNullOrEmpty(Model.Job.FldClientCompanyName))
                         {
                             <tr>
+                                <td class=" fw-bold">Company</td>
                                 <td class="fw-bold">@Model.Job.FldClientCompanyName</td>
                             </tr>
                         }
                         @if (!string.IsNullOrEmpty(Model.Job.FldCompanyAddress))
                         {
                             <tr>
+                                <td class=" fw-bold">Address</td>
                                 <td class="fst-italic">@Model.Job.FldCompanyAddress</td>
                             </tr>
                         }
                         <tr>
+                            <td class=" fw-bold">Contact</td>
                             <td>@Model.Job.FldCustomerContact1</td>
                         </tr>
                         @if (!string.IsNullOrEmpty(Model.Job.FldComanyGstnumber))
                         {
                             <tr>
-                                <td> <b>GST : </b> @Model.Job.FldComanyGstnumber</td>
+                                <td class=" fw-bold">GST</td>
+                                <td class="text-uppercase" > @Model.Job.FldComanyGstnumber</td>
                             </tr>
                         }
                     </table>
                 </td>
                 @*Vehicle Detail*@
-                <td class="border-start">
+                <td class="border-start col-md-4">
                     <table class="table table-sm table-borderless mb-0">
                         <tr>
-                            <td class="text-secondary fw-bold">Reg. No</td>
-                            <td>@Model.Job.FldVehicleRegisteredNumber</td>
+                            <td class="fw-bold col-md-6">Vehicle Reg. No</td>
+                            <td class="text-uppercase" >@Model.Job.FldVehicleRegisteredNumber</td>
                         </tr>
                         <tr>
-                            <td class="text-secondary fw-bold">Model</td>
+                            <td class="fw-bold">Model</td>
                             <td>@Model.Job.FldModelNameNumber</td>
                         </tr>
                         <tr>
-                            <td class="text-secondary fw-bold">Pickup-date</td>
+                            <td class="fw-bold">Pickup-date</td>
                             <td>@Model.Job.FldRegisteredOn.ToString("dd-MMM-yyyy")</td>
                         </tr>
                         <tr>
-                            <td class="text-secondary fw-bold">Pickup-km</td>
-                            <td>@Model.Job.FldKmReadingOnRegistration</td>
+                            <td class="fw-bold">Pickup-km</td>
+                            <td>@Math.Round(Model.Job.FldKmReadingOnRegistration,2)</td>
+                        </tr>
+                        @*Service type*@
+                        <tr>
+                            <td class="fw-bold">Service</td>
+                            <td>@Model.Job.FldServiceType</td>
                         </tr>
                     </table>
                 </td>
                 @*Invoice/Estimate detail*@
-                <td class="border-start">
+                <td class="border-start col-md-3">
                     <table class="table table-sm table-borderless mb-0">
-
+                        @*Document type*@
                         <tr>
-
-                            <td class="text-secondary fw-bold">Job No</td>
-                            <td>
-                                <span>@Model.Job.FldJobNo</span>
+                            <td colspan="2" class="fw-bold text-center fs-5 border-dark border-bottom pt-2 pb-2">
+                                    @(Model.Estimate == null ? "Job No" : Model.Estimate.FldInvoiceType)
                             </td>
                         </tr>
+                        @*Estimate name and date*@
                         @if (Model.Estimate != null)
                         {
                             <tr>
-
-                                <td class="text-secondary fw-bold">@(Model.Estimate.FldIsInvoiceGenerated ? "Invoice No" : "Estimate No")</td>
+                                <td class="fw-bold">@(Model.Estimate.FldIsInvoiceGenerated ? "Invoice No" : "Estimate No")</td>
                                 <td>
                                     @if (Model.Estimate.FldIsInvoiceGenerated)
                                     {
@@ -92,7 +94,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="text-secondary fw-bold">Issue Date</td>
+                                <td class="fw-bold">Issue Date</td>
                                 <td>
                                     @if (Model.Estimate.FldIsInvoiceGenerated)
                                     {
@@ -105,13 +107,21 @@
                                 </td>
                             </tr>
                         }
+                        @*Job Reference no*@
                         <tr>
-                            <td class="text-secondary fw-bold">Service Type</td>
-                            <td>@Model.Job.FldServiceType</td>
+
+                            <td class="fw-bold">Job Ref</td>
+                            <td>
+                                <span>@Model.Job.FldJobNo</span>
+                            </td>
                         </tr>
+                       
                     </table>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+<style>
+
+</style>
